@@ -1,0 +1,7 @@
+node_modules/
+*.log
+preview-*.png
+soar-preview.html
+shot.mjs
+package*.json
+.DS_Store

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0C0A09" />
+  <title>SOAR — Luxury Streetwear · Rise Above Limitations</title>
+  <meta name="description" content="SOAR is luxury streetwear built on premium craftsmanship, elevated minimalism, and meaningful storytelling. Every garment is a reminder that growth begins where comfort ends." />
+  <meta property="og:title" content="SOAR — Luxury Streetwear" />
+  <meta property="og:description" content="Growth begins where comfort ends. Premium craftsmanship for those with the courage to rise above limitations." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230C0A09'/%3E%3Cpath d='M16 5 L23 16 H18 L16 13 L14 16 H9 Z' fill='%23C9A227'/%3E%3Cpath d='M16 12 L21 20 H11 Z' fill='%23FAFAF9'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Grain + ambient light -->
+  <div class="grain" aria-hidden="true"></div>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="cursor" data-cursor aria-hidden="true"></div>
+
+  <!-- Announcement marquee -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>Complimentary worldwide shipping</span><span class="ticker__dot">✦</span>
+      <span>New drop · Ascension Vol. I</span><span class="ticker__dot">✦</span>
+      <span>Growth begins where comfort ends</span><span class="ticker__dot">✦</span>
+      <span>Crafted in limited runs</span><span class="ticker__dot">✦</span>
+      <span>Complimentary worldwide shipping</span><span class="ticker__dot">✦</span>
+      <span>New drop · Ascension Vol. I</span><span class="ticker__dot">✦</span>
+      <span>Growth begins where comfort ends</span><span class="ticker__dot">✦</span>
+      <span>Crafted in limited runs</span><span class="ticker__dot">✦</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" data-header>
+    <div class="header__inner">
+      <a class="brand" href="#top" aria-label="SOAR home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4 L33 24 H24.5 L20 17 L15.5 24 H7 Z" fill="currentColor" />
+            <path d="M20 15 L29 30 H11 Z" class="brand__mark-fore" />
+          </svg>
+        </span>
+        <span class="brand__word">SOAR</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#collection" data-link>Collection</a>
+        <a href="#manifesto" data-link>Manifesto</a>
+        <a href="#lookbook" data-link>Lookbook</a>
+        <a href="#journal" data-link>Journal</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="icon-btn" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <button class="icon-btn show-md" type="button" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </button>
+        <button class="icon-btn bag" type="button" aria-label="Cart, 0 items">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="bag__count" data-cart-count>0</span>
+        </button>
+        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open>
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Fullscreen mobile menu -->
+  <div class="menu" data-menu hidden>
+    <div class="menu__head">
+      <span class="eyebrow">Menu</span>
+      <button class="icon-btn" type="button" aria-label="Close menu" data-menu-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <nav class="menu__nav" aria-label="Mobile">
+      <a href="#collection" data-menu-link><span>01</span>Collection</a>
+      <a href="#manifesto" data-menu-link><span>02</span>Manifesto</a>
+      <a href="#lookbook" data-menu-link><span>03</span>Lookbook</a>
+      <a href="#journal" data-menu-link><span>04</span>Journal</a>
+    </nav>
+    <div class="menu__foot">
+      <span class="eyebrow">Rise above limitations</span>
+      <span class="eyebrow">Est. MMXXIV</span>
+    </div>
+  </div>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero__stage" data-reveal>
+        <!-- BACK LAYER: the box (comfort) + golden flight path -->
+        <svg class="hero__scene hero__scene--back" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E6C566" /><stop offset="1" stop-color="#9C7318" />
+            </linearGradient>
+          </defs>
+          <ellipse class="box-shadow" cx="607" cy="662" rx="138" ry="13" fill="#000" opacity="0.5" />
+          <!-- the path the bird traces (always faintly visible) -->
+          <path class="trail" d="M612 590 C 470 560 338 506 392 410 C 446 314 560 300 612 250 C 690 196 806 232 852 300 C 892 360 942 250 988 92" fill="none" stroke="#C9A227" stroke-width="1.4" stroke-dasharray="0.5 8" stroke-linecap="round" opacity="0.3" />
+          <!-- the path drawing itself in sync with flight -->
+          <path class="trail-draw" d="M612 590 C 470 560 338 506 392 410 C 446 314 560 300 612 250 C 690 196 806 232 852 300 C 892 360 942 250 988 92" fill="none" stroke="url(#goldGrad)" stroke-width="2" pathLength="100" stroke-linecap="round" />
+          <!-- open box -->
+          <g class="box">
+            <polygon class="box-inside" points="512,584 662,584 702,560 552,560" />
+            <polygon class="box-face" points="512,584 662,584 662,646 512,646" />
+            <polygon class="box-side" points="662,584 702,560 702,622 662,646" />
+            <polygon class="box-lid" points="552,560 702,560 726,492 576,492" />
+          </g>
+          <text class="box-label" x="607" y="692" text-anchor="middle">COMFORT</text>
+        </svg>
+
+        <!-- MIDDLE LAYER: the word the bird soars around -->
+        <h1 class="hero__word">
+          <span class="sr-only">SOAR — luxury streetwear. Growth begins where comfort ends.</span>
+          <span aria-hidden="true">SOAR</span>
+        </h1>
+
+        <!-- FRONT LAYER: the bird + drifting feathers -->
+        <svg class="hero__scene hero__scene--front" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldWing" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#F0D27E" /><stop offset="1" stop-color="#A1771A" />
+            </linearGradient>
+            <linearGradient id="goldBody" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#C9A227" /><stop offset="1" stop-color="#8A6512" />
+            </linearGradient>
+            <radialGradient id="birdGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#E6C566" stop-opacity="0.45" /><stop offset="1" stop-color="#E6C566" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <g class="feathers">
+            <g transform="translate(600,250)"><path class="feather feather--1" d="M0 0 C7 -11 7 -25 0 -36 C-7 -25 -7 -11 0 0 Z" /></g>
+            <g transform="translate(706,300)"><path class="feather feather--2" d="M0 0 C6 -9 6 -20 0 -30 C-6 -20 -6 -9 0 0 Z" /></g>
+            <g transform="translate(498,332)"><path class="feather feather--3" d="M0 0 C5 -8 5 -18 0 -26 C-5 -18 -5 -8 0 0 Z" /></g>
+          </g>
+          <g class="bird">
+            <ellipse class="bird-glow" cx="0" cy="0" rx="48" ry="34" fill="url(#birdGlow)" />
+            <g class="bird-scale">
+              <path class="wing wing--up" d="M-2 -3 L-34 -30 L-6 -2 Z" fill="url(#goldWing)" />
+              <path class="wing wing--down" d="M-2 3 L-34 30 L-6 2 Z" fill="url(#goldWing)" />
+              <path class="bird-body" d="M-20 0 L-2 -5 L26 0 L-2 5 Z" fill="url(#goldBody)" />
+              <path class="bird-head" d="M18 -3 L30 0 L18 3 Z" fill="#F0D27E" />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero__copy">
+        <p class="eyebrow reveal" data-reveal>Est. MMXXIV · Luxury Streetwear</p>
+        <p class="hero__line reveal" data-reveal data-delay="1">Growth begins where comfort <em>ends.</em></p>
+        <p class="hero__sub reveal" data-reveal data-delay="2">Premium craftsmanship for those with the courage to rise above their limitations.</p>
+        <div class="hero__cta reveal" data-reveal data-delay="3">
+          <a class="btn btn--gold" href="#collection" data-magnetic>
+            Explore Ascension Vol. I
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#manifesto" data-magnetic>Read the Manifesto</a>
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#manifesto" aria-label="Scroll to manifesto">
+        <span class="eyebrow">Scroll</span>
+        <span class="hero__scroll-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!-- MARQUEE BAND -->
+    <div class="band" aria-hidden="true">
+      <div class="band__track">
+        <span>Rise Above</span><span class="band__star">✦</span>
+        <span>Soar</span><span class="band__star">✦</span>
+        <span>Ascension</span><span class="band__star">✦</span>
+        <span>Rise Above</span><span class="band__star">✦</span>
+        <span>Soar</span><span class="band__star">✦</span>
+        <span>Ascension</span><span class="band__star">✦</span>
+      </div>
+    </div>
+
+    <!-- MANIFESTO -->
+    <section class="manifesto section" id="manifesto">
+      <div class="container">
+        <div class="manifesto__grid">
+          <div class="manifesto__aside">
+            <p class="eyebrow" data-reveal>The Manifesto</p>
+            <span class="manifesto__index" data-reveal>(01)</span>
+          </div>
+          <div class="manifesto__body">
+            <h2 class="display" data-reveal>We don't make clothes.<br />We make <em>reminders.</em></h2>
+            <div class="manifesto__cols">
+              <p data-reveal>
+                SOAR was born from a single conviction: that comfort is a beautiful
+                place — and nothing ever grows there. Each piece is engineered in
+                limited runs from the finest organic fibres, finished by hand, and
+                built to outlast the seasons that chase it.
+              </p>
+              <p data-reveal>
+                We design for the moment you decide to become more. Elevated
+                silhouettes, quiet luxury, and a story stitched into every seam —
+                a reminder that you were always meant to rise.
+              </p>
+            </div>
+            <blockquote class="pullquote" data-reveal>
+              <span class="pullquote__mark" aria-hidden="true">“</span>
+              True success comes from having the courage to
+              <em>rise above limitations.</em>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section class="collection section" id="collection">
+      <div class="container">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow" data-reveal>Ascension · Vol. I</p>
+            <h2 class="display" data-reveal>The Collection</h2>
+          </div>
+          <p class="section-head__note" data-reveal>
+            Four essentials. Endless ascent. Crafted in numbered runs of 200.
+          </p>
+        </header>
+
+        <div class="grid">
+          <!-- card -->
+          <article class="card" data-reveal data-tilt style="--g1:#1a1714; --g2:#2b2118; --accent:#C9A227">
+            <div class="card__media">
+              <span class="card__index">01</span>
+              <span class="card__monogram" aria-hidden="true">S</span>
+              <span class="card__tag">Organic</span>
+              <div class="card__overlay"><span>View Piece</span></div>
+            </div>
+            <div class="card__info">
+              <div>
+                <h3>The Ascension Hoodie</h3>
+                <p class="card__meta">600gsm Organic Cotton</p>
+              </div>
+              <span class="card__price">$280</span>
+            </div>
+          </article>
+
+          <article class="card" data-reveal data-tilt data-delay="1" style="--g1:#15171a; --g2:#1f2630; --accent:#9FB3C8">
+            <div class="card__media">
+              <span class="card__index">02</span>
+              <span class="card__monogram" aria-hidden="true">O</span>
+              <span class="card__tag">Limited</span>
+              <div class="card__overlay"><span>View Piece</span></div>
+            </div>
+            <div class="card__info">
+              <div>
+                <h3>Limitless Tee</h3>
+                <p class="card__meta">Long-staple Pima</p>
+              </div>
+              <span class="card__price">$120</span>
+            </div>
+          </article>
+
+          <article class="card" data-reveal data-tilt data-delay="2" style="--g1:#171514; --g2:#2a201c; --accent:#C98A4A">
+            <div class="card__media">
+              <span class="card__index">03</span>
+              <span class="card__monogram" aria-hidden="true">A</span>
+              <span class="card__tag">Outerwear</span>
+              <div class="card__overlay"><span>View Piece</span></div>
+            </div>
+            <div class="card__info">
+              <div>
+                <h3>Rise Above Jacket</h3>
+                <p class="card__meta">Japanese Dry Twill</p>
+              </div>
+              <span class="card__price">$420</span>
+            </div>
+          </article>
+
+          <article class="card" data-reveal data-tilt data-delay="3" style="--g1:#14130f; --g2:#241f15; --accent:#C9A227">
+            <div class="card__media">
+              <span class="card__index">04</span>
+              <span class="card__monogram" aria-hidden="true">R</span>
+              <span class="card__tag">Heavyweight</span>
+              <div class="card__overlay"><span>View Piece</span></div>
+            </div>
+            <div class="card__info">
+              <div>
+                <h3>Comfort Ends Cargo</h3>
+                <p class="card__meta">Italian Ripstop</p>
+              </div>
+              <span class="card__price">$260</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="collection__foot" data-reveal>
+          <a class="btn btn--ghost" href="#" data-magnetic>View all pieces
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDITORIAL FEATURE -->
+    <section class="feature" id="lookbook">
+      <div class="feature__panel">
+        <div class="feature__panel-art" aria-hidden="true">
+          <span class="feature__panel-word">RISE</span>
+        </div>
+      </div>
+      <div class="feature__content">
+        <p class="eyebrow" data-reveal>The Philosophy</p>
+        <h2 class="display" data-reveal>Every garment is a reminder that you were made to <em>rise.</em></h2>
+        <p data-reveal>
+          We obsess over the details no one is asked to notice — the weight of a
+          drawcord, the fall of a hem, the silence of a perfect seam. Because
+          quiet luxury isn't loud. It simply lasts.
+        </p>
+        <ul class="feature__list">
+          <li data-reveal><span aria-hidden="true">01</span>Premium, traceable organic materials</li>
+          <li data-reveal data-delay="1"><span aria-hidden="true">02</span>Hand-finished in limited, numbered runs</li>
+          <li data-reveal data-delay="2"><span aria-hidden="true">03</span>Designed to outlive the trend cycle</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats section" id="journal">
+      <div class="container">
+        <p class="eyebrow center" data-reveal>By the numbers</p>
+        <div class="stats__grid">
+          <div class="stat" data-reveal>
+            <span class="stat__num" data-count="14" data-suffix="">0</span>
+            <span class="stat__label">Countries reached</span>
+          </div>
+          <div class="stat" data-reveal data-delay="1">
+            <span class="stat__num" data-count="8.4" data-suffix="K" data-decimals="1">0</span>
+            <span class="stat__label">Community risen</span>
+          </div>
+          <div class="stat" data-reveal data-delay="2">
+            <span class="stat__num" data-count="100" data-suffix="%">0</span>
+            <span class="stat__label">Organic cotton</span>
+          </div>
+          <div class="stat" data-reveal data-delay="3">
+            <span class="stat__num stat__num--inf">∞</span>
+            <span class="stat__label">Limits accepted</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="join section">
+      <div class="container join__inner">
+        <div class="join__copy">
+          <p class="eyebrow" data-reveal>Join the ascent</p>
+          <h2 class="display" data-reveal>Be first to <em>rise.</em></h2>
+          <p data-reveal>Early access to drops, the SOAR journal, and members-only releases. No noise — only ascent.</p>
+        </div>
+        <form class="join__form" data-form novalidate data-reveal>
+          <div class="field">
+            <label for="email" class="eyebrow">Email address</label>
+            <div class="field__row">
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@ascend.com" required />
+              <button class="btn btn--gold" type="submit" data-magnetic>
+                Join
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <p class="field__msg" data-form-msg aria-live="polite">We rise together. Unsubscribe anytime.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <span class="brand__mark brand__mark--lg" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4 L33 24 H24.5 L20 17 L15.5 24 H7 Z" fill="currentColor" />
+              <path d="M20 15 L29 30 H11 Z" class="brand__mark-fore" />
+            </svg>
+          </span>
+          <p class="footer__tagline">Luxury streetwear<br />for the courageous.</p>
+        </div>
+
+        <nav class="footer__col" aria-label="Shop">
+          <span class="eyebrow">Shop</span>
+          <a href="#collection">Ascension Vol. I</a>
+          <a href="#">Hoodies</a>
+          <a href="#">Tees</a>
+          <a href="#">Outerwear</a>
+        </nav>
+        <nav class="footer__col" aria-label="House">
+          <span class="eyebrow">House</span>
+          <a href="#manifesto">Manifesto</a>
+          <a href="#lookbook">Lookbook</a>
+          <a href="#journal">Journal</a>
+          <a href="#">Sustainability</a>
+        </nav>
+        <nav class="footer__col" aria-label="Support">
+          <span class="eyebrow">Support</span>
+          <a href="#">Shipping</a>
+          <a href="#">Returns</a>
+          <a href="#">Size Guide</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+
+      <div class="footer__word" aria-hidden="true">SOAR</div>
+
+      <div class="footer__bottom">
+        <span>© <span data-year>2026</span> SOAR. Made to rise.</span>
+        <div class="footer__social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 3h3l-7 8 8.2 10h-6.4l-5-6.1L8 21H5l7.5-8.6L4 3h6.5l4.5 5.6L17.5 3Zm-1.1 16h1.7L8 4.8H6.2L16.4 19Z"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 3c.3 2.1 1.6 3.6 3.7 3.9v2.6c-1.4.1-2.7-.3-3.9-1v5.8a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 1 0 1.9 2.6V3H16Z"/></svg></a>
+          <a href="#" aria-label="Back to top" class="footer__top-link" data-top>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
