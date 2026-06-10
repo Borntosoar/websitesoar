@@ -89,3 +89,85 @@ body {
     filter: none !important;
   }
 }
+
+/* ---- entrance gate symbol: locked, then breaks through on unlock ---- */
+.gate-symbol .gs-stroke {
+  fill: none;
+  stroke: #e7e2d7;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.gate-symbol .gs-crack {
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+  opacity: 0;
+}
+.gate-symbol .gs-bird,
+.gate-symbol .gs-light {
+  opacity: 0;
+}
+.gate-symbol .gs-frag {
+  transform-box: view-box;
+  transform-origin: 143px 121px;
+}
+.is-unlocking .gs-crack {
+  opacity: 1;
+  animation: gs-crack 0.5s ease forwards;
+}
+.is-unlocking .gs-frag {
+  animation: gs-frag 0.6s 0.25s ease forwards;
+}
+.is-unlocking .gs-light {
+  animation: gs-light 1.2s 0.3s ease forwards;
+}
+.is-unlocking .gs-bird {
+  animation: gs-bird 1.2s 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes gs-crack {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes gs-frag {
+  to {
+    transform: translate(9px, -13px) rotate(13deg);
+    opacity: 0.5;
+  }
+}
+@keyframes gs-light {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.28;
+  }
+}
+@keyframes gs-bird {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-unlocking .gs-crack,
+  .is-unlocking .gs-frag,
+  .is-unlocking .gs-light,
+  .is-unlocking .gs-bird {
+    animation: none !important;
+  }
+  .is-unlocking .gs-crack {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
