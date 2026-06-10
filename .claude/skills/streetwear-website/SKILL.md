@@ -202,3 +202,30 @@ generous negative space, and a single decisive CTA per screen.
 - `references/build-playbook.md` — full homepage module spec, drop-release
   implementation details, the **tech stack** (Shopify Plus + apps), conversion
   flows, and a copy/voice guide.
+
+---
+
+## Applying this to SOAR (read the `soar-brand` skill first)
+
+When the brand is **SOAR**, every pattern here is filtered through the
+`soar-brand` bible and gated by its **Brand Test**. SOAR is quiet-luxury
+(*Fear of God / Essentials × Represent*), **not** loud-graphic or brutalist —
+*luxury through meaning, never logos.*
+
+- **Aesthetic pole:** the **minimalist** pole, executed in **muted neutrals**
+  (oat / stone / taupe / **espresso**), **no bright colour**, Hanken Grotesk +
+  Newsreader serif accents, architectural whitespace, slow/quiet motion.
+- **Hero = the breakthrough symbol**, not a product grid or marquee: a **bird
+  escaping a fractured box**, light emerging from darkness ("breakthrough, not
+  flight"). The symbol carries the brand before any copy does.
+- **Drop culture = a ritual of transformation.** Map the mechanics to the
+  emotional sequence *Pressure → Resistance → Breakthrough → Growth → Freedom*:
+  the **countdown** is the held breath before release; **"Limited 200 / numbered"**
+  are individual ascents; an honest **sold-out** wall is the box others stayed
+  inside.
+- **Storytelling:** lead with meaning and symbol; copy is **quietly confident,
+  overcoming-not-perfect**, feel-before-read. Avoid hype, exclamation, trend slang.
+- **Capture:** frame the list as **"join the ascent / the movement,"** not
+  "subscribe." Klaviyo/SMS for drop access + back-in-stock.
+- **Before shipping:** run the SOAR **Brand Test** (growth? freedom? overcoming?
+  resilience? possibility? on-philosophy?). If any answer is no, change it.

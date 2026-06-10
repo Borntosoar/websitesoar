@@ -3,6 +3,22 @@ name: ui-ux-pro-max
 description: "UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples."
 ---
 
+> ## ⟡ SOAR brand lens (read first when the project is SOAR)
+> When designing for **SOAR**, filter every recommendation below through the
+> **`soar-brand`** skill and its Brand Test. SOAR is *quiet-luxury, muted, and
+> symbolic* (Fear of God/Essentials × Represent) — **luxury through meaning, not
+> logos.** Override generic suggestions that conflict:
+> - **Palette:** muted neutrals only — oat `#E7E2D7`, stone `#CFC8B9`, taupe
+>   `#8C8475`, ink `#29251F`, espresso `#1F1B16`. **No bright/excessive colour**,
+>   no liquid-glass, no neon. Light emerging from darkness.
+> - **Type:** restrained — Hanken Grotesk + Newsreader italic accents. Not
+>   oversized brutalist.
+> - **Motif:** the **fractured box + ascending bird** (breakthrough, not flight);
+>   vertical/upward composition, architecture under tension, generous whitespace.
+> - **Tone:** quietly confident, architectural, emotional, never loud.
+> Treat the style/palette search results below as raw options — keep only what
+> serves the SOAR breakthrough story.
+
 # UI/UX Pro Max - Design Intelligence
 
 Comprehensive design guide for web and mobile applications. Contains 50+ styles, 161 color palettes, 57 font pairings, 161 product types with reasoning rules, 99 UX guidelines, and 25 chart types across 10 technology stacks. Searchable database with priority-based recommendations.
