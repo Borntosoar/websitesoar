@@ -3,40 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#F5F4EF" />
+  <meta name="theme-color" content="#E8E3D9" />
   <title>SOAR® — Minimalist Streetwear · Rise Above</title>
-  <meta name="description" content="SOAR is minimalist streetwear, made to a 110% standard. Premium craftsmanship, limited drops. Growth begins where comfort ends." />
+  <meta name="description" content="SOAR is quiet-luxury streetwear. Premium essentials, made to a 110% standard, released in limited drops. Growth begins where comfort ends." />
   <meta property="og:title" content="SOAR® — Minimalist Streetwear" />
-  <meta property="og:description" content="Growth begins where comfort ends. Limited drops. Rise above." />
+  <meta property="og:description" content="Quiet-luxury essentials. Limited drops. Rise above." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F5F4EF'/%3E%3Cpath d='M16 7 L24 23 H8 Z' fill='%231E22FF'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8E3D9'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-style='italic' text-anchor='middle' fill='%232A2622'%3ES%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
   <div class="cursor" data-cursor aria-hidden="true"></div>
 
-  <!-- Announcement -->
+  <!-- Announce -->
   <div class="announce">
-    <span class="mono">Ascension Vol.01</span>
-    <span class="announce__dot" aria-hidden="true">—</span>
-    <span class="mono">Drops Thursday <span class="accent">11:00</span></span>
-    <span class="announce__dot" aria-hidden="true">—</span>
-    <span class="mono">Free worldwide shipping</span>
+    <span class="label">Ascension Vol.01</span>
+    <span class="announce__sep" aria-hidden="true">/</span>
+    <span class="label">Drops Thursday 11:00</span>
+    <span class="announce__sep" aria-hidden="true">/</span>
+    <span class="label">Complimentary worldwide shipping</span>
   </div>
 
   <!-- Header -->
   <header class="header" data-header>
-    <a class="brand" href="#top" aria-label="SOAR home">
-      <span class="brand__mark" aria-hidden="true">
-        <svg viewBox="0 0 28 28" fill="none"><path d="M14 4 L24 22 H4 Z" fill="currentColor"/></svg>
-      </span>
-      <span class="brand__word">SOAR<sup>®</sup></span>
-    </a>
+    <a class="brand" href="#top" aria-label="SOAR home"><span class="brand__word">SOAR</span><sup>®</sup></a>
     <nav class="nav" aria-label="Primary">
       <a href="#drop" data-link>Drop</a>
       <a href="#shop" data-link>Shop</a>
@@ -45,21 +41,21 @@
     </nav>
     <div class="header__actions">
       <button class="link-btn show-sm" type="button">Search</button>
-      <button class="link-btn" type="button" aria-label="Cart, 0 items">Bag <span class="accent" data-cart-count>0</span></button>
+      <button class="link-btn" type="button" aria-label="Cart, 0 items">Bag (<span data-cart-count>0</span>)</button>
       <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open><span></span><span></span></button>
     </div>
   </header>
 
   <!-- Mobile menu -->
   <div class="menu" data-menu hidden>
-    <div class="menu__head"><span class="mono">Index</span><button class="link-btn" type="button" data-menu-close>Close</button></div>
+    <div class="menu__head"><span class="label">Index</span><button class="link-btn" type="button" data-menu-close>Close</button></div>
     <nav class="menu__nav" aria-label="Mobile">
       <a href="#drop" data-menu-link><i>01</i>Drop</a>
       <a href="#shop" data-menu-link><i>02</i>Shop</a>
       <a href="#world" data-menu-link><i>03</i>World</a>
       <a href="#list" data-menu-link><i>04</i>Contact</a>
     </nav>
-    <div class="menu__foot"><span class="mono">Rise above</span><span class="mono">Est. MMXXIV</span></div>
+    <div class="menu__foot"><span class="label">Rise above</span><span class="label">Est. MMXXIV</span></div>
   </div>
 
   <main id="main">
@@ -68,152 +64,146 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero__text">
-        <p class="eyebrow" data-reveal>Minimalist streetwear · Est. MMXXIV</p>
+        <p class="eyebrow" data-reveal>Minimalist streetwear — Est. MMXXIV</p>
         <h1 class="hero__title" data-reveal="lines">
-          <span>Growth begins</span>
-          <span>where comfort</span>
-          <span><em>ends.</em></span>
+          <span>Growth begins where</span>
+          <span>comfort <em class="serif">ends.</em></span>
         </h1>
-        <p class="hero__lede" data-reveal data-delay="1">Premium essentials, built to a 110% standard and released in limited runs. For those with the nerve to rise above their limitations.</p>
+        <p class="hero__lede" data-reveal data-delay="1">Premium essentials, considered down to the seam and released in limited runs. Quiet on the outside. Loud in the doing.</p>
         <div class="hero__cta" data-reveal data-delay="2">
-          <a class="btn btn--blue" href="#drop" data-magnetic>Shop the drop</a>
-          <a class="btn btn--ghost" href="#world" data-magnetic>Our world</a>
+          <a class="btn btn--solid" href="#drop" data-magnetic>Shop the drop</a>
+          <a class="btn btn--line" href="#world" data-magnetic>Our world</a>
         </div>
-        <dl class="hero__facts" data-reveal data-delay="3">
-          <div><dt class="mono">Run</dt><dd>200 numbered</dd></div>
-          <div><dt class="mono">Cloth</dt><dd>Organic, traceable</dd></div>
-          <div><dt class="mono">Made</dt><dd>To rise</dd></div>
-        </dl>
       </div>
-
-      <div class="hero__visual" data-reveal data-delay="1" data-parallax="-0.05">
-        <span class="hero__ghost" aria-hidden="true">SOAR</span>
-        <svg class="flight" viewBox="0 0 480 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-          <path class="flight__trail" d="M120 486 C 70 388 214 360 236 262 C 252 182 360 206 372 96" fill="none" stroke="#1E22FF" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" opacity="0.5"/>
-          <path class="flight__draw" d="M120 486 C 70 388 214 360 236 262 C 252 182 360 206 372 96" fill="none" stroke="#1E22FF" stroke-width="2.5" pathLength="100" stroke-linecap="round"/>
-          <g class="flight__bird">
-            <g class="flight__scale">
-              <path class="wing wing--up" d="M-2 -3 L-30 -26 L-6 -2 Z"/>
-              <path class="wing wing--down" d="M-2 3 L-30 26 L-6 2 Z"/>
-              <path class="bird-body" d="M-18 0 L-2 -4 L24 0 L-2 4 Z"/>
-            </g>
+      <div class="hero__panel" data-reveal data-delay="1">
+        <span class="hero__panel-tag label">Vol.01 — Ascension</span>
+        <svg class="symbol" viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <radialGradient id="bloom" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#F3EEE3" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#F3EEE3" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <circle class="symbol__light" cx="238" cy="150" r="140" fill="url(#bloom)" />
+          <g class="symbol__box" fill="none" stroke="#E7E2D7" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M132 470 L272 470 L272 360 L132 360 Z" />
+            <path d="M132 360 L172 330 L312 330 L272 360" />
+            <path d="M272 470 L312 440 L312 330" />
+            <path class="symbol__crack" d="M202 360 L212 398 L196 430 L206 470" stroke-width="1.1" />
+            <path class="symbol__crack" d="M172 344 L236 344" stroke-width="1.1" />
+          </g>
+          <path class="symbol__fragment" d="M242 330 L312 330 L292 360 Z" fill="none" stroke="#E7E2D7" stroke-width="1.4" stroke-linejoin="round" />
+          <g class="symbol__bird">
+            <path class="wing wing--l" d="M-3 -2 L-22 -16 L-5 4 Z" />
+            <path class="wing wing--r" d="M3 -2 L22 -16 L5 4 Z" />
+            <path class="bird-body" d="M0 -14 L4 6 L0 12 L-4 6 Z" />
           </g>
         </svg>
-        <span class="hero__chip mono" data-parallax="0.08">N 40.71° / W 74.00°</span>
+        <span class="hero__panel-foot label">Breakthrough — not flight</span>
       </div>
     </section>
 
-    <!-- DROP MODULE -->
+    <!-- Marquee (kept, muted) -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__set"><span>Rise above</span><i>—</i><span class="serif">Soar</span><i>—</i><span>Ascension Vol.01</span><i>—</i><span>Made to a 110% standard</span><i>—</i><span>Rise above</span><i>—</i><span class="serif">Soar</span><i>—</i><span>Ascension Vol.01</span><i>—</i><span>Made to a 110% standard</span><i>—</i></div>
+    </div>
+
+    <!-- DROP (moody / espresso) -->
     <section class="drop" id="drop">
       <div class="container">
-        <div class="rowtag"><span class="mono">(01) The Drop</span><span class="mono">This week · Vol.01</span></div>
+        <div class="rowtag rowtag--d"><span class="label">(01) The Drop</span><span class="label">This week — Vol.01</span></div>
         <div class="drop__grid">
           <div class="drop__lead">
-            <span class="mono accent">◷ Next drop in</span>
+            <span class="label soft">Next drop in</span>
             <div class="count" data-countdown aria-label="Time until next drop">
-              <div class="count__u"><span class="count__n" data-cd="days">00</span><span class="mono">Days</span></div>
-              <span class="count__sep" aria-hidden="true">:</span>
-              <div class="count__u"><span class="count__n" data-cd="hours">00</span><span class="mono">Hrs</span></div>
-              <span class="count__sep" aria-hidden="true">:</span>
-              <div class="count__u"><span class="count__n" data-cd="mins">00</span><span class="mono">Min</span></div>
-              <span class="count__sep" aria-hidden="true">:</span>
-              <div class="count__u"><span class="count__n" data-cd="secs">00</span><span class="mono">Sec</span></div>
+              <div class="count__u"><span class="count__n" data-cd="days">00</span><span class="label">Days</span></div>
+              <div class="count__u"><span class="count__n" data-cd="hours">00</span><span class="label">Hrs</span></div>
+              <div class="count__u"><span class="count__n" data-cd="mins">00</span><span class="label">Min</span></div>
+              <div class="count__u"><span class="count__n" data-cd="secs">00</span><span class="label">Sec</span></div>
             </div>
-            <h2 class="drop__title" data-reveal="lines"><span>Ascension Vol.01</span></h2>
-            <p data-reveal>Four numbered essentials. 200 of each, released together, once. When the timer hits zero the drop goes live — and when they're gone, they're gone.</p>
-            <a class="btn btn--blue" href="#shop" data-magnetic>Preview the collection</a>
+            <h2 class="drop__title" data-reveal="lines"><span>Ascension <em class="serif">Vol.01</em></span></h2>
+            <p data-reveal>Four numbered essentials. Two hundred of each, released together, once. When the timer reaches zero the drop goes live — and when they're gone, they're gone.</p>
+            <a class="btn btn--paper" href="#shop" data-magnetic>Preview the collection</a>
           </div>
           <aside class="dropcard" data-reveal data-delay="1">
-            <div class="dropcard__top"><span class="mono">Lead piece</span><span class="mono accent">Limited 200</span></div>
-            <div class="dropcard__media"><span class="dropcard__mono" aria-hidden="true">S</span></div>
-            <div class="dropcard__row"><h3>Ascension Hoodie</h3><span class="accent">$280</span></div>
+            <div class="dropcard__top"><span class="label">Lead piece</span><span class="label">Limited 200</span></div>
+            <div class="dropcard__media"><span class="dropcard__mono serif" aria-hidden="true">S</span></div>
+            <div class="dropcard__row"><h3>Ascension Hoodie</h3><span>$280</span></div>
             <div class="dropcard__bar"><span style="--p:92%"></span></div>
-            <span class="mono soft">184 / 200 reserved · One per customer</span>
+            <span class="label soft">184 / 200 reserved — one per customer</span>
           </aside>
         </div>
         <ul class="trust">
-          <li><span class="mono">Free worldwide shipping</span></li>
-          <li><span class="mono">30-day returns</span></li>
-          <li><span class="mono">Numbered & authenticated</span></li>
-          <li><span class="mono">Secure checkout</span></li>
+          <li class="label">Numbered &amp; authenticated</li>
+          <li class="label">Organic, traceable cloth</li>
+          <li class="label">30-day returns</li>
+          <li class="label">Secure checkout</li>
         </ul>
       </div>
     </section>
 
-    <!-- SHOP / COLLECTION -->
+    <!-- SHOP -->
     <section class="shop" id="shop">
       <div class="container">
-        <div class="rowtag"><span class="mono">(02) Shop — Ascension</span><span class="mono">4 pieces</span></div>
+        <div class="rowtag"><span class="label">(02) Shop — Ascension</span><span class="label">Four pieces</span></div>
         <div class="grid">
           <article class="card" data-reveal data-plate>
-            <div class="card__media"><span class="card__mono" aria-hidden="true">01</span><span class="card__state low">Only 12 left</span><span class="card__add">+ Add</span></div>
-            <div class="card__info"><h3>Ascension Hoodie</h3><span class="card__meta mono">600gsm Organic</span><span class="card__price accent">$280</span></div>
+            <div class="card__media"><span class="card__mono serif" aria-hidden="true">I</span><span class="card__state low label">Only 12 left</span><span class="card__add label">Add to bag</span></div>
+            <div class="card__info"><h3>Ascension Hoodie</h3><span class="card__meta label">600gsm organic</span><span class="card__price">$280</span></div>
           </article>
           <article class="card is-soldout" data-reveal data-delay="1" data-plate>
-            <div class="card__media"><span class="card__mono" aria-hidden="true">02</span><span class="card__state out">Sold out</span><span class="card__add card__add--notify">Notify me</span></div>
-            <div class="card__info"><h3>Limitless Tee</h3><span class="card__meta mono">Long-staple Pima</span><span class="card__price accent">$120</span></div>
+            <div class="card__media"><span class="card__mono serif" aria-hidden="true">II</span><span class="card__state out label">Sold out</span><span class="card__add card__add--notify label">Notify me</span></div>
+            <div class="card__info"><h3>Limitless Tee</h3><span class="card__meta label">Long-staple pima</span><span class="card__price">$120</span></div>
           </article>
           <article class="card" data-reveal data-delay="2" data-plate>
-            <div class="card__media"><span class="card__mono" aria-hidden="true">03</span><span class="card__add">+ Add</span></div>
-            <div class="card__info"><h3>Rise Above Jacket</h3><span class="card__meta mono">Japanese Dry Twill</span><span class="card__price accent">$420</span></div>
+            <div class="card__media"><span class="card__mono serif" aria-hidden="true">III</span><span class="card__add label">Add to bag</span></div>
+            <div class="card__info"><h3>Rise Above Jacket</h3><span class="card__meta label">Japanese dry twill</span><span class="card__price">$420</span></div>
           </article>
           <article class="card" data-reveal data-delay="3" data-plate>
-            <div class="card__media"><span class="card__mono" aria-hidden="true">04</span><span class="card__add">+ Add</span></div>
-            <div class="card__info"><h3>Comfort Ends Cargo</h3><span class="card__meta mono">Italian Ripstop</span><span class="card__price accent">$260</span></div>
+            <div class="card__media"><span class="card__mono serif" aria-hidden="true">IV</span><span class="card__add label">Add to bag</span></div>
+            <div class="card__info"><h3>Comfort Ends Cargo</h3><span class="card__meta label">Italian ripstop</span><span class="card__price">$260</span></div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- WORLD / MANIFESTO -->
+    <!-- WORLD -->
+    <!-- NOTE: the pledge line is editable brand copy — make it literally true (a real % to a named cause) before launch. -->
     <section class="world" id="world">
       <div class="container">
-        <div class="rowtag"><span class="mono">(03) Our World</span><span class="mono">The meaning</span></div>
+        <div class="rowtag"><span class="label">(03) Our World</span><span class="label">The meaning</span></div>
         <h2 class="statement" data-reveal="lines">
           <span>We don't make clothes.</span>
-          <span>We make <em>reminders</em></span>
+          <span>We make <em class="serif">reminders</em></span>
           <span>that nothing grows</span>
           <span>inside comfort.</span>
         </h2>
-        <div class="world__cols">
+        <div class="world__grid">
           <p data-reveal>Every piece is cut from heavyweight organic cloth, finished by hand, numbered, and built to outlast the season that chased it. No logos for the sake of logos. No noise — only intent.</p>
-          <p data-reveal data-delay="1">SOAR is a movement disguised as a clothing label: quiet on the outside, loud in the doing. We design for the moment you decide discomfort is the price of becoming more — and you pay it gladly.</p>
+          <div class="ledger">
+            <div class="ledger__row" data-reveal><span class="label">01</span><span>Discomfort is the tuition</span></div>
+            <div class="ledger__row" data-reveal data-delay="1"><span class="label">02</span><span>Quiet outside, loud within</span></div>
+            <div class="ledger__row" data-reveal data-delay="2"><span class="label">03</span><span>Rise, then reach back — a share of every drop funds youth programs</span></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ETHOS -->
-    <!-- NOTE: the "SOAR Pledge" tenet is editable brand copy — make it literally true (a real % to a named cause) before launch. -->
-    <section class="ethos">
-      <div class="container">
-        <div class="ethos__grid">
-          <article data-reveal><span class="ethos__n mono">01</span><h3>Discomfort is the tuition</h3><p>Nothing worth having is grown in comfort. Every piece is a tax on staying the same.</p></article>
-          <article data-reveal data-delay="1"><span class="ethos__n mono">02</span><h3>Quiet outside, loud within</h3><p>We don't shout with logos. We let the work — and the wearer — make the noise.</p></article>
-          <article data-reveal data-delay="2"><span class="ethos__n mono">03</span><h3>Rise, then reach back</h3><p>A share of every drop funds programs that help young people rise above their limits.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- LOOKBOOK STRIP (colour pop) -->
+    <!-- LOOKBOOK STRIP (moody) -->
     <section class="strip" id="lookbook">
-      <div class="strip__marquee" aria-hidden="true">
-        <div class="strip__set"><span>Rise above</span><b>✦</b><span>Soar</span><b>✦</b><span>Ascension Vol.01</span><b>✦</b><span>Rise above</span><b>✦</b><span>Soar</span><b>✦</b><span>Ascension Vol.01</span><b>✦</b></div>
-      </div>
       <div class="container strip__inner">
-        <p class="strip__quote" data-reveal>“Every garment is a reminder that you were made to rise.”</p>
+        <p class="strip__quote" data-reveal>Every garment is a reminder that you were <em class="serif">made to rise.</em></p>
         <a class="btn btn--paper" href="#shop" data-magnetic>See the lookbook</a>
       </div>
     </section>
 
-    <!-- INDEX / STATS -->
+    <!-- INDEX -->
     <section class="index">
-      <div class="container">
-        <div class="index__grid">
-          <div class="idx" data-reveal><span class="idx__n" data-count="14">0</span><span class="mono">Countries</span></div>
-          <div class="idx" data-reveal data-delay="1"><span class="idx__n" data-count="8.4" data-suffix="K" data-decimals="1">0</span><span class="mono">Community</span></div>
-          <div class="idx" data-reveal data-delay="2"><span class="idx__n" data-count="200">0</span><span class="mono">Per run</span></div>
-          <div class="idx" data-reveal data-delay="3"><span class="idx__n accent">110%</span><span class="mono">The standard</span></div>
-        </div>
+      <div class="container index__grid">
+        <div class="idx" data-reveal><span class="idx__n" data-count="14">0</span><span class="label">Countries</span></div>
+        <div class="idx" data-reveal data-delay="1"><span class="idx__n" data-count="8.4" data-suffix="K" data-decimals="1">0</span><span class="label">Community</span></div>
+        <div class="idx" data-reveal data-delay="2"><span class="idx__n" data-count="200">0</span><span class="label">Per run</span></div>
+        <div class="idx" data-reveal data-delay="3"><span class="idx__n serif">110%</span><span class="label">The standard</span></div>
       </div>
     </section>
 
@@ -223,17 +213,15 @@
     <section class="list" id="list">
       <div class="container list__inner">
         <div class="list__copy">
-          <p class="eyebrow" data-reveal>(04) The List · Powered by Klaviyo</p>
-          <h2 class="list__title" data-reveal="lines"><span>Get on</span><span>the <em>list.</em></span></h2>
+          <p class="eyebrow" data-reveal>(04) The List — powered by Klaviyo</p>
+          <h2 class="list__title" data-reveal="lines"><span>Get on the <em class="serif">list.</em></span></h2>
           <p data-reveal>Early access to every drop, members-only releases, and back-in-stock alerts. No noise — only ascent.</p>
         </div>
         <form class="list__form" data-form data-klaviyo novalidate data-reveal data-delay="1">
-          <div class="field">
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required aria-label="Email address" />
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Phone — SMS, optional" aria-label="Phone for SMS alerts, optional" />
-          </div>
-          <button class="btn btn--blue" type="submit" data-magnetic>Join the list →</button>
-          <p class="list__msg mono" data-form-msg aria-live="polite">Early access + back-in-stock. Unsubscribe anytime.</p>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Email address" required aria-label="Email address" />
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Phone — SMS, optional" aria-label="Phone for SMS alerts, optional" />
+          <button class="btn btn--solid" type="submit" data-magnetic>Join the list</button>
+          <p class="list__msg label" data-form-msg aria-live="polite">Early access + back-in-stock. Unsubscribe anytime.</p>
         </form>
       </div>
     </section>
@@ -244,15 +232,15 @@
     <div class="container">
       <div class="footer__top">
         <a class="footer__brand" href="#top">SOAR<sup>®</sup></a>
-        <nav class="footer__col" aria-label="Shop"><span class="mono">Shop</span><a href="#shop">Ascension Vol.01</a><a href="#">Hoodies</a><a href="#">Outerwear</a></nav>
-        <nav class="footer__col" aria-label="House"><span class="mono">House</span><a href="#world">Our World</a><a href="#lookbook">Lookbook</a><a href="#">Sustainability</a></nav>
-        <nav class="footer__col" aria-label="Support"><span class="mono">Support</span><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Size Guide</a></nav>
-        <div class="footer__col"><span class="mono">Social</span><div class="footer__social"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">X</a></div></div>
+        <nav class="footer__col" aria-label="Shop"><span class="label">Shop</span><a href="#shop">Ascension Vol.01</a><a href="#">Hoodies</a><a href="#">Outerwear</a></nav>
+        <nav class="footer__col" aria-label="House"><span class="label">House</span><a href="#world">Our World</a><a href="#lookbook">Lookbook</a><a href="#">Sustainability</a></nav>
+        <nav class="footer__col" aria-label="Support"><span class="label">Support</span><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Size guide</a></nav>
+        <nav class="footer__col" aria-label="Social"><span class="label">Social</span><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Newsletter</a></nav>
       </div>
       <div class="footer__bottom">
-        <span class="mono">© <span data-year>2026</span> SOAR® — Made to rise</span>
-        <button class="link-btn" type="button" data-top>Back to top ↑</button>
-        <span class="mono">Growth begins where comfort ends</span>
+        <span class="label">© <span data-year>2026</span> SOAR® — Made to rise</span>
+        <button class="link-btn" type="button" data-top>Back to top</button>
+        <span class="label">Growth begins where comfort ends</span>
       </div>
     </div>
   </footer>
