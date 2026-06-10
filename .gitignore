@@ -3,5 +3,6 @@ node_modules/
 preview-*.png
 soar-preview.html
 shot.mjs
-package*.json
+/package*.json
+*.zip
 .DS_Store
