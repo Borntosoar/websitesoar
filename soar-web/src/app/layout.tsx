@@ -13,6 +13,7 @@ const serif = Newsreader({
   style: ["italic", "normal"],
   weight: ["400", "500"],
   variable: "--font-serif",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
