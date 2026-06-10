@@ -1,0 +1,39 @@
+<section class="section cart">
+  <div class="container cart__inner">
+    <div class="rowtag">
+      <span class="label">Your bag</span>
+      <span class="label">{{ cart.item_count }} item{% if cart.item_count != 1 %}s{% endif %}</span>
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post">
+        {% for item in cart.items %}
+          <div class="cart__row">
+            <a href="{{ item.url }}" class="cart__thumb">
+              {% if item.image %}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}" width="80">{% else %}<span class="serif">{{ forloop.index }}</span>{% endif %}
+            </a>
+            <div class="cart__meta">
+              <h3>{{ item.product.title }}</h3>
+              {% unless item.variant.title contains 'Default' %}<span class="label">{{ item.variant.title }}</span>{% endunless %}
+              <a class="cart__remove label" href="{{ item.url_to_remove }}">Remove</a>
+            </div>
+            <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="cart__qty" aria-label="Quantity for {{ item.product.title | escape }}">
+            <span class="cart__price">{{ item.final_line_price | money }}</span>
+          </div>
+        {% endfor %}
+
+        <div class="cart__foot">
+          <button class="btn btn--line" type="submit" name="update">Update bag</button>
+          <div class="cart__total"><span class="label">Subtotal</span><span class="cart__sum">{{ cart.total_price | money }}</span></div>
+        </div>
+        <button class="btn btn--solid cart__checkout" type="submit" name="checkout">Checkout</button>
+        <p class="label soft" style="text-align:center;margin-top:.8rem">Taxes and shipping calculated at checkout.</p>
+      </form>
+    {% else %}
+      <div class="cart__empty">
+        <p>Your bag is empty.</p>
+        <a class="btn btn--solid" href="{{ routes.all_products_collection_url }}">Shop the drop</a>
+      </div>
+    {% endif %}
+  </div>
+</section>

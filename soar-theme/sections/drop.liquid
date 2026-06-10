@@ -1,0 +1,50 @@
+{%- assign lead = section.settings.product -%}
+<section class="drop" id="drop">
+  <div class="container">
+    <div class="rowtag rowtag--d"><span class="label">(01) The Drop</span><span class="label">This week — Vol.01</span></div>
+    <div class="drop__grid">
+      <div class="drop__lead">
+        <span class="label soft">Next drop in</span>
+        <div class="count" data-countdown aria-label="Time until next drop">
+          <div class="count__u"><span class="count__n" data-cd="days">00</span><span class="label">Days</span></div>
+          <div class="count__u"><span class="count__n" data-cd="hours">00</span><span class="label">Hrs</span></div>
+          <div class="count__u"><span class="count__n" data-cd="mins">00</span><span class="label">Min</span></div>
+          <div class="count__u"><span class="count__n" data-cd="secs">00</span><span class="label">Sec</span></div>
+        </div>
+        <h2 class="drop__title" data-reveal="lines"><span>Ascension <em class="serif">Vol.01</em></span></h2>
+        <p data-reveal>{{ section.settings.text | default: "Four numbered essentials. Two hundred of each, released together, once. When the timer reaches zero the drop goes live — and when they're gone, they're gone." }}</p>
+        <a class="btn btn--paper" href="{{ section.settings.cta_url | default: routes.all_products_collection_url }}" data-magnetic>Preview the collection</a>
+      </div>
+      <aside class="dropcard" data-reveal data-delay="1">
+        <div class="dropcard__top"><span class="label">Lead piece</span><span class="label">Limited 200</span></div>
+        <a class="dropcard__media" href="{% if lead %}{{ lead.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
+          {% if lead.featured_image %}
+            <img src="{{ lead.featured_image | image_url: width: 640 }}" alt="{{ lead.title | escape }}" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+          {% else %}
+            <span class="dropcard__mono serif">S</span>
+          {% endif %}
+        </a>
+        <div class="dropcard__row"><h3>{{ lead.title | default: 'Ascension Hoodie' }}</h3><span>{% if lead %}{{ lead.price | money }}{% else %}$280{% endif %}</span></div>
+        <div class="dropcard__bar"><span style="--p:92%"></span></div>
+        <span class="label soft">184 / 200 reserved — one per customer</span>
+      </aside>
+    </div>
+    <ul class="trust">
+      <li class="label">Numbered &amp; authenticated</li>
+      <li class="label">Organic, traceable cloth</li>
+      <li class="label">30-day returns</li>
+      <li class="label">Secure checkout</li>
+    </ul>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "The Drop",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Lead piece (optional)" },
+    { "type": "textarea", "id": "text", "label": "Description" },
+    { "type": "url", "id": "cta_url", "label": "CTA link" }
+  ],
+  "presets": [{ "name": "The Drop" }]
+}
+{% endschema %}

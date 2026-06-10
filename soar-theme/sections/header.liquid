@@ -1,0 +1,33 @@
+<header class="header" data-header>
+  <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} home">
+    <span class="brand__word">{{ shop.name | default: 'SOAR' }}</span><sup>®</sup>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    {% for link in section.settings.menu.links %}
+      <a href="{{ link.url }}" data-link>{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+  <div class="header__actions">
+    <a class="link-btn" href="{{ routes.search_url }}">Search</a>
+    <a class="link-btn" href="{{ routes.cart_url }}" aria-label="Cart">Bag (<span>{{ cart.item_count }}</span>)</a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" data-menu hidden>
+  <div class="menu__head"><span class="label">Index</span><button class="link-btn" type="button" data-menu-close>Close</button></div>
+  <nav class="menu__nav" aria-label="Mobile">
+    {% for link in section.settings.menu.links %}
+      <a href="{{ link.url }}" data-menu-link><i>0{{ forloop.index }}</i>{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+  <div class="menu__foot"><span class="label">Rise above</span><span class="label">Est. MMXXIV</span></div>
+</div>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "SOAR",
+    "theme_version": "1.0.0",
+    "theme_author": "SOAR",
+    "theme_documentation_url": "https://soar.example",
+    "theme_support_url": "https://soar.example"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Muted-neutral system"
+      },
+      {
+        "type": "paragraph",
+        "content": "SOAR ships with a fixed quiet-luxury palette and type system (see the soar-brand bible). Edit the :root tokens in assets/soar.css to retune colours globally."
+      }
+    ]
+  }
+]

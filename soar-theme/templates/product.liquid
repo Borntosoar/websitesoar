@@ -1,0 +1,46 @@
+<section class="section pdp">
+  <div class="container">
+    <div class="pdp__grid">
+      <div class="pdp__media">
+        {% for image in product.images %}
+          <img src="{{ image | image_url: width: 1100 }}" alt="{{ image.alt | default: product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="1100">
+        {% else %}
+          <div class="pdp__ph"><span class="serif">{{ product.title | slice: 0 }}</span></div>
+        {% endfor %}
+      </div>
+      <div class="pdp__info">
+        <p class="label">{{ product.type | default: 'Ascension Vol.01' }}</p>
+        <h1 class="pdp__title">{{ product.title }}</h1>
+        <p class="pdp__price">
+          {{ product.price | money }}
+          {% if product.compare_at_price > product.price %}<s class="soft">{{ product.compare_at_price | money }}</s>{% endif %}
+        </p>
+        {% if product.description != blank %}<div class="rte pdp__desc">{{ product.description }}</div>{% endif %}
+
+        {% form 'product', product %}
+          {% if product.variants.size > 1 %}
+            <label class="label" for="variant-select">Select</label>
+            <select id="variant-select" name="id" class="pdp__select">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                  {{ variant.title }} — {{ variant.price | money }}{% unless variant.available %} (sold out){% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          {% endif %}
+          <button class="btn btn--solid pdp__add" type="submit" name="add" {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}Add to bag{% else %}Sold out{% endif %}
+          </button>
+        {% endform %}
+
+        <ul class="trust" style="margin-top:2.4rem">
+          <li class="label">Numbered &amp; authenticated</li>
+          <li class="label">30-day returns</li>
+          <li class="label">Worldwide shipping</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

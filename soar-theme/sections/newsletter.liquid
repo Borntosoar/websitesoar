@@ -1,0 +1,27 @@
+<section class="list" id="list">
+  <div class="container list__inner">
+    <div class="list__copy">
+      <p class="eyebrow" data-reveal>(04) The List</p>
+      <h2 class="list__title" data-reveal="lines"><span>Get on the <em class="serif">list.</em></span></h2>
+      <p data-reveal>{{ section.settings.text | default: "Early access to every drop, members-only releases, and back-in-stock alerts. No noise — only ascent." }}</p>
+    </div>
+    {% form 'customer', class: 'list__form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter, ascension">
+      {{ form.errors | default_errors }}
+      <input type="email" name="contact[email]" placeholder="Email address" required aria-label="Email address">
+      <button class="btn btn--solid" type="submit">Join the list</button>
+      {% if form.posted_successfully? %}
+        <p class="list__msg label">On the list. Watch your inbox.</p>
+      {% else %}
+        <p class="list__msg label">No noise — only ascent. Unsubscribe anytime.</p>
+      {% endif %}
+    {% endform %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [{ "type": "textarea", "id": "text", "label": "Description" }],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

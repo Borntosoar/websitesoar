@@ -1,0 +1,42 @@
+{%- assign coll = section.settings.collection -%}
+<section class="shop" id="shop">
+  <div class="container">
+    <div class="rowtag">
+      <span class="label">{{ section.settings.heading | default: '(02) Shop — Ascension' }}</span>
+      <span class="label">{% if coll != blank %}{{ coll.products_count }}{% else %}Four{% endif %} pieces</span>
+    </div>
+    <div class="grid">
+      {% if coll != blank and coll.products_count > 0 %}
+        {% for product in coll.products limit: section.settings.count %}
+          {% render 'product-card', product: product, index: forloop.index %}
+        {% endfor %}
+      {% else %}
+        {%- assign names = "Ascension Hoodie|Limitless Tee|Rise Above Jacket|Comfort Ends Cargo" | split: "|" -%}
+        {%- assign metas = "600gsm organic|Long-staple pima|Japanese dry twill|Italian ripstop" | split: "|" -%}
+        {%- assign prices = "$280|$120|$420|$260" | split: "|" -%}
+        {%- assign romans = "I|II|III|IV" | split: "|" -%}
+        {% for n in (0..3) %}
+          <article class="card" data-reveal>
+            <div class="card__media">
+              <span class="card__mono serif">{{ romans[n] }}</span>
+              {% if n == 1 %}<span class="card__state out label">Sold out</span>{% endif %}
+              <span class="card__add label">Add to bag</span>
+            </div>
+            <div class="card__info"><h3>{{ names[n] }}</h3><span class="card__meta label">{{ metas[n] }}</span><span class="card__price">{{ prices[n] }}</span></div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Shop — Featured collection",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "(02) Shop — Ascension" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "count", "label": "Products to show", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Shop — Featured collection" }]
+}
+{% endschema %}

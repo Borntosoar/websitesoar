@@ -1,0 +1,23 @@
+{% paginate collection.products by 12 %}
+  <section class="shop section">
+    <div class="container">
+      <div class="rowtag">
+        <span class="label">{{ collection.title }}</span>
+        <span class="label">{{ collection.products_count }} pieces</span>
+      </div>
+      {% if collection.description != blank %}
+        <p class="collection__desc">{{ collection.description }}</p>
+      {% endif %}
+      <div class="grid">
+        {% for product in collection.products %}
+          {% render 'product-card', product: product, index: forloop.index %}
+        {% else %}
+          <p>No products in this collection yet.</p>
+        {% endfor %}
+      </div>
+      {% if paginate.pages > 1 %}
+        <div class="pagination">{{ paginate | default_pagination }}</div>
+      {% endif %}
+    </div>
+  </section>
+{% endpaginate %}

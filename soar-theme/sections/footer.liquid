@@ -1,0 +1,29 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <a class="footer__brand" href="{{ routes.root_url }}">{{ shop.name }}<sup>®</sup></a>
+      <nav class="footer__col">
+        <span class="label">Shop</span>
+        <a href="{{ routes.all_products_collection_url }}">All products</a>
+        <a href="/collections/ascension">Ascension Vol.01</a>
+      </nav>
+      <nav class="footer__col">
+        <span class="label">House</span>
+        <a href="/pages/world">Our World</a>
+        <a href="/blogs/journal">Journal</a>
+      </nav>
+      <nav class="footer__col">
+        <span class="label">Support</span>
+        <a href="/pages/shipping">Shipping</a>
+        <a href="/pages/contact">Contact</a>
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <span class="label">© {{ 'now' | date: '%Y' }} {{ shop.name }} — Made to rise</span>
+      <span class="label">Growth begins where comfort ends</span>
+    </div>
+  </div>
+</footer>
+{% schema %}
+{ "name": "Footer", "settings": [] }
+{% endschema %}

@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "hero": { "type": "hero-breakthrough", "settings": {} },
+    "marquee": { "type": "marquee", "settings": {} },
+    "drop": { "type": "drop", "settings": {} },
+    "shop": { "type": "featured-collection", "settings": {} },
+    "world": { "type": "world", "settings": {} },
+    "strip": { "type": "lookbook-strip", "settings": {} },
+    "list": { "type": "newsletter", "settings": {} }
+  },
+  "order": ["hero", "marquee", "drop", "shop", "world", "strip", "list"]
+}
