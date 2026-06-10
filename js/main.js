@@ -77,28 +77,62 @@
   /* ---- back to top ---- */
   var top = $("[data-top]"); top && top.addEventListener("click", function () { scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); });
 
-  /* ---- newsletter ---- */
+  /* ---- newsletter capture (Klaviyo email + SMS) ----
+     Set real keys to go live; otherwise runs in demo mode (no network call). */
+  var KLAVIYO = { publicKey: "YOUR_KLAVIYO_PUBLIC_KEY", listId: "YOUR_LIST_ID" };
   var form = $("[data-form]");
   if (form) {
-    var sec = form.closest("section"), input = $("#email", form), msg = $("[data-form-msg]"), base = msg ? msg.textContent : "";
+    var sec = form.closest("section"), input = $("#email", form), phone = $("#phone", form), msg = $("[data-form-msg]"), base = msg ? msg.textContent : "";
+    var setMsg = function (t) { if (msg) msg.textContent = t; };
+    var resetSoon = function () { setTimeout(function () { sec.classList.remove("is-ok"); setMsg(base); }, 4600); };
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((input.value || "").trim());
-      sec.classList.remove("is-ok", "is-error");
-      if (!ok) { sec.classList.add("is-error"); if (msg) msg.textContent = "Enter a valid email to begin the ascent."; input.focus(); return; }
-      sec.classList.add("is-ok"); if (msg) msg.textContent = "On the list. Watch your inbox."; input.value = "";
-      setTimeout(function () { sec.classList.remove("is-ok"); if (msg) msg.textContent = base; }, 4200);
+      var email = (input.value || "").trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { sec.classList.remove("is-ok"); sec.classList.add("is-error"); setMsg("Enter a valid email to begin the ascent."); input.focus(); return; }
+      sec.classList.remove("is-error");
+      var live = form.hasAttribute("data-klaviyo") && KLAVIYO.publicKey.indexOf("YOUR_") !== 0;
+      if (!live) { sec.classList.add("is-ok"); setMsg("On the list. Watch your inbox."); form.reset(); resetSoon(); return; }
+      setMsg("Joining…");
+      var attrs = { email: email };
+      if (phone && phone.value.trim()) attrs.phone_number = phone.value.trim();
+      var payload = { data: { type: "subscription", attributes: { custom_source: "SOAR Website", profile: { data: { type: "profile", attributes: attrs } } }, relationships: { list: { data: { type: "list", id: KLAVIYO.listId } } } } };
+      fetch("https://a.klaviyo.com/client/subscriptions/?company_id=" + encodeURIComponent(KLAVIYO.publicKey), { method: "POST", headers: { "Content-Type": "application/json", revision: "2024-10-15" }, body: JSON.stringify(payload) })
+        .then(function (r) {
+          if (r.ok || r.status === 202) { sec.classList.add("is-ok"); setMsg("On the list. Watch your inbox."); form.reset(); }
+          else { sec.classList.add("is-error"); setMsg("Something went wrong — please try again."); }
+          resetSoon();
+        })
+        .catch(function () { sec.classList.add("is-error"); setMsg("Network error — please try again."); resetSoon(); });
     });
-    input && input.addEventListener("input", function () { if (sec.classList.contains("is-error")) { sec.classList.remove("is-error"); if (msg) msg.textContent = base; } });
+    input && input.addEventListener("input", function () { if (sec.classList.contains("is-error")) { sec.classList.remove("is-error"); setMsg(base); } });
   }
 
   /* ---- add to bag ---- */
   var cc = $("[data-cart-count]"), cart = 0;
   $$(".plate__add, .plate__media").forEach(function (el) {
     el.addEventListener("click", function () {
+      var p = el.closest(".plate"); if (p && p.classList.contains("is-soldout")) return;
       cart++; if (cc) { cc.textContent = cart; cc.animate([{ transform: "scale(1)" }, { transform: "scale(1.7)" }, { transform: "scale(1)" }], { duration: 340, easing: "cubic-bezier(.22,1,.36,1)" }); }
     });
   });
+
+  /* ---- drop countdown (next Thursday 11:00 local) ---- */
+  (function () {
+    var root = $("[data-countdown]"); if (!root) return;
+    var d = $("[data-cd='days']"), h = $("[data-cd='hours']"), m = $("[data-cd='mins']"), s = $("[data-cd='secs']");
+    function nextDrop() { var n = new Date(), t = new Date(n); t.setHours(11, 0, 0, 0); var add = (4 - t.getDay() + 7) % 7; if (add === 0 && n.getTime() >= t.getTime()) add = 7; t.setDate(t.getDate() + add); return t; }
+    var target = nextDrop();
+    var pad = function (v) { return (v < 10 ? "0" : "") + v; };
+    function tick() {
+      var diff = target - new Date(); if (diff <= 0) { target = nextDrop(); diff = target - new Date(); }
+      var tot = Math.floor(diff / 1000);
+      if (d) d.textContent = pad(Math.floor(tot / 86400));
+      if (h) h.textContent = pad(Math.floor((tot % 86400) / 3600));
+      if (m) m.textContent = pad(Math.floor((tot % 3600) / 60));
+      if (s) s.textContent = pad(tot % 60);
+    }
+    tick(); setInterval(tick, 1000);
+  })();
 
   /* ---- pointer flourishes ---- */
   if (fine && !reduce) {

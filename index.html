@@ -143,10 +143,48 @@
       </div>
     </div>
 
+    <!-- THE DROP (countdown · scarcity) -->
+    <section class="release section" id="drop">
+      <div class="container">
+        <div class="sec-tag"><span class="label">(01) The Drop</span><span class="label">Weekly · Thu 11:00</span></div>
+        <div class="release__grid">
+          <div class="release__lead">
+            <span class="label release__live" data-drop-status>◷ Next drop in</span>
+            <div class="countdown" data-countdown aria-label="Time until next drop">
+              <div class="cd"><span class="cd__n" data-cd="days">00</span><span class="cd__l">Days</span></div>
+              <div class="cd"><span class="cd__n" data-cd="hours">00</span><span class="cd__l">Hrs</span></div>
+              <div class="cd"><span class="cd__n" data-cd="mins">00</span><span class="cd__l">Min</span></div>
+              <div class="cd"><span class="cd__n" data-cd="secs">00</span><span class="cd__l">Sec</span></div>
+            </div>
+            <h2 class="release__title" data-reveal="lines"><span>Ascension Vol.01</span><span><em>Drop 001</em></span></h2>
+            <p data-reveal>Four numbered essentials. 200 of each. Released together, once. When the timer hits zero the drop goes live — and when they're gone, they're gone for good.</p>
+            <div class="release__cta" data-reveal data-delay="1">
+              <a class="btn btn--acid" href="#list" data-magnetic>Get drop access →</a>
+              <a class="btn" href="#collection" data-magnetic>Preview collection</a>
+            </div>
+          </div>
+          <aside class="release__card" data-reveal data-delay="1">
+            <div class="release__card-head"><span class="label">Drop 001 · Lead piece</span><span class="label release__badge">Limited 200</span></div>
+            <div class="release__piece"><span class="release__piece-mono" aria-hidden="true">S</span><span class="release__idx label">Ascension</span></div>
+            <h3>Ascension Hoodie</h3>
+            <div class="release__meta"><span>600gsm Organic</span><span class="release__price">$280</span></div>
+            <div class="release__bar"><span style="--p:92%"></span></div>
+            <span class="release__note label">184 / 200 reserved · One per customer</span>
+          </aside>
+        </div>
+        <ul class="trustbar" aria-label="Why SOAR">
+          <li><b>✱</b> Free worldwide shipping</li>
+          <li><b>✱</b> 30-day returns</li>
+          <li><b>✱</b> Numbered &amp; authenticated</li>
+          <li><b>✱</b> Secure checkout</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- MANIFESTO -->
     <section class="manifesto section" id="manifesto">
       <div class="container">
-        <div class="sec-tag"><span class="label">(01) Manifesto</span><span class="label">SOAR®</span></div>
+        <div class="sec-tag"><span class="label">(02) Manifesto</span><span class="label">SOAR®</span></div>
         <h2 class="statement" data-reveal="lines">
           <span>We don't make clothes.</span>
           <span>We make <em>reminders</em> that</span>
@@ -160,11 +198,42 @@
       </div>
     </section>
 
+    <!-- ETHOS / PURPOSE -->
+    <!-- NOTE: the "SOAR Pledge" line is editable brand copy — make it literally true (a real % to a named cause) before launch. -->
+    <section class="ethos section" id="ethos">
+      <div class="container">
+        <div class="sec-tag"><span class="label">(03) Why we exist</span><span class="label">The meaning</span></div>
+        <h2 class="statement statement--mid" data-reveal="lines">
+          <span>SOAR is a <em>movement</em></span>
+          <span>disguised as a</span>
+          <span>clothing label.</span>
+        </h2>
+        <div class="ethos__grid">
+          <article class="ethos__tenet" data-reveal>
+            <span class="ethos__n">01</span>
+            <h3>Discomfort is the tuition</h3>
+            <p>Nothing worth having is grown in comfort. Every piece is a tax on staying the same — and a receipt for the person you're becoming.</p>
+          </article>
+          <article class="ethos__tenet" data-reveal data-delay="1">
+            <span class="ethos__n">02</span>
+            <h3>Quiet outside, loud within</h3>
+            <p>We don't shout with logos. We let the work — and the wearer — make the noise.</p>
+          </article>
+          <article class="ethos__tenet" data-reveal data-delay="2">
+            <span class="ethos__n">03</span>
+            <h3>Rise, then reach back</h3>
+            <p>A share of every drop funds programs that help young people rise above their limits.*</p>
+          </article>
+        </div>
+        <p class="ethos__pledge label" data-reveal>* The SOAR Pledge — purpose built into the price, not bolted on. <a href="#list">Join the movement →</a></p>
+      </div>
+    </section>
+
     <!-- COLLECTION — horizontal pinned rail -->
     <section class="rail" id="collection" data-rail>
       <div class="rail__sticky">
         <div class="rail__head">
-          <span class="label">(02) Ascension — Vol.01</span>
+          <span class="label">(04) Ascension — Vol.01</span>
           <span class="label">Drag / Scroll →</span>
         </div>
         <div class="rail__track" data-rail-track>
@@ -172,6 +241,7 @@
             <div class="plate__media">
               <span class="plate__idx">01</span>
               <span class="plate__mono" aria-hidden="true">S</span>
+              <span class="plate__state low">Only 12 left</span>
               <span class="plate__add">+ Add</span>
             </div>
             <div class="plate__info">
@@ -181,11 +251,12 @@
             </div>
           </article>
 
-          <article class="plate" data-plate>
+          <article class="plate is-soldout" data-plate>
             <div class="plate__media">
               <span class="plate__idx">02</span>
               <span class="plate__mono" aria-hidden="true">O</span>
-              <span class="plate__add">+ Add</span>
+              <span class="plate__state out">Sold out</span>
+              <span class="plate__add plate__add--notify">Notify me</span>
             </div>
             <div class="plate__info">
               <h3>Limitless Tee</h3>
@@ -232,7 +303,7 @@
     <section class="rise" id="lookbook">
       <span class="rise__word" data-parallax="0.18" aria-hidden="true">RISE</span>
       <div class="container rise__content">
-        <span class="label" data-reveal>(03) Philosophy</span>
+        <span class="label" data-reveal>(05) Philosophy</span>
         <h2 class="statement statement--mid" data-reveal="lines">
           <span>Every garment is a</span>
           <span>reminder that you were</span>
@@ -259,17 +330,20 @@
       </div>
     </section>
 
-    <!-- DROP / NEWSLETTER -->
-    <section class="drop section" id="drop">
+    <!-- THE LIST — Klaviyo email + SMS capture -->
+    <!-- KLAVIYO SETUP: set keys in js/main.js (KLAVIYO.publicKey = your 6-char company_id / public API key, KLAVIYO.listId = your List ID).
+         Until real keys are set the form runs in demo mode (validates + confirms, no network call). -->
+    <section class="drop section" id="list">
       <div class="container">
-        <div class="sec-tag"><span class="label">(04) The List</span><span class="label">No noise</span></div>
+        <div class="sec-tag"><span class="label">(06) The List</span><span class="label">Powered by Klaviyo</span></div>
         <h2 class="drop__title" data-reveal="lines"><span>Get on</span><span>the <em>list.</em></span></h2>
-        <p data-reveal>First access to drops. Members-only releases. Zero spam — only ascent.</p>
-        <form class="drop__form" data-form novalidate data-reveal data-delay="1">
+        <p data-reveal>Early access to every drop, members-only releases, and back-in-stock alerts. No noise — only ascent.</p>
+        <form class="drop__form" data-form data-klaviyo novalidate data-reveal data-delay="1">
           <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="EMAIL ADDRESS" required aria-label="Email address" />
-          <button class="btn btn--acid" type="submit" data-magnetic>Join →</button>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="PHONE — SMS, OPTIONAL" aria-label="Phone for SMS alerts, optional" />
+          <button class="btn btn--acid" type="submit" data-magnetic>Join the list →</button>
         </form>
-        <p class="drop__msg label" data-form-msg aria-live="polite">We rise together. Unsubscribe anytime.</p>
+        <p class="drop__msg label" data-form-msg aria-live="polite">Early access + back-in-stock. Unsubscribe anytime.</p>
       </div>
     </section>
   </main>
