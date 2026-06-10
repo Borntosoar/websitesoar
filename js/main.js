@@ -10,6 +10,41 @@
 
   var y = $("[data-year]"); if (y) y.textContent = new Date().getFullYear();
 
+  /* ---- entrance gate (password) ----
+     NOTE: client-side only — anyone can read PASS in the source. It's a
+     drop-culture splash, not real security. For true gating use Shopify's
+     storefront password page or a server check. */
+  (function () {
+    var gate = $("[data-gate]"); if (!gate) return;
+    var PASS = "ASCEND";                 // change me
+    var KEY = "soar-gate-passed";
+    var form = $("[data-gate-form]", gate), input = $("[data-gate-input]", gate), msg = $("[data-gate-msg]", gate);
+    var base = msg ? msg.textContent : "";
+    var passed = false; try { passed = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
+
+    function seal() { try { sessionStorage.setItem(KEY, "1"); } catch (e) {} document.body.style.overflow = ""; }
+    function shut() { gate.classList.add("is-open"); setTimeout(function () { gate.setAttribute("hidden", ""); }, 750); }
+    function enter(skipAnim) {
+      seal();
+      if (skipAnim || reduce) { shut(); return; }
+      gate.classList.add("is-unlocking");
+      setTimeout(shut, 1500);            // let the breakthrough play
+    }
+
+    if (passed) { gate.classList.add("is-open"); gate.setAttribute("hidden", ""); }
+    else { document.body.style.overflow = "hidden"; if (input) setTimeout(function () { input.focus(); }, 350); }
+
+    form && form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if ((input.value || "").trim().toLowerCase() === PASS.toLowerCase()) { gate.classList.remove("is-error"); enter(false); }
+      else { gate.classList.add("is-error"); if (msg) msg.textContent = "Not yet — the box holds. Try again."; input.select(); }
+    });
+    input && input.addEventListener("input", function () { if (gate.classList.contains("is-error")) { gate.classList.remove("is-error"); if (msg) msg.textContent = base; } });
+    $$("[data-gate-skip]", gate).forEach(function (a) {
+      a.addEventListener("click", function (e) { e.preventDefault(); enter(true); var t = $("#list"); if (t) setTimeout(function () { t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }, 60); });
+    });
+  })();
+
   /* header stuck */
   var header = $("[data-header]");
   var stuck = function () { if (header) header.classList.toggle("is-stuck", scrollY > 6); };

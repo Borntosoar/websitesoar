@@ -284,3 +284,43 @@ ul { list-style: none; padding: 0; }
   .symbol__fragment { transform: translate(12px, -14px) rotate(11deg); }
   .symbol__bird { offset-distance: 62%; opacity: 1; }
 }
+
+/* =========================================================
+   Entrance gate (password) — the box you break through
+   ========================================================= */
+.gate { position: fixed; inset: 0; z-index: 500; background: var(--espresso); color: var(--bone); display: grid; place-items: center; padding: var(--gutter); text-align: center; transition: opacity .7s var(--ease); }
+.gate.is-open { opacity: 0; pointer-events: none; }
+.gate__inner { display: flex; flex-direction: column; align-items: center; gap: 1.05rem; max-width: 440px; width: 100%; }
+.gate__mark { color: var(--bone-soft); letter-spacing: .24em; }
+.gate__symbol { width: clamp(140px, 30vw, 196px); height: auto; margin: .3rem 0 .2rem; overflow: visible; }
+.gate .eyebrow { color: var(--bone-soft); }
+.gate__title { font-weight: 500; font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.1; letter-spacing: -.01em; }
+.gate__title em { color: var(--bone); }
+.gate__form { display: flex; gap: .6rem; width: 100%; max-width: 360px; margin-top: .5rem; }
+.gate__form input { flex: 1; min-width: 0; background: transparent; border: 1px solid var(--line-d); color: var(--bone); padding: .95em 1.2em; font: 400 .95rem var(--sans); letter-spacing: .02em; transition: border-color .25s var(--ease); }
+.gate__form input::placeholder { color: var(--bone-soft); }
+.gate__form input:focus { outline: none; border-color: var(--bone); }
+.gate__form .btn--solid { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+.gate__form .btn--solid:hover { background: #fff; }
+.gate__msg { color: var(--bone-soft); min-height: 1.2em; }
+.gate__skip { color: var(--bone-soft); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.gate__skip:hover { color: var(--bone); }
+.gate.is-error .gate__form input { border-color: #C98A7A; }
+.gate.is-error .gate__msg { color: #C98A7A; }
+.gate.is-error .gate__form { animation: gateShake .4s ease; }
+@keyframes gateShake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+
+/* gate symbol: locked, then breaks through on unlock */
+.gs-stroke { fill: none; stroke: var(--bone); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
+.gs-crack { stroke-dasharray: 90; stroke-dashoffset: 90; opacity: 0; }
+.gs-frag { transform-box: view-box; transform-origin: 143px 121px; }
+.gs-bird { opacity: 0; }
+.gs-light { opacity: 0; }
+.gate.is-unlocking .gs-crack { opacity: 1; animation: gsCrack .5s ease forwards; }
+.gate.is-unlocking .gs-frag { animation: gsFrag .6s .25s ease forwards; }
+.gate.is-unlocking .gs-light { animation: gsLight 1.2s .3s ease forwards; }
+.gate.is-unlocking .gs-bird { animation: gsBird 1.2s .35s var(--ease) forwards; }
+@keyframes gsCrack { to { stroke-dashoffset: 0; } }
+@keyframes gsFrag { to { transform: translate(9px, -13px) rotate(13deg); opacity: .5; } }
+@keyframes gsLight { 0% { opacity: 0; } 50% { opacity: .6; } 100% { opacity: .28; } }
+@keyframes gsBird { 0% { opacity: 0; transform: translateY(0); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-120px); } }

@@ -21,6 +21,39 @@
   <div class="grain" aria-hidden="true"></div>
   <div class="cursor" data-cursor aria-hidden="true"></div>
 
+  <!-- ENTRANCE GATE (the box you break through) -->
+  <div class="gate" data-gate role="dialog" aria-modal="true" aria-label="Enter SOAR">
+    <div class="gate__inner">
+      <span class="gate__mark label">SOAR®</span>
+      <svg class="gate__symbol" viewBox="0 0 200 220" aria-hidden="true">
+        <defs>
+          <radialGradient id="gbloom" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#F3EEE3" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#F3EEE3" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle class="gs-light" cx="100" cy="72" r="74" fill="url(#gbloom)" />
+        <g class="gs-box gs-stroke">
+          <path d="M60 200 L140 200 L140 130 L60 130 Z" />
+          <path d="M60 130 L80 112 L160 112 L140 130" />
+          <path d="M140 200 L160 182 L160 112" />
+        </g>
+        <path class="gs-crack gs-stroke" d="M100 130 L106 150 L96 168 L102 200" stroke-width="1.1" />
+        <path class="gs-crack gs-stroke" d="M80 124 L120 124" stroke-width="1.1" />
+        <path class="gs-frag gs-stroke" d="M126 112 L160 112 L150 130 Z" />
+        <g class="gs-bird"><path d="M100 96 L112 120 L88 120 Z" fill="#E7E2D7" /></g>
+      </svg>
+      <p class="eyebrow">Ascension Vol.01 — Members only</p>
+      <h2 class="gate__title">The box is locked.<br /><em class="serif">Break through.</em></h2>
+      <form class="gate__form" data-gate-form novalidate>
+        <input type="password" data-gate-input placeholder="Enter password" aria-label="Password" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <button class="btn btn--solid" type="submit">Enter</button>
+      </form>
+      <p class="gate__msg label" data-gate-msg>Access by invitation. Rise above to enter.</p>
+      <a class="gate__skip label" data-gate-skip href="#list">No password? Join the list for the next drop →</a>
+    </div>
+  </div>
+
   <!-- Announce -->
   <div class="announce">
     <span class="label">Ascension Vol.01</span>
