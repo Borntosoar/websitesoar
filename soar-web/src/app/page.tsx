@@ -4,7 +4,9 @@ import { Marquee } from "@/components/sections/marquee";
 import { CampaignOne, CampaignTwo, CategorySplit } from "@/components/sections/campaigns";
 import { Drop } from "@/components/sections/drop";
 import { Shop } from "@/components/sections/shop";
+import { Lookbook } from "@/components/sections/lookbook";
 import { World } from "@/components/sections/world";
+import { Stats } from "@/components/sections/stats";
 import { Strip } from "@/components/sections/strip";
 import { List } from "@/components/sections/list";
 import { SiteFooter } from "@/components/sections/site-footer";
@@ -15,16 +17,18 @@ export default function Page() {
     <>
       <SiteHeader />
       <main id="top">
-        {/* 3D entrance — vibrating box, password, arrow burst, SOAR hovering */}
+        {/* signature 3D breakthrough entrance */}
         <EntranceHero />
         <Marquee />
-        {/* premium-streetwear home rhythm: campaign -> drop -> rail -> split -> campaign */}
+        {/* campaign-led rhythm: campaign -> categories -> drop -> grid -> lookbook -> campaign */}
         <CampaignOne />
+        <CategorySplit />
         <Drop />
         <Shop />
-        <CategorySplit />
+        <Lookbook />
         <CampaignTwo />
         <World />
+        <Stats />
         <Strip />
         <List />
       </main>

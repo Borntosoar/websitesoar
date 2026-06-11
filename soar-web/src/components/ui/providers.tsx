@@ -6,6 +6,7 @@ import { CartProvider, CartDrawer } from "@/components/ui/cart";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { SectionNav } from "@/components/ui/section-nav";
+import { Cursor } from "@/components/ui/cursor";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <CartDrawer />
         <ScrollProgress />
         <SectionNav />
+        <Cursor />
       </CartProvider>
     </MotionConfig>
   );
