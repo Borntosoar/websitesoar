@@ -20,6 +20,19 @@ description: >-
 > storytelling, and experiences to symbolize the journey of **breaking free
 > from limitations and realizing human potential.**
 
+## 0. The founders' story (canon — from the founders directly)
+SOAR is **three friends**, each trying to make it out of the **same but
+different situations**, united by one thing everyone can relate to: **putting
+in work and not seeing results — yet.** SOAR is their **all-or-nothing**.
+- The customer promise: wear SOAR and **relate without being judged.** The
+  clothes meet people inside the struggle, not above it.
+- The ambition: not a small brand — a brand built to influence many, **premium
+  in every small detail**, because the small details add up to the result.
+- The method: **long, consistent development — never quick popularity.** The
+  brand earns its rise the same way its customers do.
+- Voice implication: "we haven't seen results yet either — so we built the
+  thing that will." Overcoming, not arrived. All-or-nothing, quietly.
+
 Apply this on every SOAR deliverable. The clothing is the medium — **the true
 product is transformation.** When in doubt, run the **Brand Test** (bottom).
 

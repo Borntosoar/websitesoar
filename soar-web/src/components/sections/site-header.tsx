@@ -1,17 +1,51 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Search, Bell, Bookmark, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  ["Drop", "#drop"],
-  ["Shop", "#shop"],
+  ["Collection", "#shop"],
+  ["The Drop", "#drop"],
   ["World", "#world"],
   ["Contact", "#list"],
 ] as const;
 
+function IconBtn({
+  label,
+  count,
+  dot,
+  children,
+}: {
+  label: string;
+  count?: number;
+  dot?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label + (typeof count === "number" ? `, ${count} items` : "")}
+      className="relative grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-current/0 hover:opacity-60"
+    >
+      {children}
+      {typeof count === "number" && count > 0 && (
+        <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-current px-1 text-[9px] font-semibold leading-none">
+          <span className="invert">{count}</span>
+        </span>
+      )}
+      {dot && (
+        <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[#E6C566]" aria-hidden />
+      )}
+    </button>
+  );
+}
+
 export function SiteHeader() {
   const [stuck, setStuck] = useState(false);
+  const [saved] = useState(0);
+  const [cart] = useState(0);
+
   useEffect(() => {
     const on = () => setStuck(window.scrollY > window.innerHeight * 0.7);
     on();
@@ -23,25 +57,51 @@ export function SiteHeader() {
     <header
       data-site-header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-6 px-5 py-5 transition-colors duration-300 md:px-12",
+        "fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-5 py-4 transition-all duration-500 md:px-10",
+        // blends with the background but stays legible
         stuck
-          ? "border-b border-ink/10 bg-oat/85 text-ink backdrop-blur-md"
-          : "text-bone",
+          ? "border-b border-ink/10 bg-oat/70 text-ink shadow-[0_1px_0_rgba(41,37,31,0.04)] backdrop-blur-xl"
+          : "bg-gradient-to-b from-espresso/55 to-transparent text-bone backdrop-blur-[2px]",
       )}
     >
-      <a href="#top" className="text-[1.05rem] font-semibold tracking-[0.18em]">
-        SOAR<sup className="text-[0.5em] align-super">®</sup>
-      </a>
-      <nav className="hidden gap-8 md:flex">
+      {/* left: nav */}
+      <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
         {nav.map(([label, href]) => (
-          <a key={href} href={href} className="text-[13px] opacity-80 transition-opacity hover:opacity-100">
+          <a
+            key={href}
+            href={href}
+            className="text-[12px] uppercase tracking-[0.12em] opacity-75 transition-opacity hover:opacity-100"
+          >
             {label}
           </a>
         ))}
       </nav>
-      <button className="text-[11px] uppercase tracking-[0.12em]" type="button">
-        Bag (0)
-      </button>
+      <span className="md:hidden" />
+
+      {/* center: brand */}
+      <a
+        href="#top"
+        className="justify-self-center text-[1.15rem] font-semibold tracking-[0.22em]"
+        aria-label="SOAR home"
+      >
+        SOAR<sup className="align-super text-[0.5em] opacity-70">®</sup>
+      </a>
+
+      {/* right: utilities — search / notifications / saved / cart */}
+      <div className="flex items-center justify-end gap-0.5">
+        <IconBtn label="Search">
+          <Search size={17} strokeWidth={1.6} />
+        </IconBtn>
+        <IconBtn label="Notifications" dot>
+          <Bell size={17} strokeWidth={1.6} />
+        </IconBtn>
+        <IconBtn label="Saved pieces" count={saved}>
+          <Bookmark size={17} strokeWidth={1.6} />
+        </IconBtn>
+        <IconBtn label="Bag" count={cart}>
+          <ShoppingBag size={17} strokeWidth={1.6} />
+        </IconBtn>
+      </div>
     </header>
   );
 }

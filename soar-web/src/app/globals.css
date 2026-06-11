@@ -94,6 +94,26 @@ body {
 body.gate-locked { overflow: hidden; }
 body.gate-locked [data-site-header] { opacity: 0 !important; pointer-events: none; }
 
+/* ---- SOAR hovering above the breakthrough ---- */
+.soar-hover {
+  animation: soar-hover 5.5s ease-in-out infinite;
+  text-shadow: 0 0 60px rgba(230, 197, 102, 0.25);
+}
+@keyframes soar-hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .soar-hover {
+    animation: none;
+  }
+}
+
 /* ---- (legacy SVG gate symbol — retained, unused by the 3D entrance) ---- */
 .gate-symbol .gs-stroke {
   fill: none;
