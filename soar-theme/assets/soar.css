@@ -362,3 +362,10 @@ ul { list-style: none; padding: 0; }
 
 /* password page: gate fills the page (relative so it scrolls on short screens) */
 .template-password .gate { position: relative; min-height: 100svh; }
+
+/* 3D entrance on the password page */
+.gate-3d { position: fixed; inset: 0; z-index: 0; }
+.gate-3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.template-password .gate { position: relative; z-index: 1; }
+.gate--3d { background: transparent !important; justify-items: center; align-content: end; padding-bottom: 9svh; }
+.gate--3d .gate__inner { background: rgba(31,27,22,0.28); backdrop-filter: blur(4px); padding: 1.6rem; }
