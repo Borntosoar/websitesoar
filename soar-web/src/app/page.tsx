@@ -1,5 +1,5 @@
 import { SiteHeader } from "@/components/sections/site-header";
-import { HeroClient } from "@/components/ui/hero-client";
+import { EntranceHero } from "@/components/sections/entrance-hero";
 import { Marquee } from "@/components/sections/marquee";
 import { Drop } from "@/components/sections/drop";
 import { Shop } from "@/components/sections/shop";
@@ -13,8 +13,8 @@ export default function Page() {
     <>
       <SiteHeader />
       <main id="top">
-        {/* dark 3D breakthrough */}
-        <HeroClient />
+        {/* 3D breakthrough — entrance gate + hero in one scene */}
+        <EntranceHero />
         {/* light */}
         <Marquee />
         {/* dark */}

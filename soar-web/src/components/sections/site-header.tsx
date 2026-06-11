@@ -21,6 +21,7 @@ export function SiteHeader() {
 
   return (
     <header
+      data-site-header
       className={cn(
         "fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-6 px-5 py-5 transition-colors duration-300 md:px-12",
         stuck

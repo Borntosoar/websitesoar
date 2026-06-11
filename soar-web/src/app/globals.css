@@ -90,7 +90,11 @@ body {
   }
 }
 
-/* ---- entrance gate symbol: locked, then breaks through on unlock ---- */
+/* ---- entrance: lock scroll + hide header while the breakthrough is locked ---- */
+body.gate-locked { overflow: hidden; }
+body.gate-locked [data-site-header] { opacity: 0 !important; pointer-events: none; }
+
+/* ---- (legacy SVG gate symbol — retained, unused by the 3D entrance) ---- */
 .gate-symbol .gs-stroke {
   fill: none;
   stroke: #e7e2d7;
