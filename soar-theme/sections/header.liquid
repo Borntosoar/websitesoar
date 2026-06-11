@@ -9,7 +9,7 @@
   </nav>
   <div class="header__actions">
     <a class="link-btn" href="{{ routes.search_url }}">Search</a>
-    <a class="link-btn" href="{{ routes.cart_url }}" aria-label="Cart">Bag (<span>{{ cart.item_count }}</span>)</a>
+    <a class="link-btn" href="{{ routes.cart_url }}" aria-label="Cart" data-cart-toggle>Bag (<span data-cart-count>{{ cart.item_count }}</span>)</a>
     <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-open><span></span><span></span></button>
   </div>
 </header>

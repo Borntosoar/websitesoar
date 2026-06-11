@@ -20,6 +20,7 @@
 
   <body class="template-{{ template.name }}">
     <a class="skip-link" href="#MainContent">Skip to content</a>
+    <div class="cd-progress" data-progress aria-hidden="true"></div>
     <div class="cursor" data-cursor aria-hidden="true"></div>
 
     {% section 'announcement-bar' %}
@@ -30,7 +31,16 @@
     </main>
 
     {% section 'footer' %}
+    {% section 'cart-drawer' %}
 
+    <script type="module">
+      import Lenis from 'https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.mjs';
+      const lenis = new Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      window.lenis = lenis;
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    </script>
     <script src="{{ 'soar.js' | asset_url }}" defer></script>
+    <script src="{{ 'soar-enhance.js' | asset_url }}" defer></script>
   </body>
 </html>

@@ -1,0 +1,44 @@
+<div class="cd-overlay" data-cd-overlay hidden></div>
+<aside class="cd" data-cart-drawer aria-label="Your bag" aria-hidden="true">
+  <div class="cd__head">
+    <span class="label">Your bag ({{ cart.item_count }})</span>
+    <button class="link-btn" type="button" data-cd-close>Close</button>
+  </div>
+  <div class="cd__body">
+    {% if cart.item_count > 0 %}
+      {% for item in cart.items %}
+        <div class="cd__row" data-line="{{ forloop.index }}">
+          <a class="cd__thumb" href="{{ item.url }}">
+            {% if item.image %}<img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}" width="64">{% else %}<span class="serif">{{ forloop.index }}</span>{% endif %}
+          </a>
+          <div class="cd__meta">
+            <p>{{ item.product.title }}</p>
+            {% unless item.variant.title contains 'Default' %}<span class="label">{{ item.variant.title }}</span>{% endunless %}
+            <div class="cd__qty">
+              <button type="button" data-cd-dec aria-label="Decrease quantity">–</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" data-cd-inc aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+          <span class="cd__price">{{ item.final_line_price | money }}</span>
+          <button class="cd__remove" type="button" data-cd-remove aria-label="Remove {{ item.title | escape }}">×</button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="cd__empty">
+        <p>Your bag is empty.</p>
+        <button class="link-btn" type="button" data-cd-close>Keep shopping</button>
+      </div>
+    {% endif %}
+  </div>
+  {% if cart.item_count > 0 %}
+    <div class="cd__foot">
+      <div class="cd__sub"><span class="label">Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+      <a class="btn btn--solid" href="/checkout">Checkout</a>
+      <p class="label soft" style="text-align:center;margin-top:.7rem">Shipping &amp; taxes at checkout</p>
+    </div>
+  {% endif %}
+</aside>
+{% schema %}
+{ "name": "Cart drawer" }
+{% endschema %}

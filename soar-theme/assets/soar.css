@@ -369,3 +369,29 @@ ul { list-style: none; padding: 0; }
 .template-password .gate { position: relative; z-index: 1; }
 .gate--3d { background: transparent !important; justify-items: center; align-content: end; padding-bottom: 9svh; }
 .gate--3d .gate__inner { background: rgba(31,27,22,0.28); backdrop-filter: blur(4px); padding: 1.6rem; }
+
+/* ===== Theme interactions: progress · lenis · tilt · cart drawer ===== */
+.cd-progress { position: fixed; left: 0; top: 0; z-index: 300; height: 2px; width: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+body.cd-locked { overflow: hidden; }
+.card__media, .plate__media { transition: transform .2s var(--ease), border-color .3s var(--ease); transform-style: preserve-3d; }
+
+.cd-overlay { position: fixed; inset: 0; z-index: 400; background: rgba(31,27,22,.5); backdrop-filter: blur(3px); }
+.cd { position: fixed; right: 0; top: 0; z-index: 401; display: flex; flex-direction: column; width: 100%; max-width: 420px; height: 100svh; background: var(--oat); color: var(--ink); transform: translateX(100%); transition: transform .45s var(--ease); }
+.cd.is-open { transform: none; }
+.cd__head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.cd__body { flex: 1; overflow: auto; padding: 0 24px; }
+.cd__row { display: grid; grid-template-columns: 64px 1fr auto auto; gap: 14px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.cd__thumb { display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--line); background: var(--paper); }
+.cd__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.cd__meta p { font-weight: 500; }
+.cd__qty { display: inline-flex; align-items: center; gap: 12px; margin-top: 8px; }
+.cd__qty button { width: 24px; height: 24px; border: 1px solid var(--line-2); line-height: 1; }
+.cd__remove { color: var(--taupe); font-size: 1.1rem; }
+.cd__remove:hover { color: var(--ink); }
+.cd__foot { padding: 20px 24px; border-top: 1px solid var(--ink); }
+.cd__sub { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+.cd__foot .btn { width: 100%; justify-content: center; }
+.cd__empty { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 60px 0; text-align: center; }
