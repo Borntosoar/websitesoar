@@ -12,6 +12,7 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Edges } from "@react-three/drei";
+import { EffectComposer, Bloom as BloomEffect } from "@react-three/postprocessing";
 import { useMemo, useRef, type MutableRefObject, type ReactNode } from "react";
 import * as THREE from "three";
 
@@ -231,6 +232,9 @@ export function BreakthroughScene({ unlocked = false }: { unlocked?: boolean }) 
       <ambientLight intensity={0.32} />
       <directionalLight position={[3, 6, 4]} intensity={0.45} color={BONE} />
       <Scene unlocked={unlocked} />
+      <EffectComposer>
+        <BloomEffect intensity={0.9} luminanceThreshold={0.18} luminanceSmoothing={0.5} mipmapBlur radius={0.8} />
+      </EffectComposer>
     </Canvas>
   );
 }

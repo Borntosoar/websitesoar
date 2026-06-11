@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { motion, type Variants } from "framer-motion";
+import { type ReactNode } from "react";
 
-/** Fade-and-rise on scroll into view (IntersectionObserver, reduced-motion safe). */
+const variants: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0 },
+};
+
+/** Scroll-into-view reveal (Framer spring). Respects reduced motion via the
+ *  app-level MotionConfig. Same API as before (children, className, delay-ms). */
 export function Reveal({
   children,
   className,
@@ -13,42 +19,16 @@ export function Reveal({
   className?: string;
   delay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setShown(true);
-            io.disconnect();
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={cn(
-        "transition-all duration-700 ease-brand motion-reduce:transition-none motion-reduce:opacity-100",
-        shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
-        className,
-      )}
+    <motion.div
+      className={className}
+      variants={variants}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: delay / 1000 }}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

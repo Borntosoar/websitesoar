@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { Providers } from "@/components/ui/providers";
 import "./globals.css";
 
 const sans = Hanken_Grotesk({
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
       <body className="bg-espresso text-bone antialiased">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
