@@ -15,6 +15,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
 
     {{ 'soar.css' | asset_url | stylesheet_tag }}
+    <style>
+      :root {
+        --oat: {{ settings.col_bg | default: '#E7E2D7' }};
+        --ink: {{ settings.col_ink | default: '#29251F' }};
+        --espresso: {{ settings.col_dark | default: '#1F1B16' }};
+        --accent: {{ settings.col_accent | default: '#E6C566' }};
+        --accent-2: {{ settings.col_accent2 | default: '#3B49FF' }};
+      }
+    </style>
     {{ content_for_header }}
   </head>
 

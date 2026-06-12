@@ -2,22 +2,26 @@
   {
     "name": "theme_info",
     "theme_name": "SOAR",
-    "theme_version": "1.0.0",
+    "theme_version": "1.1.0",
     "theme_author": "SOAR",
     "theme_documentation_url": "https://soar.example",
     "theme_support_url": "https://soar.example"
   },
   {
+    "name": "Colours",
+    "settings": [
+      { "type": "header", "content": "Play with the palette — applies site-wide, live" },
+      { "type": "color", "id": "col_bg", "label": "Background (paper)", "default": "#E7E2D7" },
+      { "type": "color", "id": "col_ink", "label": "Text", "default": "#29251F" },
+      { "type": "color", "id": "col_dark", "label": "Dark sections", "default": "#1F1B16" },
+      { "type": "color", "id": "col_accent", "label": "Accent", "default": "#E6C566" },
+      { "type": "color", "id": "col_accent2", "label": "Accent 2 (electric)", "default": "#3B49FF" }
+    ]
+  },
+  {
     "name": "Brand",
     "settings": [
-      {
-        "type": "header",
-        "content": "Muted-neutral system"
-      },
-      {
-        "type": "paragraph",
-        "content": "SOAR ships with a fixed quiet-luxury palette and type system (see the soar-brand bible). Edit the :root tokens in assets/soar.css to retune colours globally."
-      }
+      { "type": "paragraph", "content": "Deeper tokens (stone, taupe, hairlines) live in assets/soar.css. The breakthrough entrance colours are in assets/soar-entrance-3d.js." }
     ]
   }
 ]

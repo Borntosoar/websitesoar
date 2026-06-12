@@ -1,0 +1,47 @@
+{%- assign s = section.settings -%}
+<section class="banner banner--{{ s.height }}">
+  {% if s.image != blank %}
+    <img class="banner__img" {% if s.parallax %}data-parallax="0.12"{% endif %}
+      src="{{ s.image | image_url: width: 2200 }}"
+      srcset="{{ s.image | image_url: width: 800 }} 800w, {{ s.image | image_url: width: 1600 }} 1600w, {{ s.image | image_url: width: 2200 }} 2200w"
+      sizes="100vw" alt="{{ s.image.alt | escape }}" loading="lazy" width="2200" height="1400">
+  {% else %}
+    <div class="banner__ph"></div>
+  {% endif %}
+  <div class="banner__scrim" style="opacity: {{ s.overlay | divided_by: 100.0 }}"></div>
+  <div class="banner__content banner__content--{{ s.align }}">
+    {% if s.subheading != blank %}<span class="label" data-reveal>{{ s.subheading }}</span>{% endif %}
+    {% if s.heading != blank %}<h2 class="banner__title" data-reveal data-delay="1">{{ s.heading }}</h2>{% endif %}
+    {% if s.text != blank %}<p class="banner__text" data-reveal data-delay="2">{{ s.text }}</p>{% endif %}
+    {% if s.btn1 != blank or s.btn2 != blank %}
+      <div class="banner__cta" data-reveal data-delay="3">
+        {% if s.btn1 != blank %}<a class="btn {{ s.btn1_style }}" href="{{ s.btn1_link | default: '#' }}">{{ s.btn1 }}</a>{% endif %}
+        {% if s.btn2 != blank %}<a class="btn btn--line-bone" href="{{ s.btn2_link | default: '#' }}">{{ s.btn2 }}</a>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Image banner",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "height", "label": "Height", "default": "lg",
+      "options": [{"value":"sm","label":"Small"},{"value":"md","label":"Medium"},{"value":"lg","label":"Large"},{"value":"full","label":"Full screen"}] },
+    { "type": "range", "id": "overlay", "label": "Image darken", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 35 },
+    { "type": "checkbox", "id": "parallax", "label": "Parallax", "default": true },
+    { "type": "select", "id": "align", "label": "Text position", "default": "bl",
+      "options": [{"value":"bl","label":"Bottom left"},{"value":"bc","label":"Bottom center"},{"value":"cc","label":"Center"}] },
+    { "type": "text", "id": "subheading", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Ascension Vol.01" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "text", "id": "btn1", "label": "Button 1", "default": "Shop now" },
+    { "type": "url", "id": "btn1_link", "label": "Button 1 link" },
+    { "type": "select", "id": "btn1_style", "label": "Button 1 style", "default": "btn--paper",
+      "options": [{"value":"btn--paper","label":"Paper"},{"value":"btn--accent","label":"Accent"},{"value":"btn--line-bone","label":"Outline"}] },
+    { "type": "text", "id": "btn2", "label": "Button 2" },
+    { "type": "url", "id": "btn2_link", "label": "Button 2 link" }
+  ],
+  "presets": [{ "name": "Image banner" }]
+}
+{% endschema %}
