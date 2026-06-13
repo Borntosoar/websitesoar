@@ -62,12 +62,18 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
     const t = clock.getElapsedTime();
     const b = boost.current;
     const f = easeOut(b);
-    const pulse = Math.pow(Math.max(0, Math.sin(t * 2.2)), 3); // sharp press from inside
-    const shake = 0.013 * (0.35 + pulse);
+    // caged breathing — layered sines so the idle loops with no obvious beat or
+    // seam. Something alive presses from inside and light leaks through the pixel
+    // gaps, but the box never opens until the password unlocks it.
+    const breath = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 0.9));
+    const press1 = Math.pow(Math.max(0, Math.sin(t * 1.7)), 2);
+    const press2 = Math.pow(Math.max(0, Math.sin(t * 2.6 + 1.3)), 4);
+    const pulse = (press1 * 0.6 + press2 * 0.4) * breath; // organic, non-repeating-looking
+    const shake = 0.009 * (0.4 + pulse);
 
     for (let k = 0; k < cells.length; k++) {
       const c = cells[k];
-      const press = pulse * 0.055;
+      const press = pulse * 0.06;
       const sc = f * (1.4 + c.rand * 2.6);
       dummy.position.set(
         c.pos.x + c.nor.x * press + Math.sin(t * 30 + c.rand * 99) * shake + (c.rand - 0.5) * f * 1.4,
@@ -84,8 +90,8 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
     inst.position.x = Math.sin(t * 31) * 0.02 * (0.3 + pulse);
     inst.position.z = Math.cos(t * 23) * 0.02 * (0.3 + pulse);
 
-    if (light.current) light.current.intensity = 1.5 + pulse * 7 + f * 140;
-    if (core.current) core.current.scale.setScalar(0.22 + pulse * 0.06 + f * 34);
+    if (light.current) light.current.intensity = 1.3 + pulse * 7 + f * 140;
+    if (core.current) core.current.scale.setScalar(0.2 + pulse * 0.07 + f * 34);
   });
 
   return (
