@@ -20,6 +20,11 @@ export function TheBox() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // respect reduced-motion: hold a single static frame instead of looping
+    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setActive(false);
+      return;
+    }
     const obs = new IntersectionObserver(([e]) => setActive(e.isIntersecting), { threshold: 0.15 });
     obs.observe(el);
     return () => obs.disconnect();

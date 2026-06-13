@@ -9,7 +9,6 @@ import { TheFlock } from "@/components/sections/the-flock";
 import { FutureDrops } from "@/components/sections/future-drops";
 import { FinalCTA } from "@/components/sections/final-cta";
 import { SiteFooter } from "@/components/sections/site-footer";
-import { SectionNav } from "@/components/ui/section-nav";
 
 export default function Page() {
   return (
@@ -17,7 +16,7 @@ export default function Page() {
       {/* signature 3D studio entrance — password `soar`, white floods out of the box */}
       <EntranceHero />
       <SiteHeader />
-      <SectionNav />
+      {/* SectionNav, custom cursor, smooth-scroll & scroll-progress are mounted globally in Providers */}
       <main id="top">
         {/* Born To Soar architecture: hero -> featured drop -> the box narrative ->
             collection -> live drop -> the flock -> upcoming -> final flight */}

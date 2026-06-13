@@ -34,7 +34,7 @@ export function Drop() {
                 <span>Lead piece</span>
                 <span>Limited 200</span>
               </div>
-              <div className="my-4 grid aspect-[16/10] place-items-center border border-bone/10 bg-[#272219]">
+              <div className="my-4 grid aspect-[16/10] place-items-center border border-bone/10 bg-white/[0.04]">
                 <span className="font-serif text-5xl text-bone/40">S</span>
               </div>
               <div className="flex items-baseline justify-between">

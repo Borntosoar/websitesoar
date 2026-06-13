@@ -2,14 +2,15 @@
 
 import { motion, useScroll, useSpring } from "framer-motion";
 
-/** Thin amber progress bar tracking page scroll. */
+/** Thin progress bar tracking page scroll. mix-blend keeps it visible on both
+ *  black and white sections. */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
   return (
     <motion.div
       style={{ scaleX }}
-      className="fixed left-0 top-0 z-[120] h-[2px] w-full origin-left bg-[#E6C566]"
+      className="fixed left-0 top-0 z-[115] h-[2px] w-full origin-left bg-white mix-blend-difference"
       aria-hidden
     />
   );

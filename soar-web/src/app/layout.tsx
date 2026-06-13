@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import { Providers } from "@/components/ui/providers";
 import "./globals.css";
@@ -18,9 +18,30 @@ const serif = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "SOAR® — Rise Above",
+  title: { default: "SOAR — Born To Soar", template: "%s — SOAR" },
   description:
-    "Premium essentials, released in limited drops. Growth begins where comfort ends.",
+    "A movement for those who refuse limitations. Premium essentials, released in limited drops. The box was never real — born to soar.",
+  applicationName: "SOAR",
+  keywords: ["SOAR", "Born To Soar", "streetwear", "premium essentials", "limited drops"],
+  openGraph: {
+    title: "SOAR — Born To Soar",
+    description: "A movement for those who refuse limitations. Premium essentials in limited drops.",
+    siteName: "SOAR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SOAR — Born To Soar",
+    description: "A movement for those who refuse limitations.",
+  },
+  robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
