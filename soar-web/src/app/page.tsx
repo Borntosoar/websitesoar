@@ -1,39 +1,36 @@
 import { SiteHeader } from "@/components/sections/site-header";
 import { EntranceHero } from "@/components/sections/entrance-hero";
-import { Marquee } from "@/components/sections/marquee";
-import { CampaignOne, CampaignTwo, CategorySplit } from "@/components/sections/campaigns";
+import { Hero } from "@/components/sections/hero";
+import { Featured } from "@/components/sections/featured";
+import { TheBox } from "@/components/sections/the-box";
+import { CollectionGrid } from "@/components/sections/collection-grid";
 import { Drop } from "@/components/sections/drop";
-import { Shop } from "@/components/sections/shop";
-import { Lookbook } from "@/components/sections/lookbook";
-import { World } from "@/components/sections/world";
-import { Stats } from "@/components/sections/stats";
-import { Strip } from "@/components/sections/strip";
-import { List } from "@/components/sections/list";
+import { TheFlock } from "@/components/sections/the-flock";
+import { FutureDrops } from "@/components/sections/future-drops";
+import { FinalCTA } from "@/components/sections/final-cta";
 import { SiteFooter } from "@/components/sections/site-footer";
-import { EmailPopup } from "@/components/ui/email-popup";
+import { SectionNav } from "@/components/ui/section-nav";
 
 export default function Page() {
   return (
     <>
+      {/* signature 3D studio entrance — password `soar`, white floods out of the box */}
+      <EntranceHero />
       <SiteHeader />
+      <SectionNav />
       <main id="top">
-        {/* signature 3D breakthrough entrance */}
-        <EntranceHero />
-        <Marquee />
-        {/* campaign-led rhythm: campaign -> categories -> drop -> grid -> lookbook -> campaign */}
-        <CampaignOne />
-        <CategorySplit />
+        {/* Born To Soar architecture: hero -> featured drop -> the box narrative ->
+            collection -> live drop -> the flock -> upcoming -> final flight */}
+        <Hero />
+        <Featured />
+        <TheBox />
+        <CollectionGrid />
         <Drop />
-        <Shop />
-        <Lookbook />
-        <CampaignTwo />
-        <World />
-        <Stats />
-        <Strip />
-        <List />
+        <TheFlock />
+        <FutureDrops />
+        <FinalCTA />
       </main>
       <SiteFooter />
-      <EmailPopup />
     </>
   );
 }

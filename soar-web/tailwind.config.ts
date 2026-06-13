@@ -7,13 +7,13 @@ const config: Config = {
     extend: {
       colors: {
         // SOAR muted-neutral system (see the soar-brand skill)
-        oat: "#E7E2D7",
-        paper: "#F1EEE6",
-        stone: "#CFC8B9",
-        taupe: "#8C8475",
-        ink: "#29251F",
-        espresso: "#1F1B16",
-        bone: "#E7E2D7",
+        oat: "#FFFFFF",
+        paper: "#F5F5F5",
+        stone: "#D4D4D4",
+        taupe: "#8A8A8A",
+        ink: "#000000",
+        espresso: "#000000",
+        bone: "#FFFFFF",
         border: "hsl(var(--border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

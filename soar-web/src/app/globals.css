@@ -201,3 +201,12 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
+
+/* rising light particles (hero) */
+.soar-particle { position: absolute; bottom: -12px; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .5; animation: soar-rise linear infinite; }
+@keyframes soar-rise { from { transform: translateY(0); opacity: .5; } to { transform: translateY(-110svh); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .soar-particle { display: none; } }
+
+/* THE FLOCK — infinite community rows (track duplicated x2, slide -50%) */
+@keyframes flock-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { [style*="flock-scroll"] { animation: none !important; } }

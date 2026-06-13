@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/components/ui/cart";
 
 const nav = [
-  ["Collection", "#shop"],
-  ["The Drop", "#drop"],
-  ["World", "#world"],
-  ["Contact", "#list"],
+  ["Shop", "#collection"],
+  ["Collections", "#featured"],
+  ["Journal", "#community"],
+  ["Community", "#community"],
+  ["About", "#the-box"],
 ] as const;
 
 function IconBtn({
@@ -34,11 +35,11 @@ function IconBtn({
     >
       {children}
       {typeof count === "number" && count > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#E6C566] px-1 text-[9px] font-semibold leading-none text-ink">
+        <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full border border-black/20 bg-white px-1 text-[9px] font-semibold leading-none text-black">
           {count}
         </span>
       )}
-      {dot && <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[#E6C566]" aria-hidden />}
+      {dot && <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-current" aria-hidden />}
     </button>
   );
 }

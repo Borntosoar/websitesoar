@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const items = [
-  ["top", "Top"],
-  ["drop", "Drop"],
-  ["shop", "Shop"],
-  ["world", "World"],
-  ["list", "List"],
+  ["hero", "Born"],
+  ["the-box", "Box"],
+  ["collection", "Shop"],
+  ["community", "Flock"],
+  ["upcoming", "Drops"],
 ] as const;
 
 /** Fixed dot navigation; highlights the section in view. mix-blend keeps it
