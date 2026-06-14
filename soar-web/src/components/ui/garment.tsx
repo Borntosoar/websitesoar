@@ -98,6 +98,7 @@ export function Garment({ kind, className }: { kind: string; className?: string 
   const uid = useId().replace(/[:]/g, "");
   const bg = `bg${uid}`;
   const cl = `cl${uid}`;
+  const hl = `hl${uid}`;
   const sh = `sh${uid}`;
   return (
     <svg
@@ -117,6 +118,11 @@ export function Garment({ kind, className }: { kind: string; className?: string 
           <stop offset="55%" stopColor="#141414" />
           <stop offset="100%" stopColor="#070707" />
         </linearGradient>
+        <linearGradient id={hl} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+          <stop offset="42%" stopColor="#ffffff" stopOpacity="0" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
         <filter id={sh} x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="4" />
         </filter>
@@ -124,6 +130,8 @@ export function Garment({ kind, className }: { kind: string; className?: string 
       <rect width="200" height="240" fill={`url(#${bg})`} />
       <ellipse cx="100" cy="214" rx="60" ry="9" fill="#000000" opacity="0.14" filter={`url(#${sh})`} />
       <g fill={`url(#${cl})`}>{body(kind)}</g>
+      {/* soft studio sheen */}
+      <g fill={`url(#${hl})`} style={{ mixBlendMode: "screen" }}>{body(kind)}</g>
       <g fill="none" stroke="#ffffff" strokeOpacity="0.08" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         {seams(kind)}
       </g>
