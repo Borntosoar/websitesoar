@@ -1,11 +1,10 @@
 "use client";
 
 /**
- * SOAR — Studio Entrance (R3F). Black box made of PIXELS sits in a white 3D
- * studio cove. A white core light pulses from inside: on each press the pixels
- * push out and white shines through the gaps; the box shakes like something is
- * caged. On unlock the core floods white OUT of the box (engulfs the view), the
- * pixels scatter upward, and a bird flies up. Black & white only.
+ * SOAR — Studio Entrance (R3F). A black box made of PIXELS sits in a premium
+ * white studio cove. A caged white light presses from inside (idle loop). On
+ * unlock the core floods white OUT of the box, the pixels fracture upward, and a
+ * bird breaks free and climbs — breakthrough, then flight. Black & white only.
  */
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
@@ -54,7 +53,10 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
   const light = useRef<THREE.PointLight>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const geo = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0a0a0a", roughness: 0.45, metalness: 0.15 }), []);
+  const mat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#0b0b0b", roughness: 0.38, metalness: 0.22 }),
+    [],
+  );
 
   useFrame(({ clock }) => {
     const inst = ref.current;
@@ -62,13 +64,11 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
     const t = clock.getElapsedTime();
     const b = boost.current;
     const f = easeOut(b);
-    // caged breathing — layered sines so the idle loops with no obvious beat or
-    // seam. Something alive presses from inside and light leaks through the pixel
-    // gaps, but the box never opens until the password unlocks it.
+    // caged breathing — layered sines so the idle loops with no obvious beat/seam
     const breath = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 0.9));
     const press1 = Math.pow(Math.max(0, Math.sin(t * 1.7)), 2);
     const press2 = Math.pow(Math.max(0, Math.sin(t * 2.6 + 1.3)), 4);
-    const pulse = (press1 * 0.6 + press2 * 0.4) * breath; // organic, non-repeating-looking
+    const pulse = (press1 * 0.6 + press2 * 0.4) * breath;
     const shake = 0.009 * (0.4 + pulse);
 
     for (let k = 0; k < cells.length; k++) {
@@ -106,40 +106,77 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
   );
 }
 
-/* ---- bird (white, flies up on unlock) ---- */
-function wingGeometry(sign: number) {
+/* ---- bird: low-poly body + head + tail + flapping swept wings ---- */
+function buildWing(sign: number) {
+  const s = sign;
   const g = new THREE.BufferGeometry();
-  g.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0, sign * 1.2, 0.06, -0.12, sign * 0.32, 0, -0.7], 3));
-  g.setIndex([0, 1, 2]);
+  const v = new Float32Array([
+    0, 0, 0.12, //0 shoulder front
+    0, 0, -0.22, //1 shoulder back
+    s * 0.5, 0.0, 0.02, //2 mid leading
+    s * 0.55, 0.0, -0.28, //3 mid trailing
+    s * 1.05, 0.05, -0.04, //4 outer leading
+    s * 1.0, 0.04, -0.3, //5 tip / outer trailing
+  ]);
+  g.setAttribute("position", new THREE.BufferAttribute(v, 3));
+  g.setIndex([0, 2, 1, 1, 2, 3, 2, 4, 3, 3, 4, 5]);
   g.computeVertexNormals();
   return g;
 }
+
 function Bird({ boost }: { boost: MutableRefObject<number> }) {
   const group = useRef<THREE.Group>(null);
-  const lw = useRef<THREE.Mesh>(null);
-  const rw = useRef<THREE.Mesh>(null);
-  const lGeo = useMemo(() => wingGeometry(1), []);
-  const rGeo = useMemo(() => wingGeometry(-1), []);
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0a0a0a", roughness: 0.6, side: THREE.DoubleSide, transparent: true }), []);
+  const lw = useRef<THREE.Group>(null);
+  const rw = useRef<THREE.Group>(null);
+  const lGeo = useMemo(() => buildWing(1), []);
+  const rGeo = useMemo(() => buildWing(-1), []);
+  const mat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#080808", roughness: 0.5, metalness: 0.1, side: THREE.DoubleSide, transparent: true }),
+    [],
+  );
+
   useFrame(({ clock }) => {
     const b = boost.current;
     const f = easeOut(b);
     const t = clock.getElapsedTime();
     if (group.current) {
-      group.current.scale.setScalar(Math.min(1, Math.max(0, b * 4 - 0.6)));
-      group.current.position.set(0, 0.1 + f * 10, f * 0.4);
-      group.current.rotation.x = -0.4 - f * 0.2;
-      group.current.rotation.y = Math.sin(t * 1.6) * 0.16;
+      const appear = Math.min(1, Math.max(0, b * 3.5 - 0.5));
+      group.current.scale.setScalar(appear * 0.95);
+      group.current.position.set(Math.sin(t * 0.8) * 0.16 * f, 0.05 + f * 11, f * 0.5);
+      group.current.rotation.x = -0.5 - f * 0.3; // pitch up into the climb
+      group.current.rotation.z = Math.sin(t * 1.1) * 0.18; // gentle bank
+      group.current.rotation.y = Math.sin(t * 0.7) * 0.12;
+      mat.opacity = b > 0.92 ? Math.max(0, 1 - (b - 0.92) / 0.08) : 1;
     }
-    const flap = Math.sin(t * 18) * 0.7;
-    if (lw.current) lw.current.rotation.z = flap;
-    if (rw.current) rw.current.rotation.z = -flap;
-    mat.opacity = b > 0.9 ? Math.max(0, 1 - (b - 0.9) / 0.1) : 1;
+    const flap = Math.sin(t * 15);
+    const lift = 0.5 + flap * 0.85; // raised → lowered wingbeat
+    if (lw.current) {
+      lw.current.rotation.z = lift;
+      lw.current.rotation.y = flap * 0.1;
+    }
+    if (rw.current) {
+      rw.current.rotation.z = -lift;
+      rw.current.rotation.y = -flap * 0.1;
+    }
   });
+
   return (
     <group ref={group} scale={0} position={[0, 0.1, 0]}>
-      <mesh ref={lw} geometry={lGeo} material={mat} />
-      <mesh ref={rw} geometry={rGeo} material={mat} />
+      <mesh material={mat} scale={[0.16, 0.16, 0.5]}>
+        <sphereGeometry args={[1, 16, 12]} />
+      </mesh>
+      <mesh material={mat} position={[0, 0.03, 0.42]} scale={0.12}>
+        <sphereGeometry args={[1, 14, 12]} />
+      </mesh>
+      <mesh material={mat} position={[0, 0, -0.5]} rotation={[0.18, 0, 0]} scale={[0.2, 0.02, 0.24]}>
+        <boxGeometry args={[1, 1, 1]} />
+      </mesh>
+      <group ref={lw} position={[0.05, 0.02, 0]}>
+        <mesh geometry={lGeo} material={mat} />
+      </group>
+      <group ref={rw} position={[-0.05, 0.02, 0]}>
+        <mesh geometry={rGeo} material={mat} />
+      </group>
     </group>
   );
 }
@@ -165,12 +202,16 @@ function Scene({ unlocked }: { unlocked: boolean }) {
       {/* studio cove (inverted sphere = seamless white surround) */}
       <mesh>
         <sphereGeometry args={[30, 32, 32]} />
-        <meshBasicMaterial color="#eeeeee" side={THREE.BackSide} toneMapped={false} />
+        <meshBasicMaterial color="#f0f0f0" side={THREE.BackSide} toneMapped={false} />
       </mesh>
-      <ambientLight intensity={0.55} />
-      <spotLight position={[2.5, 6, 4]} angle={0.5} penumbra={0.8} intensity={2.4} color="#ffffff" castShadow />
-      <directionalLight position={[-4, 3, -3]} intensity={0.6} color="#ffffff" />
-      <ContactShadows position={[0, -0.82, 0]} opacity={0.5} scale={9} blur={2.4} far={4} color="#000000" />
+      <ambientLight intensity={0.5} />
+      {/* key */}
+      <spotLight position={[3, 6.5, 4.5]} angle={0.5} penumbra={1} intensity={2.6} color="#ffffff" castShadow shadow-mapSize={[1024, 1024]} shadow-bias={-0.0002} />
+      {/* rim / back edge light */}
+      <directionalLight position={[-3, 4, -5]} intensity={1.1} color="#ffffff" />
+      {/* low fill */}
+      <directionalLight position={[0, -2, 4]} intensity={0.25} color="#ffffff" />
+      <ContactShadows position={[0, -0.82, 0]} opacity={0.42} scale={11} blur={3} far={4.5} resolution={512} color="#000000" />
       <Rig>
         <PixelBox boost={boost} />
         <Bird boost={boost} />
@@ -181,10 +222,10 @@ function Scene({ unlocked }: { unlocked: boolean }) {
 
 export function BreakthroughScene({ unlocked = false }: { unlocked?: boolean }) {
   return (
-    <Canvas shadows camera={{ position: [0, 0.6, 6.2], fov: 42 }} gl={{ antialias: true }} dpr={[1, 2]}>
+    <Canvas shadows camera={{ position: [0, 0.5, 5.9], fov: 40 }} gl={{ antialias: true }} dpr={[1, 2]}>
       <Scene unlocked={unlocked} />
       <EffectComposer>
-        <BloomEffect intensity={1.1} luminanceThreshold={0.9} luminanceSmoothing={0.4} mipmapBlur radius={0.8} />
+        <BloomEffect intensity={1.0} luminanceThreshold={0.9} luminanceSmoothing={0.4} mipmapBlur radius={0.85} />
       </EffectComposer>
     </Canvas>
   );

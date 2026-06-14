@@ -1,12 +1,13 @@
 "use client";
 
 /**
- * SOAR — Studio entrance (fixed overlay). Password `soar`. On enter the white
- * floods out of the box, a bird flies up, "SOAR" resolves, then a clean fade to
+ * SOAR — Studio entrance (fixed overlay). Confirm 13+ and the password `soar`;
+ * the box breaks open, the bird climbs, "SOAR" resolves, then a clean fade to
  * the home beneath. Black & white.
  */
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +24,8 @@ export function EntranceHero() {
   const [showWord, setShowWord] = useState(false);
   const [reveal, setReveal] = useState(false);
   const [gone, setGone] = useState(false);
-  const [error, setError] = useState(false);
+  const [agree, setAgree] = useState(false);
+  const [error, setError] = useState<"age" | "pass" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export function EntranceHero() {
     setTimeout(() => {
       try {
         sessionStorage.setItem(KEY, "1");
+        sessionStorage.setItem("soar-age-ok", "1");
       } catch {}
       setReveal(true);
       document.body.classList.remove("gate-locked");
@@ -55,11 +58,15 @@ export function EntranceHero() {
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!agree) {
+      setError("age");
+      return;
+    }
     if ((inputRef.current?.value || "").trim().toLowerCase() === PASS) {
-      setError(false);
+      setError(null);
       go();
     } else {
-      setError(true);
+      setError("pass");
       inputRef.current?.select();
     }
   }
@@ -77,6 +84,9 @@ export function EntranceHero() {
         <BreakthroughScene unlocked={entered} />
       </div>
 
+      {/* subtle cinematic vignette for premium framing */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_100%_at_50%_42%,transparent_55%,rgba(0,0,0,0.13))]" />
+
       {/* white veil floods in to guarantee a clean white */}
       <div
         className={cn(
@@ -85,10 +95,10 @@ export function EntranceHero() {
         )}
       />
 
-      {/* password UI */}
+      {/* gate UI */}
       <div
         className={cn(
-          "absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 px-6 pb-[12vh] text-center text-black transition-all duration-500",
+          "absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 px-6 pb-[10vh] text-center text-black transition-all duration-500",
           entered ? "pointer-events-none translate-y-3 opacity-0" : "opacity-100",
         )}
       >
@@ -102,15 +112,44 @@ export function EntranceHero() {
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
-            onChange={() => setError(false)}
+            onChange={() => setError(null)}
             className="min-w-0 flex-1 border-b border-black/40 bg-transparent px-1 py-2 text-center text-sm tracking-[0.2em] text-black outline-none placeholder:text-black/30 focus:border-black"
           />
-          <button type="submit" className="bg-black px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] text-white transition-opacity hover:opacity-80">
+          <button
+            type="submit"
+            className="bg-black px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] text-white transition-opacity hover:opacity-80"
+          >
             Enter
           </button>
         </form>
+
+        {/* 13+ age confirmation + legal */}
+        <label className="flex max-w-[340px] items-start gap-2 text-left text-[11px] leading-snug text-black/55">
+          <input
+            type="checkbox"
+            checked={agree}
+            onChange={(e) => {
+              setAgree(e.target.checked);
+              setError(null);
+            }}
+            className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-black"
+            aria-label="I am 13 or older and accept the policies"
+          />
+          <span>
+            I&apos;m 13 or older and agree to the{" "}
+            <Link href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-black">
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link href="/terms" target="_blank" className="underline underline-offset-2 hover:text-black">
+              Terms
+            </Link>
+            .
+          </span>
+        </label>
+
         <span className={cn("text-[11px] uppercase tracking-[0.14em]", error ? "text-black" : "text-black/40")}>
-          {error ? "Try again" : "The box is locked"}
+          {error === "age" ? "Please confirm you're 13 or older" : error === "pass" ? "Try again" : "The box is locked"}
         </span>
       </div>
 
