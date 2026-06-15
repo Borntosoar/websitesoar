@@ -115,7 +115,7 @@ export function EntranceHero() {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] bg-white transition-transform [transition-duration:1200ms] ease-[cubic-bezier(0.65,0,0.35,1)] will-change-transform",
+        "fixed inset-0 z-[120] bg-white transition-transform [transition-duration:1200ms] [transition-timing-function:cubic-bezier(0.65,0,0.35,1)] will-change-transform",
         reveal ? "pointer-events-none -translate-y-full" : "translate-y-0",
       )}
     >
