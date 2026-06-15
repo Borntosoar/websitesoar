@@ -91,7 +91,8 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
     inst.position.z = Math.cos(t * 23) * 0.02 * (0.3 + pulse);
 
     if (light.current) light.current.intensity = 1.3 + pulse * 7 + f * 140;
-    if (core.current) core.current.scale.setScalar(0.2 + pulse * 0.07 + f * 34);
+    // backlight glow only (the "ball" is now the caged bird in front of it)
+    if (core.current) core.current.scale.setScalar(0.06 + pulse * 0.05 + f * 34);
   });
 
   return (
@@ -139,16 +140,20 @@ function Bird({ boost }: { boost: MutableRefObject<number> }) {
     const b = boost.current;
     const f = easeOut(b);
     const t = clock.getElapsedTime();
+    const caged = 1 - f; // 1 while trapped, 0 once free
     if (group.current) {
-      const appear = Math.min(1, Math.max(0, b * 3.5 - 0.5));
-      group.current.scale.setScalar(appear * 0.95);
-      group.current.position.set(Math.sin(t * 0.8) * 0.16 * f, 0.05 + f * 11, f * 0.5);
-      group.current.rotation.x = -0.5 - f * 0.3; // pitch up into the climb
-      group.current.rotation.z = Math.sin(t * 1.1) * 0.18; // gentle bank
-      group.current.rotation.y = Math.sin(t * 0.7) * 0.12;
+      // a small bird caged inside the box → bursts to full size as it breaks free
+      group.current.scale.setScalar(0.34 + f * 0.58);
+      // struggle: dart against the walls when caged; climb & bank when free
+      const jx = Math.sin(t * 7) * 0.17 * caged + Math.sin(t * 0.8) * 0.16 * f;
+      const jz = Math.cos(t * 6.3) * 0.12 * caged;
+      group.current.position.set(jx, 0.05 + f * 11, jz + f * 0.5);
+      group.current.rotation.x = -0.8 * f - Math.sin(t * 5) * 0.12 * caged;
+      group.current.rotation.z = Math.sin(t * 1.1) * 0.18 * f + Math.sin(t * 9) * 0.14 * caged;
+      group.current.rotation.y = Math.sin(t * 0.7) * 0.12 * f + Math.sin(t * 4.5) * 0.22 * caged;
       mat.opacity = b > 0.92 ? Math.max(0, 1 - (b - 0.92) / 0.08) : 1;
     }
-    const flap = Math.sin(t * 15);
+    const flap = Math.sin(t * (15 + caged * 10)); // frantic flutter when caged
     const lift = 0.5 + flap * 0.85; // raised → lowered wingbeat
     if (lw.current) {
       lw.current.rotation.z = lift;
@@ -161,7 +166,7 @@ function Bird({ boost }: { boost: MutableRefObject<number> }) {
   });
 
   return (
-    <group ref={group} scale={0} position={[0, 0.1, 0]}>
+    <group ref={group} scale={0.34} position={[0, 0.05, 0]}>
       <mesh material={mat} scale={[0.16, 0.16, 0.5]}>
         <sphereGeometry args={[1, 16, 12]} />
       </mesh>
