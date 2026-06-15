@@ -52,6 +52,7 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
   const core = useRef<THREE.Mesh>(null);
   const light = useRef<THREE.PointLight>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
+  const _v = useMemo(() => new THREE.Vector3(), []);
   const geo = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
   const mat = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "#0b0b0b", roughness: 0.38, metalness: 0.22 }),
@@ -73,26 +74,30 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
 
     for (let k = 0; k < cells.length; k++) {
       const c = cells[k];
-      const press = pulse * 0.06;
-      const sc = f * (1.4 + c.rand * 2.6);
+      const idle = 1 - f;
+      const press = pulse * 0.06 * idle;
+      const dir = _v.copy(c.pos).normalize(); // radial outward
+      const burst = f * (1.6 + c.rand * 2.8); // box shatters outward as the bird breaks through
       dummy.position.set(
-        c.pos.x + c.nor.x * press + Math.sin(t * 30 + c.rand * 99) * shake + (c.rand - 0.5) * f * 1.4,
-        c.pos.y + c.nor.y * press + sc * sc * 0.7,
-        c.pos.z + c.nor.z * press + Math.cos(t * 27 + c.rand * 70) * shake + (c.rand - 0.5) * f * 1.4,
+        c.pos.x + dir.x * burst + (c.nor.x * press + Math.sin(t * 30 + c.rand * 99) * shake) * idle + (c.rand - 0.5) * 0.2 * f,
+        c.pos.y + dir.y * burst + burst * 0.9 + c.nor.y * press * idle,
+        c.pos.z + dir.z * burst + (c.nor.z * press + Math.cos(t * 27 + c.rand * 70) * shake) * idle + (c.rand - 0.5) * 0.2 * f,
       );
-      const s = step * 0.82 * (1 - Math.min(1, f * (c.rand + 0.25)));
-      dummy.scale.setScalar(Math.max(0, s));
-      dummy.rotation.set(f * c.rand * 6, f * c.rand * 5, 0);
+      const s = step * 0.82 * Math.max(0, 1 - f * (0.7 + c.rand * 0.55));
+      dummy.scale.setScalar(s);
+      dummy.rotation.set(f * c.rand * 8, f * c.rand * 7, f * c.rand * 4);
       dummy.updateMatrix();
       inst.setMatrixAt(k, dummy.matrix);
     }
     inst.instanceMatrix.needsUpdate = true;
-    inst.position.x = Math.sin(t * 31) * 0.02 * (0.3 + pulse);
-    inst.position.z = Math.cos(t * 23) * 0.02 * (0.3 + pulse);
+    inst.position.x = Math.sin(t * 31) * 0.02 * (0.3 + pulse) * (1 - f);
+    inst.position.z = Math.cos(t * 23) * 0.02 * (0.3 + pulse) * (1 - f);
 
     if (light.current) light.current.intensity = 1.3 + pulse * 7 + f * 140;
-    // backlight glow only (the "ball" is now the caged bird in front of it)
-    if (core.current) core.current.scale.setScalar(0.06 + pulse * 0.05 + f * 34);
+    // white floods FROM the box only AFTER the bird has broken out — bird stays the hero
+    const flood = Math.max(0, (f - 0.45) / 0.55);
+    const floodS = flood * flood * (3 - 2 * flood);
+    if (core.current) core.current.scale.setScalar(0.06 + pulse * 0.05 + floodS * 32);
   });
 
   return (
@@ -141,20 +146,20 @@ function Bird({ boost }: { boost: MutableRefObject<number> }) {
     const f = easeOut(b);
     const t = clock.getElapsedTime();
     const caged = 1 - f; // 1 while trapped, 0 once free
+    const climb = f * f; // accelerate upward — the soar
     if (group.current) {
-      // a small bird caged inside the box → bursts to full size as it breaks free
-      group.current.scale.setScalar(0.34 + f * 0.58);
-      // struggle: dart against the walls when caged; climb & bank when free
-      const jx = Math.sin(t * 7) * 0.17 * caged + Math.sin(t * 0.8) * 0.16 * f;
-      const jz = Math.cos(t * 6.3) * 0.12 * caged;
-      group.current.position.set(jx, 0.05 + f * 11, jz + f * 0.5);
-      group.current.rotation.x = -0.8 * f - Math.sin(t * 5) * 0.12 * caged;
-      group.current.rotation.z = Math.sin(t * 1.1) * 0.18 * f + Math.sin(t * 9) * 0.14 * caged;
-      group.current.rotation.y = Math.sin(t * 0.7) * 0.12 * f + Math.sin(t * 4.5) * 0.22 * caged;
-      mat.opacity = b > 0.92 ? Math.max(0, 1 - (b - 0.92) / 0.08) : 1;
+      group.current.scale.setScalar(0.34 + f * 0.7); // caged → full as it breaks free
+      // dart against the walls when caged; rise & bank as it soars free
+      const jx = Math.sin(t * 7) * 0.16 * caged + Math.sin(t * 0.9) * 0.2 * f;
+      const jz = Math.cos(t * 6.3) * 0.11 * caged;
+      group.current.position.set(jx, 0.05 + climb * 12.5, jz + f * 0.6);
+      group.current.rotation.x = -0.18 * f - Math.sin(t * 5) * 0.12 * caged; // slight nose-up climb
+      group.current.rotation.z = Math.sin(t * 1.2) * 0.2 * f + Math.sin(t * 9) * 0.14 * caged;
+      group.current.rotation.y = Math.sin(t * 0.8) * 0.14 * f + Math.sin(t * 4.5) * 0.22 * caged;
+      mat.opacity = f > 0.86 ? Math.max(0, 1 - (f - 0.86) / 0.14) : 1; // fades as it soars into the light
     }
-    const flap = Math.sin(t * (15 + caged * 10)); // frantic flutter when caged
-    const lift = 0.5 + flap * 0.85; // raised → lowered wingbeat
+    const flap = Math.sin(t * (14 + caged * 10)); // frantic flutter when caged, powerful in flight
+    const lift = 0.5 + flap * 0.9; // raised → lowered wingbeat
     if (lw.current) {
       lw.current.rotation.z = lift;
       lw.current.rotation.y = flap * 0.1;

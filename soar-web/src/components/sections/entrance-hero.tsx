@@ -52,7 +52,7 @@ export function EntranceHero() {
 
   function go() {
     setEntered(true);
-    setTimeout(() => setShowWord(true), 1500);
+    setTimeout(() => setShowWord(true), 2400);
     setTimeout(() => {
       try {
         sessionStorage.setItem(KEY, "1");
@@ -60,8 +60,8 @@ export function EntranceHero() {
       } catch {}
       setReveal(true);
       document.body.classList.remove("gate-locked");
-    }, 2900);
-    setTimeout(() => setGone(true), 3800);
+    }, 3300);
+    setTimeout(() => setGone(true), 4100);
   }
 
   function validContact() {
@@ -135,7 +135,7 @@ export function EntranceHero() {
       <div
         className={cn(
           "pointer-events-none absolute inset-0 bg-white transition-opacity",
-          entered ? "opacity-100 delay-300 [transition-duration:1600ms]" : "opacity-0 duration-300",
+          entered ? "opacity-100 delay-[1300ms] [transition-duration:1500ms]" : "opacity-0 duration-300",
         )}
       />
 
