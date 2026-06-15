@@ -13,7 +13,7 @@ import { EffectComposer, Bloom as BloomEffect } from "@react-three/postprocessin
 import { useMemo, useRef, type MutableRefObject, type ReactNode } from "react";
 import * as THREE from "three";
 
-const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
+// breakout progress (0→1) is driven explicitly in <Scene> over ~3s
 
 /* ---- pixel-shell box ---- */
 function usePixels(size = 1.6, grid = 7) {
@@ -63,8 +63,7 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
     const inst = ref.current;
     if (!inst) return;
     const t = clock.getElapsedTime();
-    const b = boost.current;
-    const f = easeOut(b);
+    const f = boost.current;
     // caged breathing — layered sines so the idle loops with no obvious beat/seam
     const breath = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 0.9));
     const press1 = Math.pow(Math.max(0, Math.sin(t * 1.7)), 2);
@@ -95,9 +94,9 @@ function PixelBox({ boost }: { boost: MutableRefObject<number> }) {
 
     if (light.current) light.current.intensity = 1.3 + pulse * 7 + f * 140;
     // white floods FROM the box only AFTER the bird has broken out — bird stays the hero
-    const flood = Math.max(0, (f - 0.45) / 0.55);
+    const flood = Math.max(0, (f - 0.6) / 0.4);
     const floodS = flood * flood * (3 - 2 * flood);
-    if (core.current) core.current.scale.setScalar(0.06 + pulse * 0.05 + floodS * 32);
+    if (core.current) core.current.scale.setScalar(0.06 + pulse * 0.05 + floodS * 26);
   });
 
   return (
@@ -142,21 +141,20 @@ function Bird({ boost }: { boost: MutableRefObject<number> }) {
   );
 
   useFrame(({ clock }) => {
-    const b = boost.current;
-    const f = easeOut(b);
+    const f = boost.current;
     const t = clock.getElapsedTime();
     const caged = 1 - f; // 1 while trapped, 0 once free
-    const climb = f * f; // accelerate upward — the soar
+    const climb = Math.pow(f, 1.3); // rise — kept on-screen long enough to read
     if (group.current) {
-      group.current.scale.setScalar(0.34 + f * 0.7); // caged → full as it breaks free
+      group.current.scale.setScalar(0.34 + f * 0.85); // caged → full as it breaks free
       // dart against the walls when caged; rise & bank as it soars free
       const jx = Math.sin(t * 7) * 0.16 * caged + Math.sin(t * 0.9) * 0.2 * f;
       const jz = Math.cos(t * 6.3) * 0.11 * caged;
-      group.current.position.set(jx, 0.05 + climb * 12.5, jz + f * 0.6);
+      group.current.position.set(jx, 0.05 + climb * 9, jz + f * 0.7);
       group.current.rotation.x = -0.18 * f - Math.sin(t * 5) * 0.12 * caged; // slight nose-up climb
       group.current.rotation.z = Math.sin(t * 1.2) * 0.2 * f + Math.sin(t * 9) * 0.14 * caged;
       group.current.rotation.y = Math.sin(t * 0.8) * 0.14 * f + Math.sin(t * 4.5) * 0.22 * caged;
-      mat.opacity = f > 0.86 ? Math.max(0, 1 - (f - 0.86) / 0.14) : 1; // fades as it soars into the light
+      mat.opacity = f > 0.9 ? Math.max(0, 1 - (f - 0.9) / 0.1) : 1; // fades as it soars into the light
     }
     const flap = Math.sin(t * (14 + caged * 10)); // frantic flutter when caged, powerful in flight
     const lift = 0.5 + flap * 0.9; // raised → lowered wingbeat
@@ -204,8 +202,16 @@ function Rig({ children }: { children: ReactNode }) {
 
 function Scene({ unlocked }: { unlocked: boolean }) {
   const boost = useRef(0);
-  useFrame((_, dt) => {
-    boost.current = THREE.MathUtils.damp(boost.current, unlocked ? 1 : 0, 1.3, dt);
+  const startT = useRef<number | null>(null);
+  useFrame((state) => {
+    if (unlocked) {
+      if (startT.current === null) startT.current = state.clock.elapsedTime;
+      const u = Math.min(1, (state.clock.elapsedTime - startT.current) / 3.0); // ~3s breakout
+      boost.current = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; // easeInOut
+    } else {
+      boost.current = 0;
+      startT.current = null;
+    }
   });
   return (
     <>
