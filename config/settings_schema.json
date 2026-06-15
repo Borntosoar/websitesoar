@@ -1,0 +1,27 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "SOAR",
+    "theme_version": "1.1.0",
+    "theme_author": "SOAR",
+    "theme_documentation_url": "https://soar.example",
+    "theme_support_url": "https://soar.example"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      { "type": "header", "content": "Play with the palette — applies site-wide, live" },
+      { "type": "color", "id": "col_bg", "label": "Background", "default": "#FFFFFF" },
+      { "type": "color", "id": "col_ink", "label": "Text", "default": "#000000" },
+      { "type": "color", "id": "col_dark", "label": "Dark sections", "default": "#000000" },
+      { "type": "color", "id": "col_accent", "label": "Accent", "default": "#000000" },
+      { "type": "color", "id": "col_accent2", "label": "Accent 2", "default": "#000000" }
+    ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "paragraph", "content": "Deeper tokens (stone, taupe, hairlines) live in assets/soar.css. The breakthrough entrance colours are in assets/soar-entrance-3d.js." }
+    ]
+  }
+]

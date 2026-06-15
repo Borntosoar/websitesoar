@@ -1,0 +1,26 @@
+<section class="world" id="world">
+  <div class="container">
+    <div class="rowtag"><span class="label">(03) Our World</span><span class="label">The meaning</span></div>
+    <h2 class="statement" data-reveal="lines">
+      <span>We don't make clothes.</span>
+      <span>We make <em class="serif">reminders</em></span>
+      <span>that nothing grows</span>
+      <span>inside comfort.</span>
+    </h2>
+    <div class="world__grid">
+      <p data-reveal>{{ section.settings.text | default: "Every piece is cut from heavyweight organic cloth, finished by hand, numbered, and built to outlast the season that chased it. No logos for the sake of logos. No noise — only intent." }}</p>
+      <div class="ledger">
+        <div class="ledger__row" data-reveal><span class="label">01</span><span>Discomfort is the tuition</span></div>
+        <div class="ledger__row" data-reveal data-delay="1"><span class="label">02</span><span>Quiet outside, loud within</span></div>
+        <div class="ledger__row" data-reveal data-delay="2"><span class="label">03</span><span>Rise, then reach back — a share of every drop funds youth programs</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Our World",
+  "settings": [{ "type": "textarea", "id": "text", "label": "Paragraph" }],
+  "presets": [{ "name": "Our World" }]
+}
+{% endschema %}

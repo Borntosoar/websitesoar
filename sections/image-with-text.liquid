@@ -1,0 +1,32 @@
+{%- assign s = section.settings -%}
+<section class="iwt {% if s.layout == 'right' %}iwt--right{% endif %}">
+  <div class="iwt__media">
+    {% if s.image != blank %}
+      <img src="{{ s.image | image_url: width: 1400 }}" alt="{{ s.image.alt | escape }}" loading="lazy" width="1400" height="1750">
+    {% else %}
+      <div class="iwt__ph"><span class="serif">S</span></div>
+    {% endif %}
+  </div>
+  <div class="iwt__text">
+    {% if s.subheading != blank %}<span class="label" data-reveal>{{ s.subheading }}</span>{% endif %}
+    <h2 class="statement statement--mid" data-reveal data-delay="1">{{ s.heading }}</h2>
+    {% if s.text != blank %}<div class="rte" data-reveal data-delay="2">{{ s.text }}</div>{% endif %}
+    {% if s.btn != blank %}<a class="btn btn--solid" data-reveal data-delay="3" href="{{ s.btn_link | default: '#' }}">{{ s.btn }}</a>{% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "layout", "label": "Image side", "default": "left",
+      "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}] },
+    { "type": "text", "id": "subheading", "label": "Eyebrow", "default": "The Standard" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Small details, added up." },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "btn", "label": "Button" },
+    { "type": "url", "id": "btn_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Image with text" }]
+}
+{% endschema %}

@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "hero": { "type": "hero-breakthrough", "settings": {} },
+    "marquee": { "type": "marquee", "settings": {} },
+    "banner1": {
+      "type": "image-banner",
+      "settings": {
+        "subheading": "Campaign — SS26",
+        "heading": "Built by three. Worn by everyone still waiting on results.",
+        "btn1": "Shop Vol.01",
+        "btn1_style": "btn--paper",
+        "height": "lg",
+        "align": "bl"
+      }
+    },
+    "shop": { "type": "featured-collection", "settings": {} },
+    "iwt": {
+      "type": "image-with-text",
+      "settings": {
+        "subheading": "The Standard",
+        "heading": "Small details, added up. That's the whole strategy.",
+        "text": "<p>No quick popularity. Long, consistent development — the same way our customers earn their rise.</p>",
+        "btn": "Our world",
+        "btn_link": "/pages/world"
+      }
+    },
+    "drop": { "type": "drop", "settings": {} },
+    "gallery": {
+      "type": "gallery",
+      "blocks": {
+        "g1": { "type": "image", "settings": { "caption": "Pressure" } },
+        "g2": { "type": "image", "settings": { "caption": "Breakthrough" } },
+        "g3": { "type": "image", "settings": { "caption": "Ascent" } },
+        "g4": { "type": "image", "settings": { "caption": "Reach back" } }
+      },
+      "block_order": ["g1", "g2", "g3", "g4"],
+      "settings": { "heading": "Lookbook — the arc" }
+    },
+    "banner2": {
+      "type": "image-banner",
+      "settings": {
+        "subheading": "Ascension",
+        "heading": "Growth begins where comfort ends.",
+        "btn1": "Shop now",
+        "btn1_style": "btn--accent",
+        "height": "md",
+        "align": "cc"
+      }
+    },
+    "world": { "type": "world", "settings": {} },
+    "list": { "type": "newsletter", "settings": {} }
+  },
+  "order": ["hero", "marquee", "banner1", "shop", "iwt", "drop", "gallery", "banner2", "world", "list"]
+}

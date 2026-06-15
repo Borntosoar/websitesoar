@@ -1,0 +1,17 @@
+<div class="announce">
+  <span class="label">{{ section.settings.text_1 | default: 'Ascension Vol.01' }}</span>
+  <span class="announce__sep" aria-hidden="true">/</span>
+  <span class="label">{{ section.settings.text_2 | default: 'Drops Thursday 11:00' }}</span>
+  <span class="announce__sep" aria-hidden="true">/</span>
+  <span class="label">{{ section.settings.text_3 | default: 'Complimentary worldwide shipping' }}</span>
+</div>
+{% schema %}
+{
+  "name": "Announcement",
+  "settings": [
+    { "type": "text", "id": "text_1", "label": "Text 1", "default": "Ascension Vol.01" },
+    { "type": "text", "id": "text_2", "label": "Text 2", "default": "Drops Thursday 11:00" },
+    { "type": "text", "id": "text_3", "label": "Text 3", "default": "Complimentary worldwide shipping" }
+  ]
+}
+{% endschema %}

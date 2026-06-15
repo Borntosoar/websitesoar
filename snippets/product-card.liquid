@@ -1,0 +1,16 @@
+<article class="card" data-reveal>
+  <a class="card__media" href="{{ product.url }}">
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | image_url: width: 700 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="700" height="875" style="width:100%;height:100%;object-fit:cover">
+    {% else %}
+      <span class="card__mono serif">{{ index | default: 1 }}</span>
+    {% endif %}
+    {% unless product.available %}<span class="card__state out label">Sold out</span>{% endunless %}
+    <span class="card__add label">View piece</span>
+  </a>
+  <div class="card__info">
+    <h3>{{ product.title }}</h3>
+    <span class="card__meta label">{{ product.type | default: product.vendor }}</span>
+    <span class="card__price">{{ product.price | money }}</span>
+  </div>
+</article>

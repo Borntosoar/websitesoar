@@ -1,0 +1,15 @@
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__set">
+    {%- assign items = section.settings.text | split: ' — ' -%}
+    {% for n in (1..2) %}{% for t in items %}<span>{{ t }}</span><i>—</i>{% endfor %}{% endfor %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Items (separate with ' — ')", "default": "Rise above — Soar — Ascension Vol.01 — Made to a 110% standard" }
+  ],
+  "presets": [{ "name": "Marquee" }]
+}
+{% endschema %}
