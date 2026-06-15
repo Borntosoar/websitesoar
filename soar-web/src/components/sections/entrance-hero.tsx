@@ -51,16 +51,16 @@ export function EntranceHero() {
 
   function go() {
     setEntered(true);
-    setTimeout(() => setShowWord(true), 3400);
+    setTimeout(() => setShowWord(true), 3300);
     setTimeout(() => {
       try {
         sessionStorage.setItem(KEY, "1");
         sessionStorage.setItem("soar-age-ok", "1");
       } catch {}
-      setReveal(true);
+      setReveal(true); // the white + SOAR pull up to reveal the home
       document.body.classList.remove("gate-locked");
     }, 4400);
-    setTimeout(() => setGone(true), 5200);
+    setTimeout(() => setGone(true), 5800);
   }
 
   function validContact() {
@@ -115,8 +115,8 @@ export function EntranceHero() {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] bg-white transition-opacity duration-700",
-        reveal ? "pointer-events-none opacity-0" : "opacity-100",
+        "fixed inset-0 z-[120] bg-white transition-transform [transition-duration:1200ms] ease-[cubic-bezier(0.65,0,0.35,1)] will-change-transform",
+        reveal ? "pointer-events-none -translate-y-full" : "translate-y-0",
       )}
     >
       <div className="absolute inset-0">
@@ -128,7 +128,7 @@ export function EntranceHero() {
       <div
         className={cn(
           "pointer-events-none absolute inset-0 bg-white transition-opacity",
-          entered ? "opacity-100 [transition-delay:2500ms] [transition-duration:1600ms]" : "opacity-0 duration-300",
+          entered ? "opacity-100 [transition-delay:2200ms] [transition-duration:1400ms]" : "opacity-0 duration-300",
         )}
       />
 
@@ -142,7 +142,7 @@ export function EntranceHero() {
         <DropClock tone="dark" className="mb-1" />
 
         <span className="text-[11px] uppercase tracking-[0.3em] text-black/50">
-          {mode === "join" ? "Create your account — join the flight" : "Members"}
+          {mode === "join" ? "Create your account — join the flight" : "Enter the password — release the bird"}
         </span>
 
         {mode === "join" && (
@@ -218,8 +218,8 @@ export function EntranceHero() {
 
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-700",
-          showWord && !reveal ? "opacity-100" : "opacity-0",
+          "pointer-events-none absolute inset-0 flex items-center justify-center transition-all duration-700",
+          showWord ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
         )}
       >
         <span className="text-[18vw] font-semibold leading-none tracking-[0.12em] text-black md:text-[12rem]">SOAR</span>
