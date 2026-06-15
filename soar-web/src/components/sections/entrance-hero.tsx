@@ -32,8 +32,7 @@ export function EntranceHero() {
   const [mode, setMode] = useState<Mode>("join");
   const [channel, setChannel] = useState<Channel>("email");
   const [value, setValue] = useState("");
-  const [agree, setAgree] = useState(false);
-  const [error, setError] = useState<"input" | "agree" | "pass" | null>(null);
+  const [error, setError] = useState<"input" | "pass" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -71,10 +70,6 @@ export function EntranceHero() {
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!agree) {
-      setError("agree");
-      return;
-    }
     if (mode === "join") {
       if (!validContact()) {
         setError("input");
@@ -107,9 +102,7 @@ export function EntranceHero() {
   if (gone) return null;
 
   const status =
-    error === "agree"
-      ? "Please confirm you're 13 or older"
-      : error === "input"
+    error === "input"
       ? channel === "email"
         ? "Enter a valid email"
         : "Enter a valid phone number"
@@ -117,7 +110,7 @@ export function EntranceHero() {
       ? "Incorrect password"
       : mode === "join"
       ? "10% off your first order when you join"
-      : "Enter the members password";
+      : "Enter the password to release the bird";
 
   return (
     <div
@@ -198,28 +191,17 @@ export function EntranceHero() {
           </button>
         </form>
 
-        <label className="flex max-w-[360px] items-start gap-2 text-left text-[11px] leading-snug text-black/55">
-          <input
-            type="checkbox"
-            checked={agree}
-            onChange={(e) => {
-              setAgree(e.target.checked);
-              setError(null);
-            }}
-            className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-black"
-          />
-          <span>
-            I&apos;m 13 or older and agree to the{" "}
-            <Link href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-black">
-              Privacy Policy
-            </Link>{" "}
-            and{" "}
-            <Link href="/terms" target="_blank" className="underline underline-offset-2 hover:text-black">
-              Terms
-            </Link>
-            {mode === "join" ? ", and to receive SOAR updates." : "."}
-          </span>
-        </label>
+        <p className="max-w-[360px] text-[11px] leading-snug text-black/45">
+          By {mode === "join" ? "joining" : "entering"} you confirm you&apos;re 13 or older and agree to the{" "}
+          <Link href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-black">
+            Privacy Policy
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms" target="_blank" className="underline underline-offset-2 hover:text-black">
+            Terms
+          </Link>
+          {mode === "join" ? ", and to receive SOAR updates." : "."}
+        </p>
 
         <span className={cn("text-[11px] uppercase tracking-[0.14em]", error ? "text-black" : "text-black/40")}>
           {status}
