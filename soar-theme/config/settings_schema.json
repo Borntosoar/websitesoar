@@ -11,11 +11,11 @@
     "name": "Colours",
     "settings": [
       { "type": "header", "content": "Play with the palette — applies site-wide, live" },
-      { "type": "color", "id": "col_bg", "label": "Background (paper)", "default": "#E7E2D7" },
-      { "type": "color", "id": "col_ink", "label": "Text", "default": "#29251F" },
-      { "type": "color", "id": "col_dark", "label": "Dark sections", "default": "#1F1B16" },
-      { "type": "color", "id": "col_accent", "label": "Accent", "default": "#E6C566" },
-      { "type": "color", "id": "col_accent2", "label": "Accent 2 (electric)", "default": "#3B49FF" }
+      { "type": "color", "id": "col_bg", "label": "Background", "default": "#FFFFFF" },
+      { "type": "color", "id": "col_ink", "label": "Text", "default": "#000000" },
+      { "type": "color", "id": "col_dark", "label": "Dark sections", "default": "#000000" },
+      { "type": "color", "id": "col_accent", "label": "Accent", "default": "#000000" },
+      { "type": "color", "id": "col_accent2", "label": "Accent 2", "default": "#000000" }
     ]
   },
   {
