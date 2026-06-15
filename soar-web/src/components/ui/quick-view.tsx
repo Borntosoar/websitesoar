@@ -38,7 +38,7 @@ function Panel({ product }: { product: Product }) {
       return;
     }
     for (let i = 0; i < qty; i++) {
-      cart.add({ id: product.id, title: product.name, price: product.price, category: product.category, size: size || undefined, image: product.image });
+      cart.add({ id: product.id, handle: product.handle, title: product.name, price: product.price, category: product.category, size: size || undefined, image: product.image });
     }
     close();
   }

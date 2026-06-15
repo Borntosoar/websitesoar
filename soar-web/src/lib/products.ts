@@ -1,5 +1,7 @@
 export type Product = {
   id: string;
+  /** Shopify product handle — used to map the cart to real variants at checkout. */
+  handle: string;
   name: string;
   code: string;
   price: number;
@@ -18,10 +20,12 @@ export type Product = {
 const APPAREL = ["S", "M", "L", "XL"];
 const ONE = ["OS"];
 
-/** Original SOAR pieces — names carry the box→breakthrough language. */
+/** Original SOAR pieces — names carry the box→breakthrough language.
+ *  `handle` matches the Shopify product handle (kebab-case of the name). */
 export const products: Product[] = [
   {
     id: "ascension-hoodie",
+    handle: "ascension-hoodie",
     name: "Ascension Hoodie",
     code: "001",
     price: 180,
@@ -36,6 +40,7 @@ export const products: Product[] = [
   },
   {
     id: "escape-tee",
+    handle: "escape-tee",
     name: "Escape Tee",
     code: "002",
     price: 70,
@@ -49,6 +54,7 @@ export const products: Product[] = [
   },
   {
     id: "flight-sweatpants",
+    handle: "flight-sweatpants",
     name: "Flight Sweatpants",
     code: "003",
     price: 140,
@@ -62,6 +68,7 @@ export const products: Product[] = [
   },
   {
     id: "rise-bomber",
+    handle: "rise-bomber",
     name: "Rise Bomber",
     code: "004",
     price: 320,
@@ -76,6 +83,7 @@ export const products: Product[] = [
   },
   {
     id: "free-bird-cap",
+    handle: "free-bird-cap",
     name: "Free Bird Cap",
     code: "005",
     price: 55,
@@ -89,6 +97,7 @@ export const products: Product[] = [
   },
   {
     id: "limitless-crew",
+    handle: "limitless-crewneck",
     name: "Limitless Crewneck",
     code: "006",
     price: 160,
@@ -102,6 +111,7 @@ export const products: Product[] = [
   },
   {
     id: "ascend-short",
+    handle: "ascend-shorts",
     name: "Ascend Shorts",
     code: "007",
     price: 95,
@@ -115,6 +125,7 @@ export const products: Product[] = [
   },
   {
     id: "horizon-tee",
+    handle: "horizon-tee",
     name: "Horizon Tee",
     code: "008",
     price: 70,

@@ -4,10 +4,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Plus, Minus, ShoppingBag, Lock } from "lucide-react";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Garment } from "@/components/ui/garment";
+import { shopifyEnabled, fetchVariantMap, createCheckout } from "@/lib/shopify";
 
 export type Line = {
   lineId: string;
   id: string;
+  handle?: string;
   title: string;
   price: number;
   qty: number;
@@ -16,7 +18,7 @@ export type Line = {
   image?: string;
 };
 
-type AddInput = { id: string; title: string; price: number; category: string; size?: string; image?: string };
+type AddInput = { id: string; handle?: string; title: string; price: number; category: string; size?: string; image?: string };
 
 type CartCtx = {
   items: Line[];
@@ -84,8 +86,40 @@ function Thumb({ line }: { line: Line }) {
 export function CartDrawer() {
   const { items, open, setOpen, subtotal, setQty, remove } = useCart();
   const [note, setNote] = useState(false);
+  const [busy, setBusy] = useState(false);
   const progress = Math.min(1, subtotal / FREE_AT);
   const remaining = Math.max(0, FREE_AT - subtotal);
+
+  async function checkout() {
+    if (!shopifyEnabled) {
+      setNote(true);
+      return;
+    }
+    setBusy(true);
+    try {
+      const map = await fetchVariantMap();
+      const lines: { merchandiseId: string; quantity: number }[] = [];
+      for (const i of items) {
+        const sizes = i.handle ? map.get(i.handle) : undefined;
+        const vid = sizes?.get(i.size || "OS") ?? sizes?.values().next().value;
+        if (!vid) {
+          setBusy(false);
+          setNote(true);
+          return;
+        }
+        lines.push({ merchandiseId: vid, quantity: i.qty });
+      }
+      const url = await createCheckout(lines);
+      if (url) window.location.href = url;
+      else {
+        setBusy(false);
+        setNote(true);
+      }
+    } catch {
+      setBusy(false);
+      setNote(true);
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -179,13 +213,14 @@ export function CartDrawer() {
                   <span className="text-lg font-medium tabular-nums">${subtotal}</span>
                 </div>
                 <button
-                  onClick={() => setNote(true)}
-                  className="flex w-full items-center justify-center gap-2 bg-ink py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-colors hover:bg-espresso"
+                  onClick={checkout}
+                  disabled={busy}
+                  className="flex w-full items-center justify-center gap-2 bg-ink py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-colors hover:bg-espresso disabled:opacity-70"
                 >
-                  <Lock size={13} strokeWidth={1.8} /> Secure checkout
+                  <Lock size={13} strokeWidth={1.8} /> {busy ? "Redirecting…" : "Secure checkout"}
                 </button>
                 <p className="mt-2 text-center text-[11px] uppercase tracking-[0.12em] text-taupe">
-                  {note ? "Checkout connects at launch — your bag is saved." : "Shipping & taxes calculated at checkout"}
+                  {note ? "Checkout connects once Shopify is linked — your bag is saved." : "Shipping & taxes calculated at checkout"}
                 </p>
               </div>
             )}
