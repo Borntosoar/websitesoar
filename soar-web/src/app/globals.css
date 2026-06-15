@@ -227,3 +227,6 @@ body::after {
   background-size: 120px 120px;
 }
 @media (prefers-reduced-motion: reduce) { body::after { display: none; } }
+
+/* digital drop clock — blinking colon */
+@keyframes clock-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }

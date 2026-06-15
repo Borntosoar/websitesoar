@@ -8,6 +8,7 @@ import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { SectionNav } from "@/components/ui/section-nav";
 import { Cursor } from "@/components/ui/cursor";
+import { PromoPopup } from "@/components/ui/promo-popup";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <SmoothScroll>{children}</SmoothScroll>
           <CartDrawer />
           <ProductQuickView />
+          <PromoPopup />
           <ScrollProgress />
           <SectionNav />
           <Cursor />
