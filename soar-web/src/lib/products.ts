@@ -15,6 +15,8 @@ export type Product = {
   edition: number;
   left: number;
   related: string[];
+  /** size → Shopify variant GID (set for live Shopify products). */
+  variantBySize?: Record<string, string>;
 };
 
 const APPAREL = ["S", "M", "L", "XL"];

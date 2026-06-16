@@ -4,12 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Plus, Minus, ShoppingBag, Lock } from "lucide-react";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Garment } from "@/components/ui/garment";
-import { shopifyEnabled, fetchVariantMap, createCheckout } from "@/lib/shopify";
+import { shopifyEnabled, createCheckout } from "@/lib/shopify";
 
 export type Line = {
   lineId: string;
   id: string;
   handle?: string;
+  variantId?: string;
   title: string;
   price: number;
   qty: number;
@@ -18,7 +19,7 @@ export type Line = {
   image?: string;
 };
 
-type AddInput = { id: string; handle?: string; title: string; price: number; category: string; size?: string; image?: string };
+type AddInput = { id: string; handle?: string; variantId?: string; title: string; price: number; category: string; size?: string; image?: string };
 
 type CartCtx = {
   items: Line[];
@@ -97,17 +98,14 @@ export function CartDrawer() {
     }
     setBusy(true);
     try {
-      const map = await fetchVariantMap();
       const lines: { merchandiseId: string; quantity: number }[] = [];
       for (const i of items) {
-        const sizes = i.handle ? map.get(i.handle) : undefined;
-        const vid = sizes?.get(i.size || "OS") ?? sizes?.values().next().value;
-        if (!vid) {
+        if (!i.variantId) {
           setBusy(false);
           setNote(true);
           return;
         }
-        lines.push({ merchandiseId: vid, quantity: i.qty });
+        lines.push({ merchandiseId: i.variantId, quantity: i.qty });
       }
       const url = await createCheckout(lines);
       if (url) window.location.href = url;

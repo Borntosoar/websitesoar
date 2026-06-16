@@ -68,3 +68,51 @@ export async function createCheckout(lines: { merchandiseId: string; quantity: n
   );
   return data?.cartCreate?.cart?.checkoutUrl ?? null;
 }
+
+export type SfVariant = { id: string; size: string; price: number; available: boolean };
+export type SfProduct = {
+  handle: string;
+  title: string;
+  description: string;
+  productType: string;
+  price: number;
+  image?: string;
+  tag?: string;
+  total: number;
+  variants: SfVariant[];
+};
+
+/** Fetch the live catalog from Shopify (display + checkout). */
+export async function fetchProducts(): Promise<SfProduct[]> {
+  type Node = {
+    handle: string; title: string; description: string; productType: string; tags: string[]; totalInventory: number;
+    featuredImage: { url: string } | null;
+    variants: { edges: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string }; selectedOptions: { name: string; value: string }[] } }[] };
+  };
+  const data = await storefront<{ products: { edges: { node: Node }[] } }>(`{
+    products(first: 30, sortKey: CREATED_AT, reverse: true) {
+      edges { node {
+        handle title description productType tags totalInventory
+        featuredImage { url }
+        variants(first: 25) { edges { node { id title availableForSale price { amount } selectedOptions { name value } } } }
+      } }
+    }
+  }`);
+  if (!data) return [];
+  return data.products.edges.map(({ node: n }) => ({
+    handle: n.handle,
+    title: n.title,
+    description: (n.description || "").trim(),
+    productType: n.productType || "",
+    image: n.featuredImage?.url,
+    tag: n.tags && n.tags.length ? n.tags[0] : undefined,
+    total: n.totalInventory ?? 0,
+    price: n.variants.edges.length ? Number(n.variants.edges[0].node.price.amount) : 0,
+    variants: n.variants.edges.map(({ node: v }) => ({
+      id: v.id,
+      size: v.selectedOptions.find((o) => o.name.toLowerCase() === "size")?.value || v.title,
+      price: Number(v.price.amount),
+      available: v.availableForSale,
+    })),
+  }));
+}

@@ -1,10 +1,14 @@
+"use client";
+
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/ui/product-card";
 import { Reveal } from "@/components/ui/reveal";
+import { useCatalog } from "@/components/ui/catalog";
 
-/** New Arrivals — the shoppable product grid (Represent-style architecture). */
+/** New Arrivals — live Shopify products (falls back to local placeholders). */
 export function ShopGrid() {
-  const items = products.slice(0, 8);
+  const cat = useCatalog();
+  const items = (cat ?? products).slice(0, 8);
   return (
     <section id="shop" className="bg-white py-20 text-black md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-12">

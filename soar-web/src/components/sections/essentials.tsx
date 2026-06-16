@@ -1,9 +1,13 @@
+"use client";
+
 import { bestSellers } from "@/lib/products";
 import { ProductCard } from "@/components/ui/product-card";
+import { useCatalog } from "@/components/ui/catalog";
 
-/** The Essentials — best-sellers rail. Horizontal scroll on mobile, grid on
- *  desktop. Dark section for rhythm against the white product grid. */
+/** The Essentials — live Shopify products (falls back to local placeholders). */
 export function Essentials() {
+  const cat = useCatalog();
+  const items = (cat ?? bestSellers).slice(0, 4);
   return (
     <section className="bg-black py-20 text-white md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-12">
@@ -20,7 +24,7 @@ export function Essentials() {
           </a>
         </div>
         <div className="-mx-5 flex snap-x gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0">
-          {bestSellers.map((p) => (
+          {items.map((p) => (
             <div key={p.id} className="w-[62vw] shrink-0 snap-start sm:w-[40vw] md:w-auto">
               <ProductCard p={p} dark />
             </div>
