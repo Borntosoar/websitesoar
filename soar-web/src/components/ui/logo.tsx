@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import logoWhite from "@/assets/soar-logo-white.png";
+import logoBlack from "@/assets/soar-logo.png";
 
-const SRC = { white: "/soar-logo-white.png", black: "/soar-logo.png" } as const;
+const SRC = { white: logoWhite, black: logoBlack } as const;
 
 /** SOAR logo lockup (box + S-swoosh + breakthrough star + wordmark).
- *  `variant` picks the colour; size via className (e.g. `h-8 w-auto`). */
+ *  Statically imported so the URL is basePath-correct on GitHub Pages.
+ *  Size via className (e.g. `h-8 w-auto`). */
 export function Logo({
   variant = "white",
   className,
@@ -21,8 +24,6 @@ export function Logo({
       src={SRC[variant]}
       alt={decorative ? "" : "SOAR"}
       aria-hidden={decorative || undefined}
-      width={430}
-      height={359}
       priority={priority}
       draggable={false}
       className={cn("select-none", className)}
