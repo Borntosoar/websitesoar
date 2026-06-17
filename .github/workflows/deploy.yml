@@ -36,7 +36,9 @@ jobs:
           PAGES_EXPORT: "1"
           PAGES_BASE_PATH: /websitesoar
           NEXT_PUBLIC_SHOPIFY_DOMAIN: n06e1d-pn.myshopify.com
-          NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+          # Public Storefront token (safe in client builds). Falls back to the repo
+          # secret if set; otherwise uses the known public token so deploys always work.
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN || 'cc4d4c67043d6dc5dda6f34978f12962' }}
         run: npm run build
 
       - name: Deploy to gh-pages
