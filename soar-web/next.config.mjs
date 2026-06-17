@@ -9,7 +9,10 @@ const basePath = process.env.PAGES_BASE_PATH || "";
 const nextConfig = {
   images: {
     unoptimized: isExport,
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "cdn.shopify.com" },
+    ],
   },
   ...(isExport
     ? {
