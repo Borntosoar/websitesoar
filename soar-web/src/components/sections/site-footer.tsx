@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
 
 const cols: [string, [string, string][]][] = [
   ["Shop", [["New Arrivals", "#shop"], ["Collections", "#collection"], ["The Drop", "#drop"], ["Upcoming", "#upcoming"]]],
@@ -60,8 +61,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl">
         <FooterSignup />
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
-          <a href="#top" className="col-span-2 text-5xl font-semibold tracking-[0.04em] md:col-span-1 md:text-6xl">
-            SOAR<sup className="align-super text-[0.25em] text-bone/55">®</sup>
+          <a href="#top" className="col-span-2 md:col-span-1" aria-label="SOAR home">
+            <Logo variant="white" className="h-14 w-auto md:h-16" />
           </a>
           {cols.map(([heading, links]) => (
             <nav key={heading} className="flex flex-col gap-3">

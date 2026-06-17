@@ -18,6 +18,7 @@ const serif = Newsreader({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://borntosoar.github.io/websitesoar/"),
   title: { default: "SOAR — Born To Soar", template: "%s — SOAR" },
   description:
     "A movement for those who refuse limitations. Premium essentials, released in limited drops. The box was never real — born to soar.",
@@ -28,11 +29,13 @@ export const metadata: Metadata = {
     description: "A movement for those who refuse limitations. Premium essentials in limited drops.",
     siteName: "SOAR",
     type: "website",
+    images: [{ url: "og.png", width: 1200, height: 630, alt: "SOAR" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "SOAR — Born To Soar",
     description: "A movement for those who refuse limitations.",
+    images: ["og.png"],
   },
   robots: { index: true, follow: true },
 };

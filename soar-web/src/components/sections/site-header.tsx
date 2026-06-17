@@ -5,6 +5,7 @@ import { Search, Bell, Bookmark, ShoppingBag, Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/components/ui/cart";
+import { Logo } from "@/components/ui/logo";
 
 const nav = [
   ["Shop", "#collection"],
@@ -93,8 +94,8 @@ export function SiteHeader() {
           <Menu size={20} strokeWidth={1.6} />
         </button>
 
-        <a href="#top" className="justify-self-center text-[1.15rem] font-semibold tracking-[0.22em]" aria-label="SOAR home">
-          SOAR<sup className="align-super text-[0.5em] opacity-70">®</sup>
+        <a href="#top" className="justify-self-center" aria-label="SOAR home">
+          <Logo variant="white" priority className="h-7 w-auto mix-blend-difference md:h-8" />
         </a>
 
         <div className="flex items-center justify-end gap-0.5">

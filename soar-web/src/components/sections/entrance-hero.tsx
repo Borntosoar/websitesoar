@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { DropClock } from "@/components/ui/drop-clock";
+import { Logo } from "@/components/ui/logo";
 
 const BreakthroughScene = dynamic(
   () => import("@/components/ui/breakthrough-scene").then((m) => m.BreakthroughScene),
@@ -139,6 +140,7 @@ export function EntranceHero() {
           entered ? "pointer-events-none translate-y-3 opacity-0" : "opacity-100",
         )}
       >
+        <Logo variant="black" priority className="mb-1 h-10 w-auto md:h-12" />
         <DropClock tone="dark" className="mb-1" />
 
         <span className="text-[11px] uppercase tracking-[0.3em] text-black/50">
@@ -222,7 +224,7 @@ export function EntranceHero() {
           showWord ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
         )}
       >
-        <span className="text-[18vw] font-semibold leading-none tracking-[0.12em] text-black md:text-[12rem]">SOAR</span>
+        <Logo variant="black" priority className="w-[58vw] max-w-[460px]" />
       </div>
     </div>
   );

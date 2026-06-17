@@ -2,6 +2,7 @@
 
 import { useRef, useState, type FormEvent } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Logo } from "@/components/ui/logo";
 
 /** Final CTA — the close. The box was never real. A bird grows toward the
  *  camera as you scroll in, the wordmark lands, and the flight invite captures
@@ -22,6 +23,12 @@ export function FinalCTA() {
 
   return (
     <section ref={ref} id="born" className="relative flex min-h-[120svh] items-center justify-center overflow-hidden bg-black px-6 text-center text-white">
+      {/* giant faint logo watermark */}
+      <Logo
+        variant="white"
+        decorative
+        className="pointer-events-none absolute left-1/2 top-1/2 h-auto w-[82vw] max-w-[760px] -translate-x-1/2 -translate-y-1/2 opacity-[0.05]"
+      />
       {/* bird flying toward camera */}
       <motion.svg
         aria-hidden
