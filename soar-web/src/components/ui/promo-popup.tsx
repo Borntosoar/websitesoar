@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const KEY = "soar-promo";
@@ -11,6 +12,7 @@ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** 10%-off welcome popup. Captures email or phone; appears once after the
  *  visitor passes the entrance, unless already claimed/dismissed. */
 export function PromoPopup() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [channel, setChannel] = useState<"email" | "phone">("email");
   const [value, setValue] = useState("");
@@ -19,6 +21,7 @@ export function PromoPopup() {
   const timer = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
+    if (pathname !== "/") return; // home only
     try {
       if (localStorage.getItem(KEY)) return; // claimed or dismissed
     } catch {}
@@ -36,7 +39,7 @@ export function PromoPopup() {
       clearInterval(poll);
       if (timer.current) clearTimeout(timer.current);
     };
-  }, []);
+  }, [pathname]);
 
   function dismiss() {
     setOpen(false);

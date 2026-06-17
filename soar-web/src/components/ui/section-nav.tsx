@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -14,6 +15,7 @@ const items = [
 /** Fixed dot navigation; highlights the section in view. mix-blend keeps it
  *  legible over both dark and light sections. */
 export function SectionNav() {
+  const pathname = usePathname();
   const [active, setActive] = useState("top");
 
   useEffect(() => {
@@ -27,6 +29,8 @@ export function SectionNav() {
     });
     return () => obs.disconnect();
   }, []);
+
+  if (pathname !== "/") return null;
 
   return (
     <nav
