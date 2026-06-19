@@ -1,122 +1,142 @@
 "use client";
 
 /**
- * SOAR — Entrance: "the road to the stars" (R3F). A glowing S-curved road (the
- * logo's swoosh) rises through a starfield toward a bright star. Idle: you sit at
- * the road's start, looking up it. On unlock you travel up the road, accelerating
- * toward the star — then the white light floods in. Monochrome.
+ * SOAR — Entrance background: the road to the monument. A wide, premium,
+ * futuristic road stretches to the horizon under a faint starfield; white neon
+ * edges and scrolling lane dashes pull you forward. The SOAR logo stands as a
+ * monument above the far horizon. On unlock the journey accelerates and the
+ * monument rushes the camera. Monochrome, cinematic. (Gate/flow unchanged.)
  */
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
 import { EffectComposer, Bloom as BloomEffect } from "@react-three/postprocessing";
 import { useMemo, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
+import logoWhite from "@/assets/soar-logo-white.png";
 
 const easeIn = (t: number) => t * t;
-
-// S-curved road that swooshes up toward the star (echoes the logo mark).
-const CURVE = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(0, -1.4, 12),
-  new THREE.Vector3(-1.5, -0.9, 3),
-  new THREE.Vector3(1.2, -0.1, -7),
-  new THREE.Vector3(-0.7, 1.1, -19),
-  new THREE.Vector3(0.4, 2.5, -33),
-  new THREE.Vector3(0, 3.6, -49),
-]);
-const STAR = new THREE.Vector3(0, 4.1, -54);
+const ROAD_W = 14;
+const FAR = -220;
+const NEAR = 18;
+const LOGO_FAR = -150;
 
 function Road() {
-  const core = useMemo(() => new THREE.TubeGeometry(CURVE, 180, 0.045, 8, false), []);
-  const halo = useMemo(() => new THREE.TubeGeometry(CURVE, 180, 0.17, 8, false), []);
   return (
     <group>
-      <mesh geometry={halo}>
-        <meshBasicMaterial color="#aab8ff" transparent opacity={0.12} toneMapped={false} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, (FAR + NEAR) / 2]}>
+        <planeGeometry args={[ROAD_W, NEAR - FAR]} />
+        <meshStandardMaterial color="#0a0a0e" roughness={0.32} metalness={0.6} />
       </mesh>
-      <mesh geometry={core}>
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
-      </mesh>
+      {[-1, 1].map((s) => (
+        <mesh key={s} rotation={[-Math.PI / 2, 0, 0]} position={[(s * ROAD_W) / 2, 0.02, (FAR + NEAR) / 2]}>
+          <planeGeometry args={[0.12, NEAR - FAR]} />
+          <meshBasicMaterial color="#ffffff" toneMapped={false} />
+        </mesh>
+      ))}
+      {/* soft inner guide lines */}
+      {[-0.34, 0.34].map((s) => (
+        <mesh key={s} rotation={[-Math.PI / 2, 0, 0]} position={[s * ROAD_W, 0.015, (FAR + NEAR) / 2]}>
+          <planeGeometry args={[0.05, NEAR - FAR]} />
+          <meshBasicMaterial color="#9fb0ff" transparent opacity={0.35} toneMapped={false} />
+        </mesh>
+      ))}
     </group>
   );
 }
 
-function Flow({ boost }: { boost: MutableRefObject<number> }) {
-  const N = 90;
-  const params = useMemo(() => Array.from({ length: N }, (_, i) => i / N), []);
-  const geo = useMemo(() => {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(N * 3), 3));
-    return g;
-  }, []);
-  const mat = useMemo(
-    () => new THREE.PointsMaterial({ color: "#ffffff", size: 0.1, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending }),
-    [],
-  );
-  const v = useMemo(() => new THREE.Vector3(), []);
+function Dashes({ boost }: { boost: MutableRefObject<number> }) {
+  const N = 30;
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const zs = useMemo(() => Array.from({ length: N }, (_, i) => NEAR - (i * (NEAR - FAR)) / N), []);
+  const geo = useMemo(() => new THREE.PlaneGeometry(0.24, 3.4), []);
+  const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: "#ffffff", toneMapped: false }), []);
   useFrame((_, dt) => {
-    const pos = geo.attributes.position.array as Float32Array;
-    const speed = Math.min(0.05, dt) * (0.06 + easeIn(boost.current) * 0.6);
+    const inst = ref.current;
+    if (!inst) return;
+    const sp = Math.min(0.05, dt) * (16 + easeIn(boost.current) * 130);
     for (let i = 0; i < N; i++) {
-      params[i] = (params[i] + speed) % 1;
-      CURVE.getPointAt(params[i], v);
-      pos[i * 3] = v.x;
-      pos[i * 3 + 1] = v.y;
-      pos[i * 3 + 2] = v.z;
+      zs[i] += sp;
+      if (zs[i] > NEAR) zs[i] = FAR + (zs[i] - NEAR);
+      dummy.position.set(0, 0.03, zs[i]);
+      dummy.rotation.set(-Math.PI / 2, 0, 0);
+      dummy.updateMatrix();
+      inst.setMatrixAt(i, dummy.matrix);
     }
-    geo.attributes.position.needsUpdate = true;
+    inst.instanceMatrix.needsUpdate = true;
   });
-  return <points geometry={geo} material={mat} />;
+  return <instancedMesh ref={ref} args={[geo, mat, N]} />;
 }
 
-function Star({ boost }: { boost: MutableRefObject<number> }) {
+function Monument({ boost }: { boost: MutableRefObject<number> }) {
+  const tex = useTexture(logoWhite.src);
   const ref = useRef<THREE.Mesh>(null);
   useFrame(({ clock }) => {
-    if (ref.current) ref.current.scale.setScalar(0.5 + Math.sin(clock.elapsedTime * 2) * 0.08 + easeIn(boost.current) * 0.8);
+    const f = easeIn(boost.current);
+    if (ref.current) {
+      ref.current.position.z = LOGO_FAR + f * (12 - LOGO_FAR); // rush toward the camera
+      ref.current.position.y = 7.5 - f * 5.8 + Math.sin(clock.elapsedTime * 0.5) * 0.1;
+    }
   });
   return (
-    <mesh ref={ref} position={STAR}>
-      <sphereGeometry args={[1, 24, 24]} />
-      <meshBasicMaterial color="#ffffff" toneMapped={false} />
+    <mesh ref={ref} position={[0, 7.5, LOGO_FAR]}>
+      <planeGeometry args={[19, (19 * 359) / 430]} />
+      <meshBasicMaterial map={tex} transparent toneMapped={false} alphaTest={0.03} />
     </mesh>
   );
 }
 
-function Field() {
+function Sky() {
   const geo = useMemo(() => {
-    const n = 1400;
+    const n = 1100;
     const pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 64;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 42 + 2;
-      pos[i * 3 + 2] = -Math.random() * 82 + 12;
+      pos[i * 3] = (Math.random() - 0.5) * 160;
+      pos[i * 3 + 1] = Math.random() * 50 + 3;
+      pos[i * 3 + 2] = -Math.random() * 220 + 10;
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     return g;
   }, []);
-  const mat = useMemo(() => new THREE.PointsMaterial({ color: "#ffffff", size: 0.06, transparent: true, opacity: 0.8, depthWrite: false }), []);
+  const mat = useMemo(() => new THREE.PointsMaterial({ color: "#ffffff", size: 0.12, sizeAttenuation: true, transparent: true, opacity: 0.7, depthWrite: false }), []);
+  return <points geometry={geo} material={mat} />;
+}
+
+function Motes({ boost }: { boost: MutableRefObject<number> }) {
   const ref = useRef<THREE.Points>(null);
-  useFrame(({ clock }) => {
-    if (ref.current) ref.current.rotation.z = clock.elapsedTime * 0.005;
+  const geo = useMemo(() => {
+    const n = 90;
+    const pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 18;
+      pos[i * 3 + 1] = Math.random() * 6;
+      pos[i * 3 + 2] = -Math.random() * 60 + 12;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    return g;
+  }, []);
+  const mat = useMemo(() => new THREE.PointsMaterial({ color: "#cdd6ff", size: 0.05, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending }), []);
+  useFrame((_, dt) => {
+    const pos = geo.attributes.position.array as Float32Array;
+    const sp = Math.min(0.05, dt) * (6 + easeIn(boost.current) * 60);
+    for (let i = 0; i < pos.length; i += 3) {
+      pos[i + 2] += sp;
+      if (pos[i + 2] > 14) pos[i + 2] = -60;
+    }
+    geo.attributes.position.needsUpdate = true;
   });
   return <points ref={ref} geometry={geo} material={mat} />;
 }
 
-function Rig({ boost }: { boost: MutableRefObject<number> }) {
+function Rig() {
   const { camera, pointer } = useThree();
-  const p = useMemo(() => new THREE.Vector3(), []);
-  const ahead = useMemo(() => new THREE.Vector3(), []);
-  const look = useMemo(() => new THREE.Vector3(), []);
-  const target = useMemo(() => new THREE.Vector3(), []);
   useFrame(() => {
-    const f = easeIn(boost.current);
-    const t = Math.min(0.985, 0.015 + f * 0.95);
-    CURVE.getPointAt(t, p);
-    CURVE.getPointAt(Math.min(0.999, t + 0.03), ahead);
-    target.set(p.x + pointer.x * 0.7, p.y + 0.55 - pointer.y * 0.35, p.z + 1.5);
-    camera.position.lerp(target, 0.1);
-    look.copy(ahead).lerp(STAR, f);
-    camera.lookAt(look);
+    camera.position.x += (pointer.x * 0.9 - camera.position.x) * 0.04;
+    camera.position.y += (1.3 - pointer.y * 0.4 - camera.position.y) * 0.04;
+    camera.lookAt(pointer.x * 0.6, 4 - pointer.y * 0.4, -80);
   });
   return null;
 }
@@ -124,27 +144,30 @@ function Rig({ boost }: { boost: MutableRefObject<number> }) {
 function Scene({ unlocked }: { unlocked: boolean }) {
   const boost = useRef(0);
   useFrame((_, dt) => {
-    boost.current = THREE.MathUtils.damp(boost.current, unlocked ? 1 : 0, 0.9, dt);
+    boost.current = THREE.MathUtils.damp(boost.current, unlocked ? 1 : 0, 1.0, dt);
   });
   return (
     <>
-      <color attach="background" args={["#04050a"]} />
-      <fog attach="fog" args={["#04050a", 14, 62]} />
-      <Field />
+      <color attach="background" args={["#040407"]} />
+      <fog attach="fog" args={["#040407", 30, 150]} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[0, 8, 6]} intensity={0.7} color="#aeb8ff" />
+      <Sky />
       <Road />
-      <Flow boost={boost} />
-      <Star boost={boost} />
-      <Rig boost={boost} />
+      <Dashes boost={boost} />
+      <Motes boost={boost} />
+      <Monument boost={boost} />
+      <Rig />
     </>
   );
 }
 
 export function BreakthroughScene({ unlocked = false }: { unlocked?: boolean }) {
   return (
-    <Canvas camera={{ position: [0, 0, 13], fov: 58 }} gl={{ antialias: true }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [0, 1.3, 9], fov: 62 }} gl={{ antialias: true }} dpr={[1, 2]}>
       <Scene unlocked={unlocked} />
       <EffectComposer>
-        <BloomEffect intensity={1.5} luminanceThreshold={0.5} luminanceSmoothing={0.5} mipmapBlur radius={0.8} />
+        <BloomEffect intensity={1.35} luminanceThreshold={0.55} luminanceSmoothing={0.5} mipmapBlur radius={0.82} />
       </EffectComposer>
     </Canvas>
   );
