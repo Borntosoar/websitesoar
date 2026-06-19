@@ -14,10 +14,11 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { DropClock } from "@/components/ui/drop-clock";
 import { Logo } from "@/components/ui/logo";
+import { EntranceBackdrop } from "@/components/ui/entrance-backdrop";
 
 const BreakthroughScene = dynamic(
   () => import("@/components/ui/breakthrough-scene").then((m) => m.BreakthroughScene),
-  { ssr: false },
+  { ssr: false, loading: () => <EntranceBackdrop /> },
 );
 
 const PASS = "soar";

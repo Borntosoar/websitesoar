@@ -7,12 +7,18 @@
  * to a near-overhead view where the whole road traces the SOAR swoosh — the
  * painted edge lines glow so the mark reads — before the light floods and the
  * single logo resolves in the overlay. Monochrome, luxury, no neon.
+ *
+ * Production-hardened per the 3d-web-experience playbook:
+ *  - loading state (the chunk is heavy) — see EntranceBackdrop in entrance-hero
+ *  - never desktop-only: a `lite` tier on phones (lower dpr, fewer stars)
+ *  - graceful fallback when WebGL is missing or reduced-motion is requested
  */
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, Bloom as BloomEffect } from "@react-three/postprocessing";
-import { useMemo, useRef, type MutableRefObject } from "react";
+import { useMemo, useRef, useState, type MutableRefObject } from "react";
 import * as THREE from "three";
+import { EntranceBackdrop } from "@/components/ui/entrance-backdrop";
 
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
@@ -129,10 +135,10 @@ function Road({ phase }: { phase: MutableRefObject<Phase> }) {
   );
 }
 
-function Stars({ phase }: { phase: MutableRefObject<Phase> }) {
+function Stars({ phase, count }: { phase: MutableRefObject<Phase>; count: number }) {
   const ref = useRef<THREE.Points>(null);
   const geo = useMemo(() => {
-    const n = 1700;
+    const n = count;
     const pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 90;
@@ -142,7 +148,7 @@ function Stars({ phase }: { phase: MutableRefObject<Phase> }) {
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     return g;
-  }, []);
+  }, [count]);
   const mat = useMemo(
     () =>
       new THREE.PointsMaterial({
@@ -190,7 +196,7 @@ function Rig({ phase }: { phase: MutableRefObject<Phase> }) {
   return null;
 }
 
-function Scene({ unlocked }: { unlocked: boolean }) {
+function Scene({ unlocked, lite }: { unlocked: boolean; lite: boolean }) {
   const phase = useRef<Phase>({ elapsed: 0, climb: 0, lift: 0, bright: 0 });
   useFrame((_, dt) => {
     const ph = phase.current;
@@ -207,17 +213,43 @@ function Scene({ unlocked }: { unlocked: boolean }) {
       <ambientLight intensity={0.5} />
       <directionalLight position={[3, 7, 5]} intensity={1.0} color="#eef1f6" />
       <directionalLight position={[-5, 2, -6]} intensity={0.45} color="#c2c8d6" />
-      <Stars phase={phase} />
+      <Stars phase={phase} count={lite ? 800 : 1700} />
       <Road phase={phase} />
       <Rig phase={phase} />
     </>
   );
 }
 
+function hasWebGL() {
+  try {
+    const c = document.createElement("canvas");
+    return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl")));
+  } catch {
+    return false;
+  }
+}
+
 export function BreakthroughScene({ unlocked = false }: { unlocked?: boolean }) {
+  // 3d-web-experience: never ship desktop-only 3D with no fallback. Honour
+  // reduced-motion / missing WebGL with a static backdrop, and run a lighter
+  // scene on phones (lower dpr, fewer stars) to protect battery & low-end GPUs.
+  const [fallback] = useState(
+    () =>
+      (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      !hasWebGL(),
+  );
+  const [lite] = useState(() => typeof matchMedia !== "undefined" && matchMedia("(max-width: 768px)").matches);
+
+  if (fallback) return <EntranceBackdrop />;
+
   return (
-    <Canvas camera={{ position: [0, -1.5, 16], fov: 60 }} gl={{ antialias: true }} dpr={[1, 2]}>
-      <Scene unlocked={unlocked} />
+    <Canvas
+      camera={{ position: [0, -1.5, 16], fov: 60 }}
+      gl={{ antialias: !lite, powerPreference: "high-performance" }}
+      dpr={lite ? [1, 1.5] : [1, 2]}
+      performance={{ min: 0.5 }}
+    >
+      <Scene unlocked={unlocked} lite={lite} />
       <EffectComposer>
         <BloomEffect intensity={0.65} luminanceThreshold={0.75} luminanceSmoothing={0.4} mipmapBlur radius={0.7} />
       </EffectComposer>
