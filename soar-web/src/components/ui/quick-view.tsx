@@ -56,10 +56,10 @@ function Panel({ product }: { product: Product }) {
       </div>
 
       {/* details */}
-      <div className="flex max-h-[88svh] flex-col overflow-auto p-6 md:p-9">
+      <div className="flex max-h-[88svh] flex-col overflow-auto p-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:p-9">
         <div className="flex items-start justify-between">
           <span className="text-[11px] uppercase tracking-[0.2em] text-taupe">SOAR — {product.code}</span>
-          <button onClick={close} aria-label="Close" className="-mr-1 -mt-1 transition-opacity hover:opacity-60">
+          <button onClick={close} aria-label="Close" className="-mr-3 -mt-3 grid h-11 w-11 place-items-center transition-opacity hover:opacity-60 md:-mr-1 md:-mt-1 md:h-9 md:w-9">
             <X size={18} strokeWidth={1.6} />
           </button>
         </div>
@@ -120,7 +120,7 @@ function Panel({ product }: { product: Product }) {
           </div>
           <button
             onClick={addToBag}
-            className="flex-1 bg-ink text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-colors hover:bg-espresso"
+            className="flex-1 bg-ink text-[13px] font-medium uppercase tracking-[0.12em] text-oat tabular-nums transition-[colors,transform] hover:bg-espresso active:scale-[0.98]"
           >
             Add to bag — ${product.price * qty}
           </button>

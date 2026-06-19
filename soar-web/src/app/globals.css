@@ -236,3 +236,23 @@ body::after {
 @keyframes loader-spin { to { transform: rotate(360deg); } }
 @keyframes spotlight { 0% { opacity: 0; transform: translate(-72%, -62%) scale(0.5); } 100% { opacity: 1; transform: translate(-50%, -40%) scale(1); } }
 .animate-spotlight { animation: spotlight 2s ease 0.75s 1 forwards; }
+
+/* ============ iPhone / mobile foundation (premium touch) ============ */
+/* never let iOS auto-resize type when rotating to landscape */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* kill the grey iOS tap-flash — we supply our own press/focus states */
+* { -webkit-tap-highlight-color: transparent; }
+/* snappy taps — drop the legacy 300ms delay on interactive controls */
+a, button, [role="button"], label, summary, input, select, textarea { touch-action: manipulation; }
+/* inputs must render >=16px on phones or iOS zooms the page on focus */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; }
+}
+/* safe-area helpers — layout sets viewport-fit=cover so these resolve on iPhone */
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pl-safe { padding-left: env(safe-area-inset-left); }
+.pr-safe { padding-right: env(safe-area-inset-right); }
+.px-safe { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+/* no rubber-band bleed behind the locked entrance */
+body.gate-locked { overscroll-behavior: none; }

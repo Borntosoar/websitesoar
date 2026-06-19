@@ -40,9 +40,9 @@ function FooterSignup() {
             required
             placeholder="Email address"
             aria-label="Email address"
-            className="min-w-0 flex-1 border border-bone/20 bg-transparent px-4 py-3 text-sm text-bone outline-none transition-colors placeholder:text-bone/40 focus:border-bone"
+            className="min-w-0 flex-1 border border-bone/20 bg-transparent px-4 py-3 text-base text-bone outline-none transition-colors placeholder:text-bone/40 focus:border-bone md:text-sm"
           />
-          <button type="submit" className="bg-bone px-5 py-3 text-[13px] font-medium text-ink transition-colors hover:bg-white">
+          <button type="submit" className="bg-bone px-5 py-3 text-[13px] font-medium text-ink transition-colors hover:bg-white active:scale-[0.98] transition-transform">
             Join
           </button>
         </div>
@@ -57,7 +57,7 @@ function FooterSignup() {
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-espresso px-5 pb-9 pt-20 text-bone md:px-12">
+    <footer className="bg-espresso px-5 pb-[max(env(safe-area-inset-bottom),2.25rem)] pt-20 text-bone md:px-12">
       <div className="mx-auto max-w-7xl">
         <FooterSignup />
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
@@ -77,11 +77,11 @@ export function SiteFooter() {
         </div>
         <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-bone/15 pt-6 text-[11px] uppercase tracking-[0.14em] text-bone/55">
           <span>© {year} SOAR® — Made to rise</span>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-bone">Instagram</a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-bone">TikTok</a>
-            <Link href="/privacy" className="transition-colors hover:text-bone">Privacy</Link>
-            <Link href="/terms" className="transition-colors hover:text-bone">Terms</Link>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center transition-colors hover:text-bone md:min-h-0">Instagram</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center transition-colors hover:text-bone md:min-h-0">TikTok</a>
+            <Link href="/privacy" className="inline-flex min-h-11 items-center transition-colors hover:text-bone md:min-h-0">Privacy</Link>
+            <Link href="/terms" className="inline-flex min-h-11 items-center transition-colors hover:text-bone md:min-h-0">Terms</Link>
           </div>
         </div>
       </div>

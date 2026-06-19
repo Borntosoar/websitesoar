@@ -131,7 +131,7 @@ export function CartDrawer() {
             onClick={() => setOpen(false)}
           />
           <motion.aside
-            className="fixed right-0 top-0 z-[141] flex h-svh w-full max-w-md flex-col bg-oat text-ink"
+            className="fixed right-0 top-0 z-[141] flex h-svh w-full max-w-md flex-col bg-oat text-ink pr-[env(safe-area-inset-right)]"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -141,7 +141,7 @@ export function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-ink/10 px-6 py-5">
               <span className="text-[11px] uppercase tracking-[0.2em] text-taupe">Your bag ({items.length})</span>
-              <button onClick={() => setOpen(false)} aria-label="Close bag" className="transition-opacity hover:opacity-60">
+              <button onClick={() => setOpen(false)} aria-label="Close bag" className="-mr-2 grid h-11 w-11 place-items-center transition-opacity hover:opacity-60 md:-mr-0 md:h-9 md:w-9">
                 <X size={18} strokeWidth={1.6} />
               </button>
             </div>
@@ -151,7 +151,7 @@ export function CartDrawer() {
               <div className="border-b border-ink/10 px-6 py-4">
                 <p className="text-[11px] uppercase tracking-[0.12em] text-taupe">
                   {remaining > 0 ? (
-                    <>You&apos;re <span className="text-ink">${remaining}</span> from free shipping</>
+                    <>You&apos;re <span className="text-ink tabular-nums">${remaining}</span> from free shipping</>
                   ) : (
                     <span className="text-ink">Free shipping unlocked — you&apos;ve risen.</span>
                   )}
@@ -186,11 +186,11 @@ export function CartDrawer() {
                       </p>
                       <div className="mt-auto flex items-center justify-between">
                         <div className="flex items-center border border-ink/15">
-                          <button onClick={() => setQty(i.lineId, i.qty - 1)} aria-label="Decrease" className="grid h-8 w-8 place-items-center hover:bg-ink/5">
+                          <button onClick={() => setQty(i.lineId, i.qty - 1)} aria-label="Decrease" className="grid h-11 w-11 place-items-center hover:bg-ink/5 md:h-8 md:w-8">
                             <Minus size={13} strokeWidth={1.8} />
                           </button>
                           <span className="w-7 text-center text-sm tabular-nums">{i.qty}</span>
-                          <button onClick={() => setQty(i.lineId, i.qty + 1)} aria-label="Increase" className="grid h-8 w-8 place-items-center hover:bg-ink/5">
+                          <button onClick={() => setQty(i.lineId, i.qty + 1)} aria-label="Increase" className="grid h-11 w-11 place-items-center hover:bg-ink/5 md:h-8 md:w-8">
                             <Plus size={13} strokeWidth={1.8} />
                           </button>
                         </div>
@@ -205,7 +205,7 @@ export function CartDrawer() {
             </div>
 
             {items.length > 0 && (
-              <div className="border-t border-ink/10 px-6 py-5">
+              <div className="sticky bottom-0 border-t border-ink/10 bg-oat px-6 pt-5 pb-[max(env(safe-area-inset-bottom),1.25rem)]">
                 <div className="mb-4 flex items-baseline justify-between">
                   <span className="text-[11px] uppercase tracking-[0.2em] text-taupe">Subtotal</span>
                   <span className="text-lg font-medium tabular-nums">${subtotal}</span>
@@ -213,7 +213,7 @@ export function CartDrawer() {
                 <button
                   onClick={checkout}
                   disabled={busy}
-                  className="flex w-full items-center justify-center gap-2 bg-ink py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-colors hover:bg-espresso disabled:opacity-70"
+                  className="flex w-full items-center justify-center gap-2 bg-ink py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-[colors,transform] hover:bg-espresso active:scale-[0.98] disabled:opacity-70"
                 >
                   <Lock size={13} strokeWidth={1.8} /> {busy ? "Redirecting…" : "Secure checkout"}
                 </button>

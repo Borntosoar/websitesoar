@@ -24,22 +24,22 @@ export function FutureDrops() {
             <Reveal key={d.n} delay={i * 90}>
               <article className="group relative flex aspect-[4/5] flex-col justify-between overflow-hidden bg-black p-6 text-white">
                 <div className="absolute inset-0 grid place-items-center">
-                  <span className="select-none text-[34vw] font-semibold leading-none text-white/[0.05] blur-[2px] transition-all duration-700 group-hover:blur-0 md:text-[12rem]">
+                  <span className="select-none text-[34vw] font-semibold leading-none text-white/[0.05] blur-[2px] transition-all duration-700 group-hover:blur-0 md:text-[12rem] tabular-nums">
                     {d.n}
                   </span>
                 </div>
                 <div className="relative z-10 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-white/45">
-                  <span>Drop {d.n}</span>
+                  <span className="tabular-nums">Drop {d.n}</span>
                   <Lock size={13} strokeWidth={1.6} />
                 </div>
                 <div className="relative z-10">
                   <h3 className="text-2xl font-semibold md:text-3xl">{d.name}</h3>
-                  <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-white/45">
+                  <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-white/45 tabular-nums">
                     {d.note} — {d.when}
                   </p>
                   <button
                     type="button"
-                    className="mt-5 inline-flex items-center gap-2 border border-white/30 px-5 py-2.5 text-[11px] uppercase tracking-[0.15em] text-white/80 transition-colors hover:border-white hover:text-white"
+                    className="mt-5 inline-flex items-center gap-2 border border-white/30 px-6 py-3.5 text-[11px] uppercase tracking-[0.15em] text-white/80 transition-colors hover:border-white hover:text-white active:scale-[0.98] transition-transform"
                   >
                     <Lock size={12} strokeWidth={1.8} /> Get notified
                   </button>

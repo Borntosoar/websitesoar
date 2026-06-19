@@ -55,9 +55,11 @@ export function EntranceHero() {
 
   function go() {
     setEntered(true);
-    setTimeout(() => setFlash(true), 2100);
-    setTimeout(() => setFlash(false), 2700);
-    setTimeout(() => setShowLogo(true), 2500);
+    // travel up the S (~0–2.2s) → rise to the overhead reveal, road traces the
+    // mark (~2–3.3s, held) → light floods → the single logo resolves → lift away
+    setTimeout(() => setFlash(true), 3700);
+    setTimeout(() => setFlash(false), 4300);
+    setTimeout(() => setShowLogo(true), 4000);
     setTimeout(() => {
       try {
         sessionStorage.setItem(KEY, "1");
@@ -65,8 +67,8 @@ export function EntranceHero() {
       } catch {}
       setReveal(true);
       document.body.classList.remove("gate-locked");
-    }, 4400);
-    setTimeout(() => setGone(true), 5600);
+    }, 5700);
+    setTimeout(() => setGone(true), 6900);
   }
 
   function validContact() {

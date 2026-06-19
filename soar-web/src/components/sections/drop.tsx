@@ -39,12 +39,12 @@ export function Drop() {
               </div>
               <div className="flex items-baseline justify-between">
                 <h3 className="font-medium">Ascension Hoodie</h3>
-                <span>$280</span>
+                <span className="tabular-nums">$280</span>
               </div>
               <div className="mt-3 h-1 w-full bg-bone/15">
                 <div className="h-full bg-bone" style={{ width: "92%" }} />
               </div>
-              <span className="mt-2 block text-[11px] uppercase tracking-[0.17em] text-bone/55">
+              <span className="mt-2 block text-[11px] uppercase tracking-[0.17em] text-bone/55 tabular-nums">
                 184 / 200 reserved — one per customer
               </span>
             </aside>

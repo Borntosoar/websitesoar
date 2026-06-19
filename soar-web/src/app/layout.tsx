@@ -45,6 +45,9 @@ export const viewport: Viewport = {
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
+  // iPhone: let the canvas/content extend under the notch + home indicator so
+  // env(safe-area-inset-*) padding can hold UI clear of them.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

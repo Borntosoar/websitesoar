@@ -76,16 +76,16 @@ export function FinalCTA() {
               required
               placeholder="Email address"
               aria-label="Email address"
-              className="min-w-0 flex-1 border-b border-white/30 bg-transparent px-1 py-2.5 text-center text-sm tracking-[0.12em] text-white outline-none placeholder:text-white/30 focus:border-white"
+              className="min-w-0 flex-1 border-b border-white/30 bg-transparent px-1 py-3.5 text-center text-base tracking-[0.12em] text-white outline-none placeholder:text-white/30 focus:border-white md:text-sm"
             />
-            <button type="submit" className="bg-white px-6 py-2.5 text-[12px] uppercase tracking-[0.15em] text-black transition-opacity hover:opacity-80">
+            <button type="submit" className="bg-white px-6 py-3.5 text-[12px] uppercase tracking-[0.15em] text-black transition hover:opacity-80 active:scale-[0.98]">
               Join the flight
             </button>
           </form>
         )}
       </div>
 
-      <span className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.2em] text-white/30">
+      <span className="absolute bottom-[max(env(safe-area-inset-bottom),1.5rem)] left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.2em] text-white/30">
         SOAR® — Made to rise
       </span>
     </section>

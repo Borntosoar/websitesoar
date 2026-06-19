@@ -82,7 +82,7 @@ export function PromoPopup() {
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 280, damping: 30 }}
           >
-            <button onClick={dismiss} aria-label="Close" className="absolute right-3 top-3 grid h-9 w-9 place-items-center text-ink/50 transition-colors hover:text-ink">
+            <button onClick={dismiss} aria-label="Close" className="absolute right-1 top-1 grid h-11 w-11 place-items-center text-ink/50 transition-colors hover:text-ink md:right-3 md:top-3 md:h-9 md:w-9">
               <X size={18} strokeWidth={1.6} />
             </button>
 
@@ -141,7 +141,7 @@ export function PromoPopup() {
                       }}
                       placeholder={channel === "email" ? "Email address" : "Phone number"}
                       aria-label={channel === "email" ? "Email address" : "Phone number"}
-                      className="w-full border border-ink/20 bg-transparent px-4 py-3 text-center text-sm tracking-[0.1em] outline-none transition-colors placeholder:text-ink/35 focus:border-ink"
+                      className="w-full border border-ink/20 bg-transparent px-4 py-3 text-center text-base tracking-[0.1em] outline-none transition-colors placeholder:text-ink/35 focus:border-ink md:text-sm"
                     />
                     <button type="submit" className="bg-ink py-3 text-[13px] font-medium uppercase tracking-[0.12em] text-oat transition-colors hover:bg-espresso">
                       Claim 10% off

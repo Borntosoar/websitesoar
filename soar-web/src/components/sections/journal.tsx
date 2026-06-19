@@ -30,7 +30,7 @@ export function Journal() {
                 <span className="text-[11px] uppercase tracking-[0.2em] text-white/45">{p.n}</span>
                 <div>
                   <h3 className="text-xl font-semibold leading-tight md:text-2xl">{p.t}</h3>
-                  <span className="mt-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-white/50 transition-colors group-hover:text-white">
+                  <span className="mt-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-white/50 transition-colors group-hover:text-white tabular-nums">
                     {p.m} · Read
                   </span>
                 </div>

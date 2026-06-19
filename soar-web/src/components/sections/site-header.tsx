@@ -33,7 +33,7 @@ function IconBtn({
       type="button"
       onClick={onClick}
       aria-label={label + (typeof count === "number" ? `, ${count} items` : "")}
-      className="relative grid h-10 w-10 place-items-center rounded-full transition-opacity hover:opacity-60"
+      className="relative grid h-11 w-11 place-items-center rounded-full transition-opacity hover:opacity-60"
     >
       {children}
       {typeof count === "number" && count > 0 && (
@@ -72,7 +72,7 @@ export function SiteHeader() {
       <header
         data-site-header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-5 py-4 transition-all duration-500 md:px-10",
+          "fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-5 pb-4 pt-[calc(env(safe-area-inset-top)+0.9rem)] transition-all duration-500 md:px-10",
           stuck
             ? "border-b border-ink/10 bg-oat/70 text-ink backdrop-blur-xl"
             : "bg-gradient-to-b from-espresso/55 to-transparent text-bone backdrop-blur-[2px]",
@@ -89,7 +89,7 @@ export function SiteHeader() {
           type="button"
           onClick={() => setMenu(true)}
           aria-label="Open menu"
-          className="grid h-10 w-10 place-items-center justify-self-start transition-opacity hover:opacity-60 md:hidden"
+          className="grid h-11 w-11 place-items-center justify-self-start transition-opacity hover:opacity-60 md:hidden"
         >
           <Menu size={20} strokeWidth={1.6} />
         </button>
@@ -130,7 +130,7 @@ export function SiteHeader() {
                 type="button"
                 onClick={() => setMenu(false)}
                 aria-label="Close menu"
-                className="grid h-10 w-10 place-items-center transition-opacity hover:opacity-60"
+                className="grid h-11 w-11 place-items-center transition-opacity hover:opacity-60"
               >
                 <X size={20} strokeWidth={1.6} />
               </button>
