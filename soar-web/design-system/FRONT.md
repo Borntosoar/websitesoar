@@ -117,3 +117,45 @@
   `soar-web/` and fix only errors you introduced.
 - Keep desktop and mobile both correct; use `md:` for desktop deltas.
 - Report a concise diff summary (what changed + why it serves the spec).
+
+---
+
+## Body sections — flagship pass (frontend-design lens, SAME system)
+
+Extend the front's system down the page. Apply `frontend-design` rigor —
+distinctive composition, atmosphere/depth, orchestrated motion, grid-breaking —
+strictly WITHIN the monochrome quiet-luxury brand (never loud, never coloured).
+Reinforce **drop-culture** quietly: edition counts, scarcity, locked/upcoming,
+numbered, "sold out" as social proof.
+
+Shared body principles:
+- Header pattern: eyebrow (`text-[11px] uppercase tracking-[0.34em] text-white/45`)
+  + Section-H2 ramp headline + optional index (`01 / 04`). `py-24 md:py-36`,
+  `px-6 md:px-12`.
+- One idea per section, generous negative space, hairlines, `tabular-nums`.
+- Orchestrate entrances with `Reveal` / `RevealWords` (stagger 60–90ms); the
+  word-by-word mask `RevealWords` (accentWord → serif italic) is the signature
+  for big statements. Reduced-motion safe.
+- Atmosphere: faint radial "light from dark", global grain — never coloured glow.
+
+### MANIFESTO (`manifesto.tsx`) — brand core, currently a flat 4-box grid
+- Editorial & architectural, not four equal boxes. Lead with a large statement
+  via `RevealWords` (one serif-italic accent), then render the four tenets as a
+  numbered hairline-separated **ledger/list** (oversized index `01–04`, generous
+  leading), not boxed cards. Keep tenet copy VERBATIM.
+
+### COLLECTION / SHOP (`collection-grid.tsx`) — commercial heart
+- Flagship category layout: bold editorial framing + an asymmetric featured-first
+  grid (one large tile + supporting), hairline frames, quiet hover (image scale
+  ≤1.04, label slide). Add a drop-culture cue per tile where the data exists
+  (`Only N left` / `Sold out`). Keep `id="collection"`; reuse existing data /
+  `ProductCard`; do NOT invent products.
+
+### DROP (`drop.tsx`) — DROP 001 scarcity module
+- Sharpen limited-release framing: large DROP 001 lockup, the existing stock
+  counter as a refined progress meter (`tabular-nums`), one clear CTA, a
+  numbered / "one per customer" cue. Keep existing copy/price/counts VERBATIM.
+
+### JOURNAL (`journal.tsx`) — editorial stories
+- Read like a magazine contents page: asymmetric editorial list, large index
+  numerals, issue/date in `tabular-nums`, refined hover. Keep entries VERBATIM.
