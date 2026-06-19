@@ -107,7 +107,13 @@ export function CartDrawer() {
         }
         lines.push({ merchandiseId: i.variantId, quantity: i.qty });
       }
-      const url = await createCheckout(lines);
+      // auto-apply the claimed 10% offer (SOAR10) — Shopify ignores it if the
+      // code isn't active, so it can never block checkout
+      let promo: string[] | undefined;
+      try {
+        if (localStorage.getItem("soar-promo") === "claimed") promo = ["SOAR10"];
+      } catch {}
+      const url = await createCheckout(lines, promo);
       if (url) window.location.href = url;
       else {
         setBusy(false);

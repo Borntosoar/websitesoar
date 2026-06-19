@@ -55,16 +55,21 @@ export async function fetchVariantMap(): Promise<Map<string, Map<string, string>
   return map;
 }
 
-/** Create a Shopify cart and return its hosted checkout URL. */
-export async function createCheckout(lines: { merchandiseId: string; quantity: number }[]): Promise<string | null> {
+/** Create a Shopify cart and return its hosted checkout URL. Optionally
+ *  auto-applies discount codes (e.g. the claimed 10%-off "SOAR10"). An unknown
+ *  or inactive code is ignored by Shopify — it never blocks checkout. */
+export async function createCheckout(
+  lines: { merchandiseId: string; quantity: number }[],
+  discountCodes?: string[],
+): Promise<string | null> {
   const data = await storefront<{ cartCreate: { cart: { checkoutUrl: string } | null; userErrors: { message: string }[] } }>(
-    `mutation Create($lines: [CartLineInput!]!) {
-      cartCreate(input: { lines: $lines }) {
+    `mutation Create($lines: [CartLineInput!]!, $discountCodes: [String!]) {
+      cartCreate(input: { lines: $lines, discountCodes: $discountCodes }) {
         cart { checkoutUrl }
         userErrors { message }
       }
     }`,
-    { lines },
+    { lines, discountCodes: discountCodes && discountCodes.length ? discountCodes : null },
   );
   return data?.cartCreate?.cart?.checkoutUrl ?? null;
 }
