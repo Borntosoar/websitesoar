@@ -1,15 +1,17 @@
 "use client";
 
 /**
- * SOAR — Studio entrance (fixed overlay). Create an account with email or phone
- * (or enter with a member password). Confirm 13+ and the policies; the box
- * breaks open, the bird climbs, "SOAR" resolves, then a clean fade to the home.
+ * SOAR — Opening cinematic + lock gate. A first-person journey up the SOAR road
+ * through a starfield; lock mode collects a password (access) or email/phone
+ * (get notified). On unlock the camera rushes the star, light floods, and the
+ * monumental SOAR logo resolves before the screen lifts to the home. Monochrome.
  */
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { DropClock } from "@/components/ui/drop-clock";
 import { Logo } from "@/components/ui/logo";
 
@@ -27,7 +29,8 @@ type Channel = "email" | "phone";
 
 export function EntranceHero() {
   const [entered, setEntered] = useState(false);
-  const [showWord, setShowWord] = useState(false);
+  const [flash, setFlash] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
   const [reveal, setReveal] = useState(false);
   const [gone, setGone] = useState(false);
   const [mode, setMode] = useState<Mode>("join");
@@ -46,22 +49,24 @@ export function EntranceHero() {
       document.body.classList.remove("gate-locked");
     } else {
       document.body.classList.add("gate-locked");
-      setTimeout(() => inputRef.current?.focus(), 500);
+      setTimeout(() => inputRef.current?.focus(), 700);
     }
   }, []);
 
   function go() {
     setEntered(true);
-    setTimeout(() => setShowWord(true), 3300);
+    setTimeout(() => setFlash(true), 2100);
+    setTimeout(() => setFlash(false), 2700);
+    setTimeout(() => setShowLogo(true), 2500);
     setTimeout(() => {
       try {
         sessionStorage.setItem(KEY, "1");
         sessionStorage.setItem("soar-age-ok", "1");
       } catch {}
-      setReveal(true); // the white + SOAR pull up to reveal the home
+      setReveal(true);
       document.body.classList.remove("gate-locked");
     }, 4400);
-    setTimeout(() => setGone(true), 5800);
+    setTimeout(() => setGone(true), 5600);
   }
 
   function validContact() {
@@ -78,7 +83,7 @@ export function EntranceHero() {
       }
       try {
         localStorage.setItem("soar-account", JSON.stringify({ channel, value: value.trim() }));
-        localStorage.setItem("soar-promo", "claimed"); // already captured — don't double-nag
+        localStorage.setItem("soar-promo", "claimed");
       } catch {}
       setError(null);
       go();
@@ -110,41 +115,33 @@ export function EntranceHero() {
       : error === "pass"
       ? "Incorrect password"
       : mode === "join"
-      ? "10% off your first order when you join"
-      : "Enter the password to release the bird";
+      ? "Join the ascent — enter before the world arrives"
+      : "Enter the password to begin";
 
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[120] bg-white transition-transform [transition-duration:1200ms] [transition-timing-function:cubic-bezier(0.65,0,0.35,1)] will-change-transform",
+        "fixed inset-0 z-[120] overflow-hidden bg-black transition-transform [transition-duration:1200ms] [transition-timing-function:cubic-bezier(0.65,0,0.35,1)] will-change-transform",
         reveal ? "pointer-events-none -translate-y-full" : "translate-y-0",
       )}
     >
+      {/* road to the stars */}
       <div className="absolute inset-0">
         <BreakthroughScene unlocked={entered} />
       </div>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_28%,transparent_45%,rgba(0,0,0,0.72))]" />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_100%_at_50%_42%,transparent_55%,rgba(0,0,0,0.13))]" />
-
+      {/* lock / get-notified gate */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 bg-white transition-opacity",
-          entered ? "opacity-100 [transition-delay:2200ms] [transition-duration:1400ms]" : "opacity-0 duration-300",
-        )}
-      />
-
-      {/* gate UI */}
-      <div
-        className={cn(
-          "absolute inset-x-0 bottom-0 flex flex-col items-center gap-3.5 px-6 pb-[8vh] text-center text-black transition-all duration-500",
+          "absolute inset-x-0 bottom-0 flex flex-col items-center gap-3.5 px-6 pb-[8vh] text-center text-white transition-all duration-500",
           entered ? "pointer-events-none translate-y-3 opacity-0" : "opacity-100",
         )}
       >
-        <Logo variant="black" priority className="mb-1 h-10 w-auto md:h-12" />
-        <DropClock tone="dark" className="mb-1" />
+        <DropClock tone="light" className="mb-1" />
 
-        <span className="text-[11px] uppercase tracking-[0.3em] text-black/50">
-          {mode === "join" ? "Create your account — join the flight" : "Enter the password — release the bird"}
+        <span className="text-[11px] uppercase tracking-[0.3em] text-white/45">
+          {mode === "join" ? "Become part of the movement" : "Members — enter the password"}
         </span>
 
         {mode === "join" && (
@@ -159,10 +156,7 @@ export function EntranceHero() {
                   setError(null);
                   setTimeout(() => inputRef.current?.focus(), 50);
                 }}
-                className={cn(
-                  "px-3 py-1 transition-colors",
-                  channel === c ? "bg-black text-white" : "text-black/45 hover:text-black",
-                )}
+                className={cn("px-3 py-1 transition-colors", channel === c ? "bg-white text-black" : "text-white/45 hover:text-white")}
               >
                 {c}
               </button>
@@ -183,48 +177,63 @@ export function EntranceHero() {
             aria-label={mode === "password" ? "Password" : channel === "email" ? "Email address" : "Phone number"}
             autoComplete={mode === "password" ? "off" : channel === "email" ? "email" : "tel"}
             spellCheck={false}
-            className="min-w-0 flex-1 border-b border-black/40 bg-transparent px-1 py-2 text-center text-sm tracking-[0.12em] text-black outline-none placeholder:text-black/30 focus:border-black"
+            className="min-w-0 flex-1 border-b border-white/35 bg-transparent px-1 py-2 text-center text-sm tracking-[0.12em] text-white outline-none placeholder:text-white/30 focus:border-white"
           />
           <button
             type="submit"
-            className="whitespace-nowrap bg-black px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] text-white transition-opacity hover:opacity-80"
+            className="whitespace-nowrap bg-white px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] text-black transition-opacity hover:opacity-80"
           >
             {mode === "join" ? "Join" : "Enter"}
           </button>
         </form>
 
-        <p className="max-w-[360px] text-[11px] leading-snug text-black/45">
+        <p className="max-w-[360px] text-[11px] leading-snug text-white/40">
           By {mode === "join" ? "joining" : "entering"} you confirm you&apos;re 13 or older and agree to the{" "}
-          <Link href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-black">
+          <Link href="/privacy" target="_blank" className="underline underline-offset-2 hover:text-white">
             Privacy Policy
           </Link>{" "}
           and{" "}
-          <Link href="/terms" target="_blank" className="underline underline-offset-2 hover:text-black">
+          <Link href="/terms" target="_blank" className="underline underline-offset-2 hover:text-white">
             Terms
           </Link>
-          {mode === "join" ? ", and to receive SOAR updates." : "."}
+          .
         </p>
 
-        <span className={cn("text-[11px] uppercase tracking-[0.14em]", error ? "text-black" : "text-black/40")}>
-          {status}
-        </span>
+        <span className={cn("text-[11px] uppercase tracking-[0.14em]", error ? "text-white" : "text-white/40")}>{status}</span>
 
         <button
           type="button"
           onClick={() => swap(mode === "join" ? "password" : "join")}
-          className="text-[11px] uppercase tracking-[0.14em] text-black/40 underline underline-offset-4 transition-colors hover:text-black"
+          className="text-[11px] uppercase tracking-[0.14em] text-white/40 underline underline-offset-4 transition-colors hover:text-white"
         >
-          {mode === "join" ? "Have a password? Enter" : "Create an account"}
+          {mode === "join" ? "Have a password? Enter" : "Get notified instead"}
         </button>
       </div>
 
+      {/* reaching the star — white flash */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 flex items-center justify-center transition-all duration-700",
-          showWord ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+          "pointer-events-none absolute inset-0 bg-white transition-opacity",
+          flash ? "opacity-100 duration-500" : "opacity-0 duration-700",
+        )}
+      />
+
+      {/* monumental logo reveal → lifts to the home */}
+      <div
+        className={cn(
+          "absolute inset-0 flex items-center justify-center bg-black transition-opacity duration-700",
+          showLogo ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <Logo variant="black" priority className="w-[58vw] max-w-[460px]" />
+        <motion.div
+          initial={{ scale: 1.55, opacity: 0 }}
+          animate={showLogo ? { scale: 1, opacity: 1 } : {}}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          className="w-[80vw] max-w-[640px]"
+          style={{ filter: "drop-shadow(0 0 70px rgba(175,195,255,0.35))" }}
+        >
+          <Logo variant="white" priority className="h-auto w-full" />
+        </motion.div>
       </div>
     </div>
   );

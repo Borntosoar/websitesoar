@@ -94,7 +94,7 @@ export function PromoPopup() {
 
               {done ? (
                 <>
-                  <h2 className="text-[clamp(1.6rem,5vw,2.2rem)] font-semibold leading-tight">Welcome to the flight.</h2>
+                  <h2 className="text-[clamp(1.6rem,5vw,2.2rem)] font-semibold leading-tight">Welcome to the ascent.</h2>
                   <p className="mt-2 text-sm text-ink/60">Use this code at checkout for 10% off your first order.</p>
                   <div className="mx-auto mt-5 w-fit border border-dashed border-ink/40 px-6 py-3 text-lg font-semibold tracking-[0.3em]">
                     SOAR10
@@ -106,12 +106,12 @@ export function PromoPopup() {
               ) : (
                 <>
                   <h2 className="text-[clamp(1.7rem,5vw,2.4rem)] font-semibold leading-[1.05]">
-                    10% off your
+                    Join the
                     <br />
-                    first ascent
+                    ascent
                   </h2>
                   <p className="mt-3 text-sm text-ink/60">
-                    Join the flight for early access to every drop — and 10% off your first order.
+                    Become part of the movement — early access to every drop, and 10% off your first order.
                   </p>
 
                   <div className="mt-5 flex justify-center gap-1 text-[11px] uppercase tracking-[0.14em]">
