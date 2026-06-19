@@ -18,8 +18,10 @@ export function Hero() {
       <motion.span initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className="text-[11px] uppercase tracking-[0.4em] text-white/50">
         Born to soar
       </motion.span>
-      <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, delay: 0.35 }} className="mt-4 text-[clamp(3.5rem,15vw,12rem)] font-semibold leading-[0.85] tracking-tight">
-        SOAR
+      <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, delay: 0.35 }} className="mt-4 text-[clamp(2.8rem,11vw,8.5rem)] font-semibold leading-[0.9] tracking-tight">
+        Rise above
+        <br />
+        the box.
       </motion.h1>
       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }} className="mt-6 max-w-md text-white/60">
         Break limitations. Become who you were meant to be.
