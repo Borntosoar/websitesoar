@@ -131,6 +131,23 @@ export function EntranceHero() {
       </div>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_28%,transparent_45%,rgba(0,0,0,0.72))]" />
 
+      {/* statement over the road */}
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-[14vh] flex flex-col items-center gap-2 px-6 text-center transition-all duration-500",
+          entered ? "-translate-y-3 opacity-0" : "opacity-100",
+        )}
+      >
+        <h2
+          className="text-[clamp(2rem,7vw,4.2rem)] font-semibold leading-none tracking-[0.14em] text-white"
+          style={{ textShadow: "0 0 44px rgba(150,170,255,0.4)" }}
+        >
+          BORN TO SOAR
+        </h2>
+        <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">The road ahead isn&apos;t for everyone</p>
+        <p className="text-[11px] uppercase tracking-[0.18em] text-white/30">Where limits end · where potential begins</p>
+      </div>
+
       {/* lock / get-notified gate */}
       <div
         className={cn(
@@ -183,7 +200,7 @@ export function EntranceHero() {
             type="submit"
             className="whitespace-nowrap bg-white px-5 py-2.5 text-[12px] uppercase tracking-[0.15em] text-black transition-opacity hover:opacity-80"
           >
-            {mode === "join" ? "Join" : "Enter"}
+            {mode === "join" ? "Join" : "Begin ascent"}
           </button>
         </form>
 

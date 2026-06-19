@@ -71,19 +71,40 @@ function Dashes({ boost }: { boost: MutableRefObject<number> }) {
 
 function Monument({ boost }: { boost: MutableRefObject<number> }) {
   const tex = useTexture(logoWhite.src);
-  const ref = useRef<THREE.Mesh>(null);
+  const glow = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    if (ctx) {
+      const grd = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grd.addColorStop(0, "rgba(205,214,255,0.55)");
+      grd.addColorStop(0.4, "rgba(170,184,255,0.12)");
+      grd.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 128, 128);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  }, []);
+  const g = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
     const f = easeIn(boost.current);
-    if (ref.current) {
-      ref.current.position.z = LOGO_FAR + f * (12 - LOGO_FAR); // rush toward the camera
-      ref.current.position.y = 7.5 - f * 5.8 + Math.sin(clock.elapsedTime * 0.5) * 0.1;
+    if (g.current) {
+      g.current.position.z = LOGO_FAR + f * (12 - LOGO_FAR); // rush the camera on unlock
+      g.current.position.y = 8.4 - f * 6.6 + Math.sin(clock.elapsedTime * 0.4) * 0.12;
     }
   });
   return (
-    <mesh ref={ref} position={[0, 7.5, LOGO_FAR]}>
-      <planeGeometry args={[19, (19 * 359) / 430]} />
-      <meshBasicMaterial map={tex} transparent toneMapped={false} alphaTest={0.03} />
-    </mesh>
+    <group ref={g} position={[0, 8.4, LOGO_FAR]}>
+      <sprite scale={[48, 48, 1]} position={[0, 0, -1]}>
+        <spriteMaterial map={glow} transparent depthWrite={false} blending={THREE.AdditiveBlending} />
+      </sprite>
+      <mesh>
+        <planeGeometry args={[27, (27 * 359) / 430]} />
+        <meshBasicMaterial map={tex} transparent toneMapped={false} alphaTest={0.03} />
+      </mesh>
+    </group>
   );
 }
 
@@ -153,6 +174,11 @@ function Scene({ unlocked }: { unlocked: boolean }) {
       <ambientLight intensity={0.35} />
       <directionalLight position={[0, 8, 6]} intensity={0.7} color="#aeb8ff" />
       <Sky />
+      {/* horizon light band */}
+      <mesh position={[0, 3, FAR + 26]}>
+        <planeGeometry args={[240, 28]} />
+        <meshBasicMaterial color="#8a9bff" transparent opacity={0.09} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+      </mesh>
       <Road />
       <Dashes boost={boost} />
       <Motes boost={boost} />
