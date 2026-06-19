@@ -41,7 +41,7 @@ export function Countdown() {
 
   const Unit = ({ n, l }: { n: string; l: string }) => (
     <div className="flex flex-col gap-2">
-      <span className="text-4xl font-medium leading-none tracking-tight tabular-nums md:text-6xl">
+      <span className="text-[clamp(1.75rem,9vw,2.25rem)] font-medium leading-none tracking-tight tabular-nums md:text-6xl">
         {n}
       </span>
       <span className="text-[11px] uppercase tracking-[0.17em] text-bone/55">{l}</span>

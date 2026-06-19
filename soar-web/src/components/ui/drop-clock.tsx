@@ -60,7 +60,7 @@ export function DropClock({ tone = "dark", className }: { tone?: "dark" | "light
               </span>
             )}
             <div className="flex w-10 flex-col items-center md:w-12">
-              <span className={cn("text-3xl font-semibold leading-none md:text-4xl", digit)}>{t[k]}</span>
+              <span className={cn("text-[clamp(1.5rem,7vw,1.875rem)] font-semibold leading-none md:text-4xl", digit)}>{t[k]}</span>
               <span className={cn("mt-1.5 text-[9px] uppercase tracking-[0.18em]", muted)}>{l}</span>
             </div>
           </Fragment>

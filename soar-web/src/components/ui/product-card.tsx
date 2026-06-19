@@ -14,7 +14,7 @@ export function ProductCard({ p, dark = false }: { p: Product; dark?: boolean })
         type="button"
         onClick={() => open(p)}
         aria-label={`View ${p.name}`}
-        className={cn("relative block aspect-[4/5] w-full overflow-hidden border", dark ? "border-white/10" : "border-black/10")}
+        className={cn("relative block aspect-[4/5] w-full overflow-hidden border transition-transform active:scale-[0.98]", dark ? "border-white/10" : "border-black/10")}
       >
         <ProductImage p={p} className="transition-transform duration-700 group-hover:scale-[1.04]" />
         {p.tag && (
