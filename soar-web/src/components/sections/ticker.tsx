@@ -5,12 +5,18 @@ export function Ticker() {
   const a = [...items, ...items, ...items];
   const track = [...a, ...a];
   return (
-    <div className="overflow-hidden border-y border-white/10 bg-black py-3 text-white">
-      <div className="flex w-max" style={{ animation: "flock-scroll 36s linear infinite" }}>
+    <div
+      className="overflow-hidden border-y border-white/10 bg-black py-3.5 text-white"
+      style={{
+        maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+        WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+      }}
+    >
+      <div className="flex w-max" style={{ animation: "flock-scroll 44s linear infinite" }}>
         {track.map((t, i) => (
-          <span key={i} className="flex items-center text-[12px] uppercase tracking-[0.2em] text-white/65">
-            <span className="px-6">{t}</span>
-            <span className="text-white/25">✦</span>
+          <span key={i} className="flex items-center text-[11px] uppercase tracking-[0.3em] text-white/55">
+            <span className="px-7">{t}</span>
+            <span aria-hidden className="h-[3px] w-[3px] rounded-full bg-white/25" />
           </span>
         ))}
       </div>
