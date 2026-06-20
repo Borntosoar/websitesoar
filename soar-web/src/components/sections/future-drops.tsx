@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { Lock } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
+import { WaitlistAccess } from "@/components/ui/waitlist-access";
 
 /** UPCOMING FLIGHTS — locked future drops. Silhouettes only; details sealed
  *  until release. Builds anticipation without an ecommerce grid. */
@@ -12,6 +14,8 @@ const drops = [
 ];
 
 export function FutureDrops() {
+  const [waitOpen, setWaitOpen] = useState(false);
+
   return (
     <section
       id="upcoming"
@@ -85,6 +89,7 @@ export function FutureDrops() {
                   </p>
                   <button
                     type="button"
+                    onClick={() => setWaitOpen(true)}
                     className="mt-6 inline-flex items-center gap-2 border border-white/30 px-6 py-3.5 text-[11px] uppercase tracking-[0.15em] text-white/80 transition-colors duration-300 hover:border-white hover:text-white active:scale-[0.98]"
                   >
                     <Lock size={12} strokeWidth={1.8} aria-hidden /> Get notified
@@ -95,6 +100,8 @@ export function FutureDrops() {
           ))}
         </div>
       </div>
+
+      <WaitlistAccess open={waitOpen} onClose={() => setWaitOpen(false)} />
     </section>
   );
 }
