@@ -74,6 +74,40 @@ export async function createCheckout(
   return data?.cartCreate?.cart?.checkoutUrl ?? null;
 }
 
+/** E.164-ish phone, or undefined (Shopify rejects malformed numbers). */
+function e164(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  const d = raw.replace(/[^\d+]/g, "");
+  return /^\+?[1-9]\d{6,14}$/.test(d) ? (d.startsWith("+") ? d : "+" + d) : undefined;
+}
+
+/** Create a Shopify customer (Storefront customerCreate) from the entrance auth.
+ *  Best-effort: needs the Storefront token to allow unauthenticated customer
+ *  writes; otherwise it's a no-op and the lead is still captured locally. */
+export async function createCustomer(input: {
+  email: string;
+  password: string;
+  phone?: string;
+  acceptsMarketing?: boolean;
+}): Promise<{ ok: boolean; message?: string }> {
+  const phone = e164(input.phone);
+  const data = await storefront<{
+    customerCreate: { customer: { id: string } | null; customerUserErrors: { message: string }[] };
+  }>(
+    `mutation Create($input: CustomerCreateInput!) {
+      customerCreate(input: $input) {
+        customer { id }
+        customerUserErrors { message }
+      }
+    }`,
+    { input: { email: input.email, password: input.password, acceptsMarketing: !!input.acceptsMarketing, ...(phone ? { phone } : {}) } },
+  );
+  if (!data) return { ok: false, message: "offline" };
+  const errs = data.customerCreate?.customerUserErrors;
+  if (errs && errs.length) return { ok: false, message: errs[0].message };
+  return { ok: Boolean(data.customerCreate?.customer) };
+}
+
 export type SfVariant = { id: string; size: string; price: number; available: boolean };
 export type SfProduct = {
   handle: string;
