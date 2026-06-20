@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== STATIC — design system =====================================
+   "Everything is noise until you cut through it."
+   Cold, precise, architectural. Strict baseline grid. Glitch is an
+   accent (logo reveal / hover / transition), never the resting state. */
+
+:root {
+  --font-display: var(--font-display);
+  --grid-pad: 20px;
+  --baseline: 8px;
+}
+@media (min-width: 768px) {
+  :root { --grid-pad: 40px; }
+}
+@media (min-width: 1280px) {
+  :root { --grid-pad: 56px; }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html, body { padding: 0; margin: 0; }
+body {
+  background: #fff;
+  color: #000;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: #000; color: #fff; }
+a { color: inherit; text-decoration: none; }
+img, svg, canvas { display: block; max-width: 100%; }
+
+/* ---- strict grid frame ---- */
+.frame { width: 100%; max-width: var(--max-frame, 1600px); margin-inline: auto; padding-inline: var(--grid-pad); }
+.col12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-pad); }
+.rule { height: 1px; width: 100%; background: #000; }
+.rule-i { height: 1px; width: 100%; background: rgba(255,255,255,0.18); }
+
+/* ---- type primitives ---- */
+.mono { font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.over { font-family: var(--font-display), sans-serif; text-transform: uppercase; line-height: 0.82; letter-spacing: -0.03em; }
+
+/* ---- glitch (signature accent only) ---- */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
+  clip-path: inset(0 0 0 0);
+}
+.glitch::before { color: #00f0ff; transform: translate(-2px, 0); mix-blend-mode: multiply; }
+.glitch::after  { color: #ff006a; transform: translate(2px, 0);  mix-blend-mode: multiply; }
+.glitch.is-firing::before { animation: glitch-c 0.42s steps(2, end) 3; }
+.glitch.is-firing::after  { animation: glitch-m 0.42s steps(2, end) 3; }
+.glitch:hover::before { animation: glitch-c 0.3s steps(2, end) 1; }
+.glitch:hover::after  { animation: glitch-m 0.3s steps(2, end) 1; }
+@keyframes glitch-c {
+  0% { clip-path: inset(0 0 82% 0); transform: translate(-3px, -1px); }
+  50% { clip-path: inset(58% 0 8% 0); transform: translate(3px, 1px); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+@keyframes glitch-m {
+  0% { clip-path: inset(70% 0 4% 0); transform: translate(3px, 1px); }
+  50% { clip-path: inset(4% 0 64% 0); transform: translate(-3px, -1px); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+
+/* scanline veil for hero, very subtle */
+.scan::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
+  background: repeating-linear-gradient(to bottom, #000 0 1px, transparent 1px 3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch.is-firing::before, .glitch.is-firing::after,
+  .glitch:hover::before, .glitch:hover::after { animation: none; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
