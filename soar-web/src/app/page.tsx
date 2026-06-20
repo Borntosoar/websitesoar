@@ -8,6 +8,7 @@ import { CollectionGrid } from "@/components/sections/collection-grid";
 import { TheBox } from "@/components/sections/the-box";
 import { Essentials } from "@/components/sections/essentials";
 import { Drop } from "@/components/sections/drop";
+import { CountdownCapture } from "@/components/sections/countdown-capture";
 import { Manifesto } from "@/components/sections/manifesto";
 import { TheFlock } from "@/components/sections/the-flock";
 import { Journal } from "@/components/sections/journal";
@@ -35,6 +36,7 @@ export default function Page() {
         <TheBox />
         <Essentials />
         <Drop />
+        <CountdownCapture />
         <Manifesto />
         <TheFlock />
         <Journal />
