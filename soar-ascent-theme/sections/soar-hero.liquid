@@ -1,0 +1,153 @@
+{%- comment -%}
+  SOAR — Hero
+  The landing the entrance lifts into; the climb continues.
+  Eyebrow, a .display statement with one .accent serif word, a .lede,
+  ONE primary .btn CTA + a quiet link.
+{%- endcomment -%}
+
+<section class="soar-hero section" aria-label="{{ section.settings.eyebrow | default: 'The ascent' | escape }}">
+  <div class="wrap">
+    <div class="soar-hero__inner reveal">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow soar-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="display soar-hero__display">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.lede != blank -%}
+        <p class="lede soar-hero__lede">{{ section.settings.lede }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank -%}
+        <div class="soar-hero__actions">
+          <a
+            class="btn soar-hero__cta"
+            href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}"
+          >{{ section.settings.cta_label }}</a>
+
+          {%- if section.settings.link_label != blank -%}
+            <a
+              class="link soar-hero__link"
+              href="{{ section.settings.link_url | default: routes.root_url }}"
+            >{{ section.settings.link_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_index -%}
+        <div class="soar-hero__foot" aria-hidden="true">
+          <span class="hair soar-hero__hair"></span>
+          <span class="idx tnum">{{ section.settings.index_text }}</span>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-hero {
+    position: relative;
+    min-height: 92svh;
+    display: flex;
+    align-items: flex-end;
+  }
+  #shopify-section-{{ section.id }} .soar-hero__inner {
+    width: 100%;
+    max-width: 56rem;
+  }
+  #shopify-section-{{ section.id }} .soar-hero__eyebrow { margin-bottom: 1.4rem; }
+  #shopify-section-{{ section.id }} .soar-hero__display { margin: 0 0 1.6rem; }
+  #shopify-section-{{ section.id }} .soar-hero__lede { margin: 0 0 2.4rem; }
+  #shopify-section-{{ section.id }} .soar-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2rem;
+  }
+  #shopify-section-{{ section.id }} .soar-hero__foot {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 4rem;
+  }
+  #shopify-section-{{ section.id }} .soar-hero__hair { flex: 1; }
+  @media (min-width: 750px) {
+    #shopify-section-{{ section.id }} .soar-hero { min-height: 100svh; }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SOAR Hero",
+  "tag": "section",
+  "class": "soar-section soar-section--hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Vol. 01 — The Ascent"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Display statement",
+      "info": "Wrap one word in italic for the serif accent.",
+      "default": "<p>The road ahead is <em>vertical</em>.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "lede",
+      "label": "Lede",
+      "default": "<p>This is where limits end and potential begins. One rise up the road, into the stars. Built for the few who keep climbing.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Primary button label",
+      "default": "Enter the drop"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Quiet link label",
+      "default": "Read the manifesto"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Quiet link URL"
+    },
+    {
+      "type": "header",
+      "content": "Footer mark"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "Show index line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "index_text",
+      "label": "Index text",
+      "default": "01 / 07 — Begin"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Hero"
+    }
+  ]
+}
+{% endschema %}

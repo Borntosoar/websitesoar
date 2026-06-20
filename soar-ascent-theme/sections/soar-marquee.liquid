@@ -1,0 +1,168 @@
+{%- comment -%}
+  SOAR — Marquee
+  A kinetic announcement ticker. Blocks for messages.
+  CSS marquee with edge fade; reduced-motion safe (animation pauses).
+{%- endcomment -%}
+
+{%- liquid
+  assign sep = section.settings.separator | default: '✦'
+  assign speed = section.settings.speed | default: 40
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  <section class="soar-marquee" aria-label="Announcements">
+    <div
+      class="soar-marquee__viewport"
+      style="--soar-marquee-speed: {{ speed }}s;"
+    >
+      {%- comment -%} Two identical tracks make a seamless loop. {%- endcomment -%}
+      {%- for i in (1..2) -%}
+        <ul
+          class="soar-marquee__track"
+          {% if i == 2 %}aria-hidden="true"{% endif %}
+          role="list"
+        >
+          {%- for block in section.blocks -%}
+            <li class="soar-marquee__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}
+                <a class="soar-marquee__link" href="{{ block.settings.link }}">{{ block.settings.text | escape }}</a>
+              {%- else -%}
+                <span class="soar-marquee__text">{{ block.settings.text | escape }}</span>
+              {%- endif -%}
+              <span class="soar-marquee__sep" aria-hidden="true">{{ sep }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-marquee {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--fg);
+    padding-block: 1.05rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  #shopify-section-{{ section.id }} .soar-marquee__viewport {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: soar-marquee-scroll var(--soar-marquee-speed, 40s) linear infinite;
+  }
+  #shopify-section-{{ section.id }} .soar-marquee:hover .soar-marquee__viewport {
+    animation-play-state: paused;
+  }
+  #shopify-section-{{ section.id }} .soar-marquee__track {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex: none;
+  }
+  #shopify-section-{{ section.id }} .soar-marquee__item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  #shopify-section-{{ section.id }} .soar-marquee__text,
+  #shopify-section-{{ section.id }} .soar-marquee__link {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  #shopify-section-{{ section.id }} .soar-marquee__link:hover { color: var(--g-2); }
+  #shopify-section-{{ section.id }} .soar-marquee__sep {
+    margin: 0 1.6rem;
+    font-size: 9px;
+    color: var(--g-3);
+  }
+  @keyframes soar-marquee-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .soar-marquee__viewport {
+      animation: none;
+      transform: none;
+      justify-content: center;
+      width: 100%;
+    }
+    #shopify-section-{{ section.id }} .soar-marquee__track[aria-hidden="true"] { display: none; }
+    #shopify-section-{{ section.id }} .soar-marquee {
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
+    #shopify-section-{{ section.id }} .soar-marquee__track {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SOAR Marquee",
+  "tag": "section",
+  "class": "soar-section soar-section--marquee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator glyph",
+      "default": "✦"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 15,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll duration (lower = faster)",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Message",
+          "default": "Next ascent — Thursday 11:00"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Marquee",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Vol. 01 — The Ascent" } },
+        { "type": "message", "settings": { "text": "Next drop · Thursday 11:00" } },
+        { "type": "message", "settings": { "text": "Numbered & limited" } },
+        { "type": "message", "settings": { "text": "Free shipping over $150" } },
+        { "type": "message", "settings": { "text": "Born to soar" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

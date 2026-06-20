@@ -1,0 +1,28 @@
+{%- comment -%}
+  Inline monochrome SVG icons. currentColor only.
+  Usage: {% render 'icon', name: 'bag' %}  (optional: class, size)
+  Names: search, bag, account, menu, close, lock, arrow
+{%- endcomment -%}
+{%- liquid
+  assign icon = name | default: 'arrow'
+  assign sz = size | default: 20
+  assign cls = class | default: ''
+-%}
+{%- case icon -%}
+  {%- when 'search' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+  {%- when 'bag' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8h12l1 12H5L6 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+  {%- when 'account' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"></circle><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"></path></svg>
+  {%- when 'menu' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7h18"></path><path d="M3 12h18"></path><path d="M3 17h18"></path></svg>
+  {%- when 'close' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+  {%- when 'lock' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="9" rx="1.5"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+  {%- when 'arrow' -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+  {%- else -%}
+    <svg class="soar-icon {{ cls }}" width="{{ sz }}" height="{{ sz }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+{%- endcase -%}
