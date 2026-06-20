@@ -30,7 +30,14 @@ function Panel({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const [err, setErr] = useState(false);
   const related = product.related.map(getProduct).filter(Boolean) as Product[];
-  const stock = Math.round((product.left / product.edition) * 100);
+  // Honest scarcity. Only show the numeric run meter when there's a REAL original
+  // run (edition > 0) that the remaining stock fits within (edition >= left).
+  // Live Shopify products with no `custom.edition_size` carry edition 0 and fall
+  // through to a truthful low-stock line driven purely by real remaining stock.
+  const hasRun = product.edition > 0 && product.edition >= product.left;
+  const stock = hasRun ? Math.round((product.left / product.edition) * 100) : 0;
+  const soldOut = product.left <= 0;
+  const lowStock = product.left > 0 && product.left <= 10;
 
   function addToBag() {
     if (needSize && !size) {
@@ -73,16 +80,23 @@ function Panel({ product }: { product: Product }) {
         <p className="mt-1 text-lg tabular-nums">${product.price}</p>
         <p className="mt-4 text-sm leading-relaxed text-ink/65">{product.description}</p>
 
-        {/* scarcity */}
-        <div className="mt-5">
-          <div className="flex justify-between text-[11px] uppercase tracking-[0.12em] text-taupe">
-            <span>Limited {product.edition}</span>
-            <span className="text-ink">Only {product.left} left</span>
+        {/* scarcity — truthful only: a numbered run meter for real editions,
+            otherwise an honest low-stock line off real remaining stock (no fake bar). */}
+        {hasRun ? (
+          <div className="mt-5">
+            <div className="flex justify-between text-[11px] uppercase tracking-[0.12em] text-taupe">
+              <span>Limited {product.edition}</span>
+              <span className="text-ink tabular-nums">Only {product.left} left</span>
+            </div>
+            <div className="mt-2 h-[3px] w-full bg-ink/10">
+              <div className="h-full bg-ink" style={{ width: `${stock}%` }} />
+            </div>
           </div>
-          <div className="mt-2 h-[3px] w-full bg-ink/10">
-            <div className="h-full bg-ink" style={{ width: `${stock}%` }} />
-          </div>
-        </div>
+        ) : soldOut ? (
+          <p className="mt-5 text-[11px] uppercase tracking-[0.12em] text-taupe">Sold out</p>
+        ) : lowStock ? (
+          <p className="mt-5 text-[11px] uppercase tracking-[0.12em] text-ink tabular-nums">Only {product.left} left</p>
+        ) : null}
 
         {/* size */}
         <div className="mt-6">

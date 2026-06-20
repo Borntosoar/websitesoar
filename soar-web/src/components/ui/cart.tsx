@@ -1,9 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Plus, Minus, ShoppingBag, Lock } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, Lock, Truck, RotateCcw } from "lucide-react";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Garment } from "@/components/ui/garment";
+import { track } from "@/lib/analytics";
 import { shopifyEnabled, createCheckout } from "@/lib/shopify";
 
 export type Line = {
@@ -46,6 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
   function add(p: AddInput) {
+    track({ type: "add_to_cart", id: p.id, qty: 1, size: p.size, price: p.price });
     const lineId = p.id + (p.size ? `-${p.size}` : "");
     setItems((prev) => {
       const e = prev.find((x) => x.lineId === lineId);
@@ -85,13 +87,14 @@ function Thumb({ line }: { line: Line }) {
 }
 
 export function CartDrawer() {
-  const { items, open, setOpen, subtotal, setQty, remove } = useCart();
+  const { items, open, setOpen, subtotal, count, setQty, remove } = useCart();
   const [note, setNote] = useState(false);
   const [busy, setBusy] = useState(false);
   const progress = Math.min(1, subtotal / FREE_AT);
   const remaining = Math.max(0, FREE_AT - subtotal);
 
   async function checkout() {
+    track({ type: "begin_checkout", value: subtotal, items: count });
     if (!shopifyEnabled) {
       setNote(true);
       return;
@@ -215,6 +218,20 @@ export function CartDrawer() {
                 <div className="mb-4 flex items-baseline justify-between">
                   <span className="text-[11px] uppercase tracking-[0.2em] text-taupe">Subtotal</span>
                   <span className="text-lg font-medium tabular-nums">${subtotal}</span>
+                </div>
+                {/* trust row — quiet reassurance, reduces checkout abandonment */}
+                <div className="mb-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[10px] uppercase tracking-[0.1em] text-taupe">
+                  <span className="inline-flex items-center gap-1">
+                    <Lock size={11} strokeWidth={1.6} /> Secure checkout
+                  </span>
+                  <span aria-hidden className="opacity-40">·</span>
+                  <span className="inline-flex items-center gap-1">
+                    <Truck size={12} strokeWidth={1.6} /> Free shipping over ${FREE_AT}
+                  </span>
+                  <span aria-hidden className="opacity-40">·</span>
+                  <span className="inline-flex items-center gap-1">
+                    <RotateCcw size={11} strokeWidth={1.6} /> 30-day returns
+                  </span>
                 </div>
                 <button
                   onClick={checkout}

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 import { ProductImage } from "@/components/ui/product-image";
 import { useQuickView } from "@/components/ui/quick-view";
 import type { Product } from "@/lib/products";
@@ -12,7 +13,10 @@ export function ProductCard({ p, dark = false }: { p: Product; dark?: boolean })
     <div className="group">
       <button
         type="button"
-        onClick={() => open(p)}
+        onClick={() => {
+          track({ type: "product_view", id: p.id, name: p.name, price: p.price });
+          open(p);
+        }}
         aria-label={`View ${p.name}`}
         className={cn("relative block aspect-[4/5] w-full overflow-hidden border transition-transform active:scale-[0.98]", dark ? "border-white/10" : "border-black/10")}
       >

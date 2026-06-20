@@ -14,6 +14,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 import { AnimatePresence, motion } from "framer-motion";
 import { DropClock } from "@/components/ui/drop-clock";
 import { Logo } from "@/components/ui/logo";
@@ -61,6 +62,7 @@ export function EntranceHero() {
   }, []);
 
   function pass() {
+    track({ type: "entrance_complete" });
     try {
       sessionStorage.setItem(KEY, "1");
       sessionStorage.setItem("soar-age-ok", "1");
@@ -71,6 +73,7 @@ export function EntranceHero() {
   }
 
   function begin() {
+    track({ type: "begin_ascent" });
     if (reduce.current) {
       setStage("auth");
       return;

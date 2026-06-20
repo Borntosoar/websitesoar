@@ -117,7 +117,11 @@ export type SfProduct = {
   price: number;
   image?: string;
   tag?: string;
+  /** REAL remaining inventory from Shopify (totalInventory). */
   total: number;
+  /** Original run size, from the `custom.edition_size` product metafield.
+   *  Undefined when the store owner hasn't set it — never inferred from stock. */
+  editionSize?: number;
   variants: SfVariant[];
 };
 
@@ -125,6 +129,7 @@ export type SfProduct = {
 export async function fetchProducts(): Promise<SfProduct[]> {
   type Node = {
     handle: string; title: string; description: string; productType: string; tags: string[]; totalInventory: number;
+    editionSize: { value: string } | null;
     featuredImage: { url: string } | null;
     variants: { edges: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string }; selectedOptions: { name: string; value: string }[] } }[] };
   };
@@ -132,13 +137,19 @@ export async function fetchProducts(): Promise<SfProduct[]> {
     products(first: 30, sortKey: CREATED_AT, reverse: true) {
       edges { node {
         handle title description productType tags totalInventory
+        editionSize: metafield(namespace: "custom", key: "edition_size") { value }
         featuredImage { url }
         variants(first: 25) { edges { node { id title availableForSale price { amount } selectedOptions { name value } } } }
       } }
     }
   }`);
   if (!data) return [];
-  return data.products.edges.map(({ node: n }) => ({
+  return data.products.edges.map(({ node: n }) => {
+    // Original run size from the `custom.edition_size` metafield — only trust a
+    // positive integer; otherwise leave undefined (never derive it from stock).
+    const ed = n.editionSize ? Math.floor(Number(n.editionSize.value)) : NaN;
+    const editionSize = Number.isFinite(ed) && ed > 0 ? ed : undefined;
+    return {
     handle: n.handle,
     title: n.title,
     description: (n.description || "").trim(),
@@ -146,6 +157,7 @@ export async function fetchProducts(): Promise<SfProduct[]> {
     image: n.featuredImage?.url,
     tag: n.tags && n.tags.length ? n.tags[0] : undefined,
     total: n.totalInventory ?? 0,
+    editionSize,
     price: n.variants.edges.length ? Number(n.variants.edges[0].node.price.amount) : 0,
     variants: n.variants.edges.map(({ node: v }) => ({
       id: v.id,
@@ -153,5 +165,6 @@ export async function fetchProducts(): Promise<SfProduct[]> {
       price: Number(v.price.amount),
       available: v.availableForSale,
     })),
-  }));
+    };
+  });
 }

@@ -22,8 +22,11 @@ function toProduct(s: SfProduct, i: number): Product {
     sizes: s.variants.map((v) => v.size),
     description: s.description.slice(0, 180),
     details: [],
-    edition: s.total || 0,
-    left: s.total || 0,
+    // Honest scarcity: `left` is the REAL remaining stock; `edition` is the real
+    // original run only when the store set `custom.edition_size`. 0 = unknown run
+    // (sentinel) — never copy stock into edition, which would force a fake 100% bar.
+    edition: s.editionSize ?? 0,
+    left: s.total ?? 0,
     related: [],
     variantBySize,
   };
