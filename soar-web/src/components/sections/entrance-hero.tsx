@@ -82,7 +82,7 @@ export function EntranceHero() {
   async function enter(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!emailRe.test(email.trim())) return setErr("Enter a valid email");
-    if (password.trim().length < 4) return setErr("Choose a password (4+ characters)");
+    if (password.trim().length < 8) return setErr("Choose a password (8+ characters)");
     if (!tos) return setErr("Please accept the Privacy Policy and Terms");
     setErr(null);
     setBusy(true);
