@@ -1,0 +1,14 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Account</span>
+  <h1 class="h2" style="margin:14px 0 8px">Activate your account</h1>
+  <p class="soar-formnote" style="margin-bottom:24px">Create a password to complete your account.</p>
+  {%- form 'activate_customer_password' -%}
+    <div class="soar-form">
+      {%- if form.errors -%}<div class="soar-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <div class="soar-field"><label for="ac-pass">Password</label><input id="ac-pass" class="soar-input" type="password" name="customer[password]" required></div>
+      <div class="soar-field"><label for="ac-conf">Confirm password</label><input id="ac-conf" class="soar-input" type="password" name="customer[password_confirmation]" required></div>
+      <button class="btn" type="submit">Activate account</button>
+      <button class="link link--quiet" name="decline" type="submit">Decline invitation</button>
+    </div>
+  {%- endform -%}
+</div>

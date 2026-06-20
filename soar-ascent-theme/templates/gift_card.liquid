@@ -1,0 +1,11 @@
+<div class="wrap section soar-pagehead" style="text-align:center">
+  <span class="eyebrow soar-pagehead__eyebrow">Gift card</span>
+  <h1 class="display" style="font-size:clamp(2.6rem,10vw,5rem);margin:14px 0 6px">{{ gift_card.balance | money }}</h1>
+  <p class="lede" style="margin:0 auto">A SOAR gift card{% if gift_card.expired %} · expired{% endif %}.</p>
+  <div style="margin:36px auto 0;max-width:380px;border:1px solid var(--line);padding:28px;display:flex;flex-direction:column;gap:18px;align-items:center">
+    {%- if gift_card.qr_identifier -%}<img src="/barcode?type=qr&data={{ gift_card.qr_identifier }}&size=160x160" alt="QR code" width="160" height="160">{%- endif -%}
+    <p class="idx" style="word-break:break-all;letter-spacing:.18em">{{ gift_card.code | format_code }}</p>
+    <button class="btn-ghost" type="button" onclick="window.print()">Print</button>
+  </div>
+  <p class="soar-formnote" style="margin-top:22px">Use this code at checkout.</p>
+</div>

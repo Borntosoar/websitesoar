@@ -1,0 +1,31 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Account</span>
+  <h1 class="h2" style="margin:14px 0 32px">Sign in</h1>
+
+  <div id="recover" style="display:none">
+    {%- form 'recover_customer_password' -%}
+      <div class="soar-form">
+        {%- if form.posted_successfully? -%}<p class="soar-notice">We&rsquo;ve sent you a reset link — check your inbox.</p>{%- endif -%}
+        <p class="soar-formnote">Enter your email and we&rsquo;ll send a reset link.</p>
+        <div class="soar-field"><label for="rec-email">Email</label><input id="rec-email" class="soar-input" type="email" name="email" required></div>
+        <button class="btn" type="submit">Send reset link</button>
+        <a class="link link--quiet" href="#login" onclick="document.getElementById('recover').style.display='none';document.getElementById('login').style.display='block';return false">Back to sign in</a>
+      </div>
+    {%- endform -%}
+  </div>
+
+  <div id="login">
+    {%- form 'customer_login' -%}
+      <div class="soar-form">
+        {%- if form.errors -%}<div class="soar-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <div class="soar-field"><label for="li-email">Email</label><input id="li-email" class="soar-input" type="email" name="customer[email]" autocomplete="email" required></div>
+        <div class="soar-field"><label for="li-pass">Password</label><input id="li-pass" class="soar-input" type="password" name="customer[password]" autocomplete="current-password" required></div>
+        <button class="btn" type="submit">Sign in</button>
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <a class="link link--quiet" href="#recover" onclick="document.getElementById('login').style.display='none';document.getElementById('recover').style.display='block';return false">Forgot password?</a>
+          <a class="link link--quiet" href="{{ routes.account_register_url }}">Create account</a>
+        </div>
+      </div>
+    {%- endform -%}
+  </div>
+</div>

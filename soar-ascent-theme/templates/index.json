@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "hero": { "type": "soar-hero", "settings": {} },
+    "marquee": { "type": "soar-marquee", "settings": {} },
+    "featured": { "type": "soar-featured", "settings": {} },
+    "collection": { "type": "soar-collection", "settings": {} },
+    "editorial": { "type": "soar-editorial", "settings": {} },
+    "manifesto": { "type": "soar-manifesto", "settings": {} },
+    "capture": { "type": "soar-capture", "settings": {} }
+  },
+  "order": ["hero", "marquee", "featured", "collection", "editorial", "manifesto", "capture"]
+}

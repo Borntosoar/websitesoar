@@ -1,0 +1,15 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Account</span>
+  <h1 class="h2" style="margin:14px 0 32px">Create account</h1>
+  {%- form 'create_customer' -%}
+    <div class="soar-form">
+      {%- if form.errors -%}<div class="soar-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <div class="soar-field"><label for="r-fn">First name</label><input id="r-fn" class="soar-input" type="text" name="customer[first_name]" autocomplete="given-name"></div>
+      <div class="soar-field"><label for="r-ln">Last name</label><input id="r-ln" class="soar-input" type="text" name="customer[last_name]" autocomplete="family-name"></div>
+      <div class="soar-field"><label for="r-email">Email</label><input id="r-email" class="soar-input" type="email" name="customer[email]" autocomplete="email" required></div>
+      <div class="soar-field"><label for="r-pass">Password</label><input id="r-pass" class="soar-input" type="password" name="customer[password]" autocomplete="new-password" required></div>
+      <button class="btn" type="submit">Create account</button>
+      <a class="link link--quiet" href="{{ routes.account_login_url }}">Already have an account? Sign in</a>
+    </div>
+  {%- endform -%}
+</div>

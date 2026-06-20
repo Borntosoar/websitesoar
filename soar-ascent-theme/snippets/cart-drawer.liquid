@@ -1,0 +1,37 @@
+{%- comment -%} Cart drawer — filled & updated by soar.js via the Cart AJAX API {%- endcomment -%}
+<div class="soar-overlay" data-soar-overlay hidden></div>
+<aside class="soar-drawer" data-soar-drawer aria-label="Your bag" aria-hidden="true">
+  <div class="soar-drawer__head">
+    <span class="soar-drawer__title">Your bag <span data-soar-drawer-count>({{ cart.item_count }})</span></span>
+    <button class="soar-iconbtn" type="button" aria-label="Close cart" data-soar-cart-close>{%- render 'icon', name: 'close' -%}</button>
+  </div>
+
+  <div class="soar-freebar" data-soar-freebar hidden>
+    <p class="soar-freebar__msg" data-soar-freebar-msg></p>
+    <div class="soar-freebar__track"><div class="soar-freebar__fill" data-soar-freebar-fill></div></div>
+  </div>
+
+  <div class="soar-drawer__items" data-soar-drawer-items aria-live="polite"></div>
+
+  <div class="soar-drawer__empty" data-soar-drawer-empty hidden>
+    {%- render 'icon', name: 'bag', size: 28 -%}
+    <p>Your bag is empty.</p>
+    <button class="btn-ghost" type="button" data-soar-cart-close>Keep exploring</button>
+  </div>
+
+  <div class="soar-drawer__foot" data-soar-drawer-foot hidden>
+    <div class="soar-trustrow">
+      <span>{%- render 'icon', name: 'lock', size: 13 -%} Secure</span>
+      <span>{%- render 'icon', name: 'arrow', size: 13 -%} Free shipping over {{ 20000 | money_without_trailing_zeros }}</span>
+      <span>30-day returns</span>
+    </div>
+    <dl class="soar-drawer__subtotal">
+      <dt>Subtotal</dt>
+      <dd data-soar-drawer-subtotal>{{ cart.total_price | money }}</dd>
+    </dl>
+    <p class="soar-drawer__tax">Shipping &amp; taxes calculated at checkout · Shop Pay available</p>
+    <form action="{{ routes.cart_url }}" method="post">
+      <button class="btn btn--block" name="checkout" type="submit">Secure checkout</button>
+    </form>
+  </div>
+</aside>

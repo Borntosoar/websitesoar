@@ -1,0 +1,19 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Order</span>
+  <h1 class="h2" style="margin:14px 0 8px">{{ order.name }}</h1>
+  <p class="idx">{{ order.created_at | date: '%B %d, %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+  <table style="width:100%;margin-top:32px;border-collapse:collapse">
+    <tbody>
+      {%- for line in order.line_items -%}
+        <tr style="border-bottom:1px solid var(--line)">
+          <td style="padding:14px 0">{{ line.title }} &times; {{ line.quantity }}</td>
+          <td style="padding:14px 0;text-align:right" class="tnum">{{ line.final_line_price | money }}</td>
+        </tr>
+      {%- endfor -%}
+      <tr><td style="padding:18px 0 6px">Subtotal</td><td style="padding:18px 0 6px;text-align:right" class="tnum">{{ order.line_items_subtotal_price | money }}</td></tr>
+      <tr><td style="padding:0 0 6px">Shipping</td><td style="padding:0 0 6px;text-align:right" class="tnum">{{ order.shipping_price | money }}</td></tr>
+      <tr><td style="padding:0;font-weight:600">Total</td><td style="padding:0;text-align:right;font-weight:600" class="tnum">{{ order.total_net_amount | money }}</td></tr>
+    </tbody>
+  </table>
+  <a class="link link--quiet" href="{{ routes.account_url }}" style="margin-top:32px;display:inline-flex">Back to account</a>
+</div>

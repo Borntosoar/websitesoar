@@ -1,0 +1,32 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Account</span>
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin:14px 0 40px">
+    <h1 class="h2">{{ customer.name | default: 'Your account' }}</h1>
+    <a class="link link--quiet" href="{{ routes.account_logout_url }}">Sign out</a>
+  </div>
+
+  <div style="display:grid;gap:56px">
+    <section>
+      <h2 class="h3" style="margin-bottom:24px">Orders</h2>
+      {%- paginate customer.orders by 12 -%}
+        {%- if customer.orders.size > 0 -%}
+          <div style="display:flex;flex-direction:column;gap:12px">
+            {%- for order in customer.orders -%}
+              <a class="soar-notice" href="{{ order.customer_url }}" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+                <span>{{ order.name }} · {{ order.created_at | date: '%b %d, %Y' }}</span>
+                <span class="tnum">{{ order.total_net_amount | money }} · {{ order.financial_status_label }}</span>
+              </a>
+            {%- endfor -%}
+          </div>
+          {{ paginate | default_pagination }}
+        {%- else -%}
+          <p class="soar-formnote">No orders yet — your first ascent awaits.</p>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </section>
+    <section>
+      <h2 class="h3" style="margin-bottom:16px">Addresses</h2>
+      <a class="link" href="{{ routes.account_addresses_url }}">Manage addresses</a>
+    </section>
+  </div>
+</div>

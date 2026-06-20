@@ -1,0 +1,33 @@
+<article class="wrap section soar-pagehead">
+  <a class="soar-crumbs" href="{{ blog.url }}">{{ blog.title }}</a>
+  <h1 class="h2" style="margin-top:18px">{{ article.title }}</h1>
+  <p class="idx" style="margin-top:14px">{{ article.published_at | date: '%B %d, %Y' }}{% if article.author %} · {{ article.author }}{% endif %}</p>
+  {%- if article.image -%}
+    <div style="margin:40px 0">{{ article.image | image_url: width: 1400 | image_tag: loading: 'lazy', alt: article.title | escape }}</div>
+  {%- endif -%}
+  <div class="soar-rte" style="margin-top:32px">{{ article.content }}</div>
+
+  {%- if blog.comments_enabled? -%}
+    <div style="margin-top:64px">
+      {%- if article.comments_count > 0 -%}
+        {%- for comment in article.comments -%}
+          <div class="soar-notice" style="margin-bottom:16px"><p>{{ comment.content }}</p><p class="idx" style="margin-top:10px">{{ comment.author }}</p></div>
+        {%- endfor -%}
+      {%- endif -%}
+      {%- form 'new_comment', article -%}
+        {%- if form.errors -%}<div class="soar-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+        {%- if form.posted_successfully? -%}<p class="soar-notice" style="margin-bottom:16px">Thanks — your comment is awaiting review.</p>{%- endif -%}
+        <div class="soar-form" style="margin-top:24px">
+          <div class="soar-field"><label for="cmt-author">Name</label><input id="cmt-author" class="soar-input" type="text" name="comment[author]" required></div>
+          <div class="soar-field"><label for="cmt-email">Email</label><input id="cmt-email" class="soar-input" type="email" name="comment[email]" required></div>
+          <div class="soar-field"><label for="cmt-body">Comment</label><textarea id="cmt-body" class="soar-input soar-input--textarea" name="comment[body]" required></textarea></div>
+          <button class="btn" type="submit">Post</button>
+        </div>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{ "name": "Article", "settings": [], "presets": [{ "name": "Article" }] }
+{% endschema %}

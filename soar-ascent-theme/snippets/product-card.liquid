@@ -1,0 +1,30 @@
+{%- comment -%} Usage: {% render 'product-card', product: product, dark: false %} {%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign dark = dark | default: false
+-%}
+{%- if p != blank -%}
+  <article class="soar-card{% if dark %} soar-card--dark{% endif %}{% unless p.available %} soar-card__sold{% endunless %}">
+    <a class="soar-card__media{% unless p.featured_media %} soar-card__media--empty{% endunless %}" href="{{ p.url }}">
+      {%- if p.featured_media -%}
+        {{ p.featured_media | image_url: width: 800 | image_tag: loading: 'lazy', class: 'soar-card__img--main', widths: '300,400,600,800', sizes: '(min-width:768px) 33vw, 50vw', alt: p.featured_media.alt | default: p.title | escape }}
+        {%- if p.media[1] -%}
+          {{ p.media[1] | image_url: width: 800 | image_tag: loading: 'lazy', class: 'soar-card__img--alt', widths: '300,400,600,800', sizes: '(min-width:768px) 33vw, 50vw', alt: '' }}
+        {%- endif -%}
+      {%- else -%}
+        SOAR
+      {%- endif -%}
+      {%- unless p.available -%}<span class="soar-card__flag">Sold out</span>{%- endunless -%}
+    </a>
+    <div class="soar-card__info">
+      <h3 class="soar-card__title">{{ p.title }}</h3>
+      <span class="soar-card__price">
+        {%- if p.compare_at_price > p.price -%}
+          <del>{{ p.compare_at_price | money }}</del><ins>{{ p.price | money }}</ins>
+        {%- else -%}
+          {{ p.price | money }}
+        {%- endif -%}
+      </span>
+    </div>
+  </article>
+{%- endif -%}

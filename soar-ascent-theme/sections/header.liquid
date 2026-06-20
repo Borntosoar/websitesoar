@@ -1,0 +1,76 @@
+{%- liquid
+  assign menu = section.settings.menu
+-%}
+<header class="soar-header{% if section.settings.sticky %} soar-header--sticky{% endif %}" data-soar-header>
+  <div class="wrap soar-header__bar">
+    <nav class="soar-header__nav" aria-label="Primary">
+      <ul>
+        {%- for link in linklists[menu].links limit: 5 -%}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {%- else -%}
+          <li><a href="{{ routes.all_products_collection_url }}">Shop</a></li>
+          <li><a href="{{ routes.root_url }}#collection">Collections</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <button class="soar-iconbtn soar-header__menu-toggle" type="button" aria-label="Open menu" data-soar-menu-open>
+      {%- render 'icon', name: 'menu' -%}
+    </button>
+
+    <a class="soar-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — home">
+      {%- if settings.logo != blank -%}
+        <img src="{{ settings.logo | image_url: width: 320 }}" alt="{{ shop.name }}" width="160" height="42">
+      {%- else -%}
+        <img src="{{ 'soar-logo-white.png' | asset_url }}" alt="{{ shop.name }}" width="160" height="42" onerror="this.style.display='none';this.nextElementSibling.removeAttribute('hidden')">
+        <span class="soar-header__wordmark" hidden>{{ shop.name | default: 'SOAR' }}</span>
+      {%- endif -%}
+    </a>
+
+    <div class="soar-header__actions">
+      <button class="soar-iconbtn" type="button" aria-label="Search" data-soar-search-toggle>{%- render 'icon', name: 'search' -%}</button>
+      <a class="soar-iconbtn" href="{{ routes.account_url }}" aria-label="Account">{%- render 'icon', name: 'account' -%}</a>
+      <button class="soar-iconbtn" type="button" aria-label="Cart" data-soar-cart-open>
+        {%- render 'icon', name: 'bag' -%}
+        <span class="soar-cart-count" data-soar-cart-count data-empty="{% if cart.item_count == 0 %}true{% else %}false{% endif %}">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="soar-search" data-soar-search>
+    <form class="wrap" action="{{ routes.search_url }}" method="get" role="search">
+      {%- render 'icon', name: 'search' -%}
+      <input type="search" name="q" placeholder="Search the runway" aria-label="Search" autocomplete="off">
+      <button class="soar-iconbtn" type="button" aria-label="Close search" data-soar-search-toggle>{%- render 'icon', name: 'close' -%}</button>
+    </form>
+  </div>
+</header>
+
+<div class="soar-mobilemenu" data-soar-menu aria-hidden="true">
+  <div class="wrap soar-mobilemenu__head">
+    <span class="eyebrow">Menu</span>
+    <button class="soar-iconbtn" type="button" aria-label="Close menu" data-soar-menu-close>{%- render 'icon', name: 'close' -%}</button>
+  </div>
+  <nav class="wrap soar-mobilemenu__links" aria-label="Mobile">
+    {%- for link in linklists[menu].links -%}
+      <a href="{{ link.url }}">{{ link.title }}</a>
+    {%- else -%}
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a href="{{ routes.account_url }}">Account</a>
+    {%- endfor -%}
+  </nav>
+  <div class="wrap soar-mobilemenu__foot">
+    <a href="{{ routes.account_url }}">Account</a>
+    <a href="{{ routes.search_url }}">Search</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "sticky", "label": "Solid background on scroll", "default": true }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,78 @@
+<footer class="soar-footer">
+  <div class="wrap soar-footer__top">
+    <div class="soar-footer__brand">
+      <div class="soar-footer__wordmark">SOAR</div>
+      <p class="lede" style="margin-top:20px">{{ section.settings.tagline | default: 'Most people stay where they are. Few choose to SOAR.' }}</p>
+      <div class="soar-footer__capture" style="margin-top:28px">
+        <p>{{ section.settings.signup_text | default: 'Join the list — early access to every drop, and 10% off your first order.' }}</p>
+        {%- form 'customer', class: 'soar-signup' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" placeholder="Email address" aria-label="Email address" required>
+          <button type="submit" aria-label="Join">{%- render 'icon', name: 'arrow' -%}</button>
+        {%- endform -%}
+        {%- if form.posted_successfully? -%}
+          <p class="soar-signup__note soar-signup--ok">You&rsquo;re on the list — only the rise.</p>
+        {%- else -%}
+          <p class="soar-signup__note">No noise — only the rise.</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="soar-footer__cols">
+      {%- for block in section.blocks -%}
+        <div class="soar-footer__col" {{ block.shopify_attributes }}>
+          <h4>{{ block.settings.heading }}</h4>
+          <ul>
+            {%- for link in linklists[block.settings.menu].links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- else -%}
+        <div class="soar-footer__col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="{{ routes.all_products_collection_url }}">All</a></li>
+            <li><a href="{{ routes.account_url }}">Account</a></li>
+          </ul>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="wrap soar-footer__bottom">
+    <div class="soar-footer__legal">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} — Made to rise</span>
+      {%- if shop.privacy_policy -%}<a href="{{ shop.privacy_policy.url }}">Privacy</a>{%- endif -%}
+      {%- if shop.terms_of_service -%}<a href="{{ shop.terms_of_service.url }}">Terms</a>{%- endif -%}
+    </div>
+    <div class="soar-social">
+      {%- if section.settings.instagram != blank -%}<a href="{{ section.settings.instagram }}" target="_blank" rel="noopener">Instagram</a>{%- endif -%}
+      {%- if section.settings.tiktok != blank -%}<a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener">TikTok</a>{%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "tagline", "label": "Tagline" },
+    { "type": "text", "id": "signup_text", "label": "Signup text" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "tiktok", "label": "TikTok URL" }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Link column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [ { "name": "Footer", "blocks": [ { "type": "menu" }, { "type": "menu" } ] } ]
+}
+{% endschema %}

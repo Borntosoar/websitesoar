@@ -1,0 +1,24 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Search</span>
+  <form action="{{ routes.search_url }}" method="get" class="soar-signup" role="search" style="max-width:520px;margin-top:14px">
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search the runway" aria-label="Search">
+    <button type="submit" aria-label="Search">{%- render 'icon', name: 'search' -%}</button>
+  </form>
+
+  {%- if search.performed -%}
+    <p class="lede" style="margin-top:28px">{{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %} for &ldquo;{{ search.terms | escape }}&rdquo;</p>
+    {%- if search.results_count > 0 -%}
+      <div class="soar-grid" style="margin-top:40px">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}{% render 'product-card', product: item %}{%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="soar-empty">No results. Try another path.</p>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "settings": [], "presets": [{ "name": "Search" }] }
+{% endschema %}

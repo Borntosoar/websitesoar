@@ -1,0 +1,32 @@
+{%- comment -%} The cinematic gate — controlled by soar.js (sessionStorage). Skippable. {%- endcomment -%}
+<div class="soar-entrance" data-soar-entrance hidden>
+  <canvas class="soar-entrance__canvas" data-soar-stars aria-hidden="true"></canvas>
+  <div class="soar-entrance__road" aria-hidden="true"><i></i></div>
+
+  <div class="soar-entrance__inner">
+    <img class="soar-entrance__logo" src="{{ 'soar-logo-white.png' | asset_url }}" alt="{{ shop.name }}" width="120" height="34" onerror="this.outerHTML='&lt;span class=&quot;soar-entrance__logo-text&quot;&gt;SOAR&lt;/span&gt;'">
+    <span class="soar-entrance__eyebrow eyebrow">Born to soar</span>
+    <h1 class="soar-entrance__title">Born to<br>soar</h1>
+    <p class="soar-entrance__lines">The road ahead isn&rsquo;t for everyone.<br>This is where limits end. This is where <span class="accent">potential</span> begins.</p>
+
+    <div class="soar-entrance__cta">
+      <button class="btn" type="button" data-soar-begin>Begin ascent</button>
+      <button class="soar-entrance__toggle" type="button" data-soar-gate-toggle>Have a password? Enter</button>
+
+      <div class="soar-entrance__gate" data-soar-gate>
+        <div class="soar-entrance__switch">
+          <button type="button" class="is-active" data-soar-mode="password">Password</button>
+          <button type="button" data-soar-mode="email">Request access</button>
+        </div>
+        <form class="soar-entrance__field" data-soar-gate-form>
+          <span class="soar-icon">{%- render 'icon', name: 'lock' -%}</span>
+          <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="off" data-soar-gate-input>
+          <button type="submit" aria-label="Enter">{%- render 'icon', name: 'arrow' -%}</button>
+        </form>
+        <p class="soar-entrance__error" data-soar-gate-error aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <button class="soar-entrance__skip" type="button" data-soar-skip>Skip {%- render 'icon', name: 'arrow' -%}</button>
+</div>

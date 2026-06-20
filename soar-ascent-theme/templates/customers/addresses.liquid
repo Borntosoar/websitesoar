@@ -1,0 +1,26 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Account</span>
+  <h1 class="h2" style="margin:14px 0 32px">Addresses</h1>
+  {%- form 'customer_address', customer.new_address -%}
+    <div class="soar-form">
+      <h2 class="h3">Add a new address</h2>
+      {%- if form.errors -%}<div class="soar-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <div class="soar-field"><label for="a-fn">First name</label><input id="a-fn" class="soar-input" type="text" name="address[first_name]"></div>
+      <div class="soar-field"><label for="a-ln">Last name</label><input id="a-ln" class="soar-input" type="text" name="address[last_name]"></div>
+      <div class="soar-field"><label for="a-a1">Address</label><input id="a-a1" class="soar-input" type="text" name="address[address1]"></div>
+      <div class="soar-field"><label for="a-city">City</label><input id="a-city" class="soar-input" type="text" name="address[city]"></div>
+      <div class="soar-field"><label for="a-country">Country</label><input id="a-country" class="soar-input" type="text" name="address[country]"></div>
+      <div class="soar-field"><label for="a-zip">ZIP / Postal code</label><input id="a-zip" class="soar-input" type="text" name="address[zip]"></div>
+      <button class="btn" type="submit">Save address</button>
+    </div>
+  {%- endform -%}
+
+  {%- if customer.addresses.size > 0 -%}
+    <div style="margin-top:48px;display:flex;flex-direction:column;gap:14px">
+      {%- for address in customer.addresses -%}
+        <div class="soar-notice">{{ address | format_address }}</div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+  <a class="link link--quiet" href="{{ routes.account_url }}" style="margin-top:32px;display:inline-flex">Back to account</a>
+</div>

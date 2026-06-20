@@ -1,0 +1,25 @@
+<div class="wrap section soar-pagehead">
+  <span class="eyebrow soar-pagehead__eyebrow">Collections</span>
+  <h1 class="h2" style="margin-top:14px">The collections</h1>
+  <div class="soar-grid" style="margin-top:48px">
+    {%- for collection in collections -%}
+      <a class="soar-card" href="{{ collection.url }}">
+        <span class="soar-card__media{% unless collection.featured_image %} soar-card__media--empty{% endunless %}">
+          {%- if collection.featured_image -%}
+            {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'soar-card__img--main', alt: collection.title | escape }}
+          {%- else -%}{{ collection.title }}{%- endif -%}
+        </span>
+        <div class="soar-card__info">
+          <h3 class="soar-card__title">{{ collection.title }}</h3>
+          <span class="soar-card__price tnum">{{ collection.all_products_count }}</span>
+        </div>
+      </a>
+    {%- else -%}
+      <p class="soar-empty">No collections yet.</p>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "List collections", "settings": [], "presets": [{ "name": "List collections" }] }
+{% endschema %}
