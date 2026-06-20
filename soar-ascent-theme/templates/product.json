@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_vendor": false,
+        "show_dynamic_checkout": true,
+        "sticky_atc": true,
+        "low_stock_threshold": 6,
+        "free_ship_threshold": 150
+      },
+      "blocks": {
+        "materials": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Materials & care",
+            "content": "<p>Premium heavyweight construction. Wash cold, hang to dry. Made to last the distance.</p>"
+          }
+        },
+        "shipping": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Free shipping over threshold. 30-day returns on unworn pieces. Every order ships from a place that knows the climb.</p>"
+          }
+        }
+      },
+      "block_order": ["materials", "shipping"]
+    }
+  },
+  "order": ["main"]
+}

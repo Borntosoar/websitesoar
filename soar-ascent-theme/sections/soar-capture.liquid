@@ -1,0 +1,383 @@
+{%- comment -%}
+  SOAR — Capture
+  A countdown to the next Thursday 11:00 + an email capture band.
+  Email posts to Shopify customer via {% form 'customer' %} with a hidden tag.
+  Monochrome. Countdown updates are reduced-motion safe (no flashing/animation).
+{%- endcomment -%}
+
+{%- liquid
+  assign is_dark = section.settings.dark
+  assign uid = section.id | replace: '-', '_'
+-%}
+
+<section
+  class="soar-capture section{% if is_dark %} soar-capture--dark{% endif %}"
+  aria-label="{{ section.settings.heading | default: 'Join the ascent' | escape }}"
+>
+  <div class="wrap">
+    <div class="soar-capture__inner reveal">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow soar-capture__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h2 soar-capture__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="lede soar-capture__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+
+      {%- comment -%} Countdown to next Thursday 11:00 {%- endcomment -%}
+      {%- if section.settings.show_countdown -%}
+        <div
+          class="soar-capture__countdown tnum"
+          data-soar-countdown
+          data-weekday="{{ section.settings.target_weekday | default: 4 }}"
+          data-hour="{{ section.settings.target_hour | default: 11 }}"
+          role="timer"
+          aria-label="Time until the next drop"
+        >
+          <div class="soar-capture__unit">
+            <span class="soar-capture__num" data-days>--</span>
+            <span class="eyebrow soar-capture__label">Days</span>
+          </div>
+          <span class="soar-capture__colon" aria-hidden="true">:</span>
+          <div class="soar-capture__unit">
+            <span class="soar-capture__num" data-hours>--</span>
+            <span class="eyebrow soar-capture__label">Hrs</span>
+          </div>
+          <span class="soar-capture__colon" aria-hidden="true">:</span>
+          <div class="soar-capture__unit">
+            <span class="soar-capture__num" data-minutes>--</span>
+            <span class="eyebrow soar-capture__label">Min</span>
+          </div>
+          <span class="soar-capture__colon" aria-hidden="true">:</span>
+          <div class="soar-capture__unit">
+            <span class="soar-capture__num" data-seconds>--</span>
+            <span class="eyebrow soar-capture__label">Sec</span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Email capture → Shopify customer with a hidden tag {%- endcomment -%}
+      {%- form 'customer', class: 'soar-capture__form' -%}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.tag | default: 'ascent-list' | escape }}">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+
+        {%- if form.posted_successfully? -%}
+          <p class="soar-capture__success" role="status">{{ section.settings.success_text | default: 'You are on the list. Watch your inbox for the next ascent.' }}</p>
+        {%- else -%}
+          <div class="soar-capture__row">
+            <label class="soar-capture__sr" for="soar-capture-email-{{ uid }}">Email address</label>
+            <input
+              id="soar-capture-email-{{ uid }}"
+              class="soar-capture__input"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="{{ section.settings.placeholder | default: 'you@email.com' | escape }}"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
+            <button type="submit" class="btn soar-capture__submit">
+              {{ section.settings.button_label | default: 'Join the ascent' }}
+            </button>
+          </div>
+
+          {%- if form.errors -%}
+            <p class="soar-capture__error" role="alert">
+              {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+            </p>
+          {%- endif -%}
+
+          {%- if section.settings.disclaimer != blank -%}
+            <p class="soar-capture__disclaimer">{{ section.settings.disclaimer }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-capture--dark {
+    background: var(--bg);
+    color: var(--fg);
+  }
+  #shopify-section-{{ section.id }} .soar-capture__inner {
+    max-width: 48rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__eyebrow { margin-bottom: 1.4rem; }
+  #shopify-section-{{ section.id }} .soar-capture__heading { margin: 0; }
+  #shopify-section-{{ section.id }} .soar-capture__subtext {
+    margin: 1.6rem auto 0;
+    max-width: 34rem;
+  }
+  #shopify-section-{{ section.id }} .soar-capture--dark .soar-capture__subtext { color: var(--g-2); }
+
+  #shopify-section-{{ section.id }} .soar-capture__countdown {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 2.6rem 0 0;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 3.5rem;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__num {
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__colon {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--g-3);
+  }
+  #shopify-section-{{ section.id }} .soar-capture__label { color: var(--g-3); }
+
+  #shopify-section-{{ section.id }} .soar-capture__form { margin-top: 2.8rem; }
+  #shopify-section-{{ section.id }} .soar-capture__row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 52px;
+    padding: 0 1rem;
+    font-size: 16px;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--line-dark);
+    border-radius: 0;
+  }
+  #shopify-section-{{ section.id }} .soar-capture--dark .soar-capture__input {
+    border-color: var(--line);
+    color: var(--fg);
+  }
+  #shopify-section-{{ section.id }} .soar-capture__input::placeholder { color: var(--g-3); }
+  #shopify-section-{{ section.id }} .soar-capture__input:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  #shopify-section-{{ section.id }} .soar-capture__submit { width: 100%; }
+  #shopify-section-{{ section.id }} .soar-capture__disclaimer {
+    margin: 1rem 0 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--g-3);
+  }
+  #shopify-section-{{ section.id }} .soar-capture__success { margin: 0; font-size: 16px; }
+  #shopify-section-{{ section.id }} .soar-capture__error {
+    margin: 0.9rem 0 0;
+    font-size: 13px;
+    color: var(--g-2);
+  }
+  #shopify-section-{{ section.id }} .soar-capture__sr,
+  #shopify-section-{{ section.id }} .soar-capture__row > .soar-capture__sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (min-width: 600px) {
+    #shopify-section-{{ section.id }} .soar-capture__row {
+      flex-direction: row;
+      max-width: 34rem;
+    }
+    #shopify-section-{{ section.id }} .soar-capture__submit { width: auto; flex: none; }
+  }
+{%- endstyle -%}
+
+<script>
+  (function () {
+    var root = document.querySelector('#shopify-section-{{ section.id }} [data-soar-countdown]');
+    if (!root) return;
+
+    var targetWeekday = parseInt(root.getAttribute('data-weekday'), 10);
+    var targetHour = parseInt(root.getAttribute('data-hour'), 10);
+    if (isNaN(targetWeekday)) targetWeekday = 4; // Thursday
+    if (isNaN(targetHour)) targetHour = 11;      // 11:00
+
+    var elDays = root.querySelector('[data-days]');
+    var elHours = root.querySelector('[data-hours]');
+    var elMinutes = root.querySelector('[data-minutes]');
+    var elSeconds = root.querySelector('[data-seconds]');
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+    function nextTarget(now) {
+      var t = new Date(now.getTime());
+      t.setHours(targetHour, 0, 0, 0);
+      var dayDiff = (targetWeekday - t.getDay() + 7) % 7;
+      t.setDate(t.getDate() + dayDiff);
+      if (t.getTime() <= now.getTime()) {
+        t.setDate(t.getDate() + 7); // already passed this week
+      }
+      return t;
+    }
+
+    function render() {
+      var now = new Date();
+      var diff = nextTarget(now).getTime() - now.getTime();
+      if (diff < 0) diff = 0;
+
+      var totalSeconds = Math.floor(diff / 1000);
+      var days = Math.floor(totalSeconds / 86400);
+      var hours = Math.floor((totalSeconds % 86400) / 3600);
+      var minutes = Math.floor((totalSeconds % 3600) / 60);
+      var seconds = totalSeconds % 60;
+
+      if (elDays) elDays.textContent = pad(days);
+      if (elHours) elHours.textContent = pad(hours);
+      if (elMinutes) elMinutes.textContent = pad(minutes);
+      if (elSeconds) elSeconds.textContent = pad(seconds);
+    }
+
+    render();
+    // A 1s text update only — no animation; safe under prefers-reduced-motion.
+    var timer = setInterval(render, 1000);
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        clearInterval(timer);
+      } else {
+        render();
+        timer = setInterval(render, 1000);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SOAR Capture",
+  "tag": "section",
+  "class": "soar-section soar-section--capture",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "dark",
+      "label": "Dark (inverted) background",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Early access"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get 10% off / early access"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "<p>Join the ascent. First in line for every drop, restock alerts, and 10% off your first order.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Countdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show countdown",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "target_weekday",
+      "label": "Drop day",
+      "options": [
+        { "value": "0", "label": "Sunday" },
+        { "value": "1", "label": "Monday" },
+        { "value": "2", "label": "Tuesday" },
+        { "value": "3", "label": "Wednesday" },
+        { "value": "4", "label": "Thursday" },
+        { "value": "5", "label": "Friday" },
+        { "value": "6", "label": "Saturday" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "target_hour",
+      "min": 0,
+      "max": 23,
+      "step": 1,
+      "unit": "h",
+      "label": "Drop hour (24h, visitor's local time)",
+      "default": 11
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input placeholder",
+      "default": "you@email.com"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Join the ascent"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Customer tag",
+      "info": "Added to the customer record on signup (segment your list).",
+      "default": "ascent-list"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success message",
+      "default": "You are on the list. Watch your inbox for the next ascent."
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "<p>No noise. Unsubscribe anytime.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Capture"
+    }
+  ]
+}
+{% endschema %}

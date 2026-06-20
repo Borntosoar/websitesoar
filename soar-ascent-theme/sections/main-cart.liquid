@@ -1,0 +1,187 @@
+{%- comment -%}
+  SOAR — Main Cart (full page; fallback to the drawer)
+  Line items with qty steppers via {% form 'cart' %} · subtotal · checkout button.
+{%- endcomment -%}
+
+<section class="soar-cart section" data-section-id="{{ section.id }}" data-cart-page>
+  <div class="wrap">
+
+    <header class="soar-cart__head reveal">
+      <p class="eyebrow">Your selection</p>
+      <h1 class="display soar-cart__title">The bag</h1>
+    </header>
+
+    {%- if cart.item_count > 0 -%}
+      {%- form 'cart', cart, class: 'soar-cart__form' -%}
+
+        <div class="soar-cart__layout">
+          <div class="soar-cart__items">
+            <div class="soar-cart__row soar-cart__row--head" role="row">
+              <span class="eyebrow">Item</span>
+              <span class="eyebrow soar-cart__col-qty">Quantity</span>
+              <span class="eyebrow soar-cart__col-total">Total</span>
+            </div>
+
+            {%- for item in cart.items -%}
+              <div class="soar-cart__row reveal" data-cart-item data-key="{{ item.key }}" data-line="{{ forloop.index }}">
+                <div class="soar-cart__product">
+                  <a class="soar-cart__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+                    {%- if item.image -%}
+                      {{
+                        item.image
+                        | image_url: width: 240
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '120, 240',
+                          sizes: '110px',
+                          alt: item.title | escape
+                      }}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'soar-placeholder' }}
+                    {%- endif -%}
+                  </a>
+                  <div class="soar-cart__meta">
+                    <a class="soar-cart__name" href="{{ item.url }}">{{ item.product.title }}</a>
+                    {%- unless item.product.has_only_default_variant -%}
+                      <p class="soar-cart__variant">{{ item.variant.title }}</p>
+                    {%- endunless -%}
+                    {%- unless item.selling_plan_allocation == nil -%}
+                      <p class="soar-cart__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                    {%- endunless -%}
+                    {%- if item.original_price != item.final_price -%}
+                      <p class="soar-cart__unit tnum">
+                        <s>{{ item.original_price | money }}</s>
+                        {{ item.final_price | money }}
+                      </p>
+                    {%- else -%}
+                      <p class="soar-cart__unit tnum">{{ item.final_price | money }}</p>
+                    {%- endif -%}
+
+                    {%- if item.line_level_discount_allocations.size > 0 -%}
+                      <ul class="soar-cart__discounts" role="list">
+                        {%- for allocation in item.line_level_discount_allocations -%}
+                          <li class="soar-cart__discount">{{ allocation.discount_application.title }} (−{{ allocation.amount | money }})</li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </div>
+                </div>
+
+                <div class="soar-cart__qty soar-cart__col-qty">
+                  <div class="soar-stepper" data-stepper>
+                    <button
+                      type="button"
+                      class="soar-stepper__btn"
+                      data-qty-down
+                      aria-label="Decrease quantity of {{ item.product.title | escape }}"
+                    >−</button>
+                    <input
+                      type="number"
+                      class="soar-stepper__input tnum"
+                      name="updates[]"
+                      id="updates_{{ item.key }}"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      inputmode="numeric"
+                      data-qty-input
+                      data-line="{{ forloop.index }}"
+                      aria-label="Quantity of {{ item.product.title | escape }}"
+                    >
+                    <button
+                      type="button"
+                      class="soar-stepper__btn"
+                      data-qty-up
+                      aria-label="Increase quantity of {{ item.product.title | escape }}"
+                    >+</button>
+                  </div>
+                  <a class="soar-cart__remove link" href="{{ item.url_to_remove }}" data-cart-remove data-line="{{ forloop.index }}">Remove</a>
+                </div>
+
+                <div class="soar-cart__line-total soar-cart__col-total tnum">
+                  {{ item.final_line_price | money }}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} ----- SUMMARY ----- {%- endcomment -%}
+          <aside class="soar-cart__summary reveal">
+            <div class="soar-cart__summary-inner">
+              <h2 class="eyebrow">Summary</h2>
+
+              {%- if cart.cart_level_discount_applications.size > 0 -%}
+                <ul class="soar-cart__discounts" role="list">
+                  {%- for application in cart.cart_level_discount_applications -%}
+                    <li class="soar-cart__discount">{{ application.title }} (−{{ application.total_allocated_amount | money }})</li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              <div class="soar-cart__subtotal">
+                <span>Subtotal</span>
+                <span class="tnum" data-cart-subtotal>{{ cart.total_price | money }}</span>
+              </div>
+              <p class="soar-cart__note">Taxes and shipping calculated at checkout.</p>
+
+              {%- if section.settings.enable_note -%}
+                <label class="soar-cart__note-label eyebrow" for="CartNote">Order note</label>
+                <textarea
+                  class="soar-cart__note-field"
+                  id="CartNote"
+                  name="note"
+                  rows="3"
+                  placeholder="Notes for your order"
+                >{{ cart.note }}</textarea>
+              {%- endif -%}
+
+              <button type="submit" name="checkout" class="btn soar-cart__checkout" data-cart-checkout>
+                Checkout
+              </button>
+              <button type="submit" name="update" class="btn-ghost soar-cart__update">Update bag</button>
+
+              <ul class="soar-cart__trust" role="list">
+                <li>{% render 'icon', name: 'lock', size: 16 %} Secure checkout</li>
+                <li>{% render 'icon', name: 'arrow', size: 16 %} Free shipping over {{ section.settings.free_ship_threshold | times: 100 | money_without_trailing_zeros }}</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+      {%- endform -%}
+    {%- else -%}
+      <div class="soar-cart__empty reveal">
+        <p class="h2">Your bag is empty.</p>
+        <p class="lede">The climb starts with a single piece.</p>
+        <a class="btn" href="{{ routes.all_products_collection_url }}">Browse the catalogue</a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "class": "soar-section soar-section--cart",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_note",
+      "label": "Enable order note",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "free_ship_threshold",
+      "label": "Free shipping threshold (whole units of currency)",
+      "default": 150
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+{%- comment -%} SOAR — 404 "lost the road" {%- endcomment -%}
+<section class="soar-404 section" data-section-id="{{ section.id }}">
+  <div class="wrap soar-404__inner">
+    <p class="eyebrow">404</p>
+    <h1 class="display soar-404__title">Lost the <span class="accent">road</span>.</h1>
+    <p class="lede soar-404__lede">{{ section.settings.message | default: "This path doesn't lead anywhere. Every climber takes a wrong turn. Find your way back and keep rising." }}</p>
+    <div class="soar-404__actions">
+      <a class="btn" href="{{ routes.root_url }}">Back to start</a>
+      <a class="link" href="{{ routes.all_products_collection_url }}">Browse the catalogue</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "tag": "section",
+  "class": "soar-section soar-section--404",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Message",
+      "default": "This path doesn't lead anywhere. Every climber takes a wrong turn. Find your way back and keep rising."
+    }
+  ],
+  "presets": [
+    {
+      "name": "404"
+    }
+  ]
+}
+{% endschema %}

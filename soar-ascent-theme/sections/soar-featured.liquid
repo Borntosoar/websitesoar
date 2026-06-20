@@ -1,0 +1,200 @@
+{%- comment -%}
+  SOAR — Featured drop (asymmetric)
+  One side full-height campaign image, the other eyebrow + .h2 name +
+  short manifesto line + scarcity line + ONE CTA.
+{%- endcomment -%}
+
+{%- liquid
+  assign img = section.settings.image
+  assign media_first = false
+  if section.settings.media_position == 'left'
+    assign media_first = true
+  endif
+-%}
+
+<section class="soar-featured section" aria-label="{{ section.settings.heading | default: 'Featured drop' | escape }}">
+  <div class="wrap">
+    <div class="soar-featured__grid{% if media_first %} soar-featured__grid--media-first{% endif %} reveal">
+
+      <div class="soar-featured__media">
+        {%- if img != blank -%}
+          {{
+            img
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '600, 800, 1000, 1200, 1600',
+              sizes: '(min-width: 990px) 50vw, 100vw',
+              alt: img.alt | default: section.settings.heading | escape,
+              class: 'soar-featured__img'
+          }}
+        {%- else -%}
+          <div class="soar-featured__placeholder" role="img" aria-label="Campaign image placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'soar-featured__svg' }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.media_caption != blank -%}
+          <span class="idx tnum soar-featured__caption">{{ section.settings.media_caption }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="soar-featured__body">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 soar-featured__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.manifesto != blank -%}
+          <p class="lede soar-featured__manifesto">{{ section.settings.manifesto }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.scarcity != blank -%}
+          <p class="soar-featured__scarcity">
+            <span class="hair soar-featured__scarcity-line" aria-hidden="true"></span>
+            <span class="eyebrow soar-featured__scarcity-text">{{ section.settings.scarcity }}</span>
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+          <div class="soar-featured__actions">
+            <a class="btn" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-featured__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  #shopify-section-{{ section.id }} .soar-featured__media {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  #shopify-section-{{ section.id }} .soar-featured__img,
+  #shopify-section-{{ section.id }} .soar-featured__svg,
+  #shopify-section-{{ section.id }} .soar-featured__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  #shopify-section-{{ section.id }} .soar-featured__placeholder { background: var(--g-4); }
+  #shopify-section-{{ section.id }} .soar-featured__caption {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1.25rem;
+    color: var(--fg);
+    mix-blend-mode: difference;
+  }
+  #shopify-section-{{ section.id }} .soar-featured__heading { margin: 1.4rem 0 0; }
+  #shopify-section-{{ section.id }} .soar-featured__manifesto { margin: 1.6rem 0 0; }
+  #shopify-section-{{ section.id }} .soar-featured__scarcity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0 0;
+  }
+  #shopify-section-{{ section.id }} .soar-featured__scarcity-line { width: 2.5rem; flex: none; }
+  #shopify-section-{{ section.id }} .soar-featured__actions { margin-top: 2.2rem; }
+
+  @media (min-width: 990px) {
+    #shopify-section-{{ section.id }} .soar-featured__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 4.5rem;
+    }
+    #shopify-section-{{ section.id }} .soar-featured__grid--media-first .soar-featured__media { order: -1; }
+    #shopify-section-{{ section.id }} .soar-featured__img,
+    #shopify-section-{{ section.id }} .soar-featured__svg,
+    #shopify-section-{{ section.id }} .soar-featured__placeholder {
+      aspect-ratio: 4 / 5.4;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SOAR Featured Drop",
+  "tag": "section",
+  "class": "soar-section soar-section--featured",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Campaign image"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Image position (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "media_caption",
+      "label": "Image caption",
+      "default": "01 — The Ascent"
+    },
+    {
+      "type": "header",
+      "content": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Drop name",
+      "default": "Ascension I"
+    },
+    {
+      "type": "richtext",
+      "id": "manifesto",
+      "label": "Manifesto line",
+      "default": "<p>The first ascent. Heavyweight cotton, raw seams, built to be worn until it tells your story back to you.</p>"
+    },
+    {
+      "type": "text",
+      "id": "scarcity",
+      "label": "Scarcity line",
+      "default": "Only 200 made — numbered"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop Ascension I"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Featured Drop"
+    }
+  ]
+}
+{% endschema %}

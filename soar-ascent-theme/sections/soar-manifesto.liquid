@@ -1,0 +1,93 @@
+{%- comment -%}
+  SOAR — Manifesto
+  Full-width typographic statement, no products, a pacing break.
+  Large .display/.h2 type, one .accent word. richtext setting.
+{%- endcomment -%}
+
+{%- liquid
+  assign is_dark = section.settings.dark
+-%}
+
+<section
+  class="soar-manifesto section{% if is_dark %} soar-manifesto--dark{% endif %}"
+  aria-label="Manifesto"
+>
+  <div class="wrap">
+    <div class="soar-manifesto__inner reveal">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow soar-manifesto__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.statement != blank -%}
+        <div class="display soar-manifesto__statement">{{ section.settings.statement }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="lede soar-manifesto__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-manifesto--dark {
+    background: var(--bg);
+    color: var(--fg);
+  }
+  #shopify-section-{{ section.id }} .soar-manifesto__inner {
+    max-width: 64rem;
+  }
+  #shopify-section-{{ section.id }} .soar-manifesto__eyebrow { margin-bottom: 2rem; }
+  #shopify-section-{{ section.id }} .soar-manifesto__statement {
+    margin: 0;
+    text-wrap: balance;
+  }
+  #shopify-section-{{ section.id }} .soar-manifesto__statement p { margin: 0; }
+  #shopify-section-{{ section.id }} .soar-manifesto__subtext {
+    margin: 2.4rem 0 0;
+    max-width: 36rem;
+  }
+  #shopify-section-{{ section.id }} .soar-manifesto--dark .soar-manifesto__subtext { color: var(--g-2); }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SOAR Manifesto",
+  "tag": "section",
+  "class": "soar-section soar-section--manifesto",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "dark",
+      "label": "Dark (inverted) background",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Manifesto"
+    },
+    {
+      "type": "richtext",
+      "id": "statement",
+      "label": "Statement",
+      "info": "Wrap one word in italic for the serif accent.",
+      "default": "<p>The box was never locked. We just had to <em>rise</em>.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "<p>Pressure. Resistance. Breakthrough. Growth. Freedom. The same arc, every drop — the same arc, every climb.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Manifesto"
+    }
+  ]
+}
+{% endschema %}

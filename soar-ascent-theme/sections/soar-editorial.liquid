@@ -1,0 +1,153 @@
+{%- comment -%}
+  SOAR — Editorial
+  Image + text story block, asymmetric. image_picker + richtext.
+{%- endcomment -%}
+
+{%- liquid
+  assign img = section.settings.image
+  assign media_first = false
+  if section.settings.media_position == 'left'
+    assign media_first = true
+  endif
+-%}
+
+<section class="soar-editorial section" aria-label="{{ section.settings.heading | default: 'Editorial' | escape }}">
+  <div class="wrap">
+    <div class="soar-editorial__grid{% if media_first %} soar-editorial__grid--media-first{% endif %} reveal">
+
+      <figure class="soar-editorial__media">
+        {%- if img != blank -%}
+          {{
+            img
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '600, 800, 1000, 1200, 1600',
+              sizes: '(min-width: 990px) 55vw, 100vw',
+              alt: img.alt | default: section.settings.heading | escape,
+              class: 'soar-editorial__img'
+          }}
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'soar-editorial__img soar-editorial__img--ph' }}
+        {%- endif -%}
+      </figure>
+
+      <div class="soar-editorial__body">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h2 soar-editorial__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.body != blank -%}
+          <div class="lede soar-editorial__text rte">{{ section.settings.body }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.link_label != blank and section.settings.link_url != blank -%}
+          <a class="link soar-editorial__link" href="{{ section.settings.link_url }}">{{ section.settings.link_label }}</a>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .soar-editorial__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  #shopify-section-{{ section.id }} .soar-editorial__media {
+    margin: 0;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  #shopify-section-{{ section.id }} .soar-editorial__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  #shopify-section-{{ section.id }} .soar-editorial__img--ph { aspect-ratio: 3 / 4; background: var(--g-4); }
+  #shopify-section-{{ section.id }} .soar-editorial__heading { margin: 1.4rem 0 0; }
+  #shopify-section-{{ section.id }} .soar-editorial__text { margin: 1.6rem 0 0; max-width: 34rem; }
+  #shopify-section-{{ section.id }} .soar-editorial__text > * + * { margin-top: 1rem; }
+  #shopify-section-{{ section.id }} .soar-editorial__link { display: inline-block; margin-top: 2.2rem; }
+
+  @media (min-width: 990px) {
+    #shopify-section-{{ section.id }} .soar-editorial__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 5rem;
+    }
+    #shopify-section-{{ section.id }} .soar-editorial__grid--media-first .soar-editorial__media { order: -1; }
+    #shopify-section-{{ section.id }} .soar-editorial__img { aspect-ratio: 4 / 5; }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SOAR Editorial",
+  "tag": "section",
+  "class": "soar-section soar-section--editorial",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Image position (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Story"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Story"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Growth begins where comfort <em>ends</em>.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Three friends, the same but different climbs, one decision: all or nothing. We hadn't seen the results yet — so we built the thing that would.</p><p>SOAR is the medium. The real product is the version of you on the other side of the limit.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Our story"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SOAR Editorial"
+    }
+  ]
+}
+{% endschema %}

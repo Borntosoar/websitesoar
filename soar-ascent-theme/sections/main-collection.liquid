@@ -1,0 +1,147 @@
+{%- comment -%}
+  SOAR — Main Collection
+  Header · result count · sort dropdown (collection.sort_options) · optional tag filter
+  · product grid via product-card snippet with {% paginate collection.products by N %}.
+{%- endcomment -%}
+
+{%- liquid
+  assign per_page = section.settings.products_per_page | default: 12
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+
+<section class="soar-collection section" data-section-id="{{ section.id }}">
+  <div class="wrap">
+
+    {%- comment -%} ----- HEADER ----- {%- endcomment -%}
+    <header class="soar-collection__head reveal">
+      <p class="eyebrow">The collection</p>
+      <h1 class="display soar-collection__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank and section.settings.show_description -%}
+        <div class="lede soar-collection__desc rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </header>
+
+    <div class="hair"></div>
+
+    {%- comment -%} ----- TOOLBAR: count · tag filter · sort ----- {%- endcomment -%}
+    <div class="soar-collection__bar">
+      <p class="soar-collection__count tnum">
+        {%- if collection.products_count == 1 -%}
+          1 piece
+        {%- else -%}
+          {{ collection.products_count }} pieces
+        {%- endif -%}
+      </p>
+
+      <div class="soar-collection__controls">
+        {%- if section.settings.enable_tag_filter and collection.all_tags.size > 0 -%}
+          <div class="soar-filter" data-soar-filter>
+            <label class="visually-hidden" for="Filter-{{ section.id }}">Filter by tag</label>
+            <select id="Filter-{{ section.id }}" class="soar-select" data-tag-filter>
+              <option value="{{ collection.url }}"{% if current_tags == empty %} selected{% endif %}>All</option>
+              {%- for tag in collection.all_tags -%}
+                {%- if current_tags contains tag -%}
+                  <option value="{{ collection.url }}/{{ tag | handleize }}" selected>{{ tag }}</option>
+                {%- else -%}
+                  <option value="{{ collection.url }}/{{ tag | handleize }}">{{ tag }}</option>
+                {%- endif -%}
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.enable_sorting -%}
+          <div class="soar-sort">
+            <label class="visually-hidden" for="SortBy-{{ section.id }}">Sort by</label>
+            <select id="SortBy-{{ section.id }}" class="soar-select" data-sort-by data-default="{{ sort_by }}">
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} ----- GRID ----- {%- endcomment -%}
+    {%- paginate collection.products by per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="soar-grid" data-soar-grid>
+          {%- for product in collection.products -%}
+            <div class="soar-grid__cell reveal" style="--i: {{ forloop.index0 }}">
+              {% render 'product-card', product: product, dark: false %}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="soar-pagination" role="navigation" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a class="link soar-pagination__prev" href="{{ paginate.previous.url }}" rel="prev">Previous</a>
+            {%- endif -%}
+            <ul class="soar-pagination__list tnum" role="list">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <li><a class="soar-pagination__num" href="{{ part.url }}">{{ part.title }}</a></li>
+                {%- else -%}
+                  <li><span class="soar-pagination__num is-current" aria-current="page">{{ part.title }}</span></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            {%- if paginate.next -%}
+              <a class="link soar-pagination__next" href="{{ paginate.next.url }}" rel="next">Next</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="soar-collection__empty">
+          <p class="h2">Nothing here yet.</p>
+          <p class="lede">This part of the ascent is still being built. Return to the <a class="link" href="{{ routes.all_products_collection_url }}">full catalogue</a>.</p>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "class": "soar-section soar-section--collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 24,
+      "step": 3,
+      "label": "Products per page",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tag_filter",
+      "label": "Enable tag filter",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection"
+    }
+  ]
+}
+{% endschema %}

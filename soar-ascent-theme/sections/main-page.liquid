@@ -1,0 +1,41 @@
+{%- comment -%} SOAR — Page (page.title + page.content) {%- endcomment -%}
+<section class="soar-page section" data-section-id="{{ section.id }}">
+  <div class="wrap soar-page__inner">
+    <header class="soar-page__head reveal">
+      {%- if section.settings.show_eyebrow -%}
+        <p class="eyebrow">{{ section.settings.eyebrow | default: 'SOAR' }}</p>
+      {%- endif -%}
+      <h1 class="h2 soar-page__title">{{ page.title }}</h1>
+    </header>
+    {%- if page.content != blank -%}
+      <div class="rte soar-page__content reveal">{{ page.content }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page",
+  "tag": "section",
+  "class": "soar-section soar-section--page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "label": "Show eyebrow",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "SOAR"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page"
+    }
+  ]
+}
+{% endschema %}

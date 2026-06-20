@@ -1,0 +1,342 @@
+{%- comment -%}
+  SOAR — Main Product (editorial PDP)
+  Media gallery (lazy) · title · price (money + compare_at) · variant/size selector
+  wired to {% form 'product' %} · sticky add-to-cart on mobile · accordion details
+  · trust row · real inventory states ("Only N left" / "Sold out").
+{%- endcomment -%}
+
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign low_threshold = section.settings.low_stock_threshold | default: 6
+  assign sticky_on = section.settings.sticky_atc
+-%}
+
+<section class="soar-pdp section" data-section-id="{{ section.id }}" data-product-pdp>
+  <div class="wrap">
+    <div class="soar-pdp__grid">
+
+      {%- comment -%} ----- MEDIA GALLERY ----- {%- endcomment -%}
+      <div class="soar-pdp__media">
+        {%- if product.media.size > 0 -%}
+          <div class="soar-pdp__gallery" data-pdp-gallery>
+            {%- for media in product.media -%}
+              <figure class="soar-pdp__frame{% if forloop.first %} is-active{% endif %}" data-pdp-frame data-index="{{ forloop.index0 }}">
+                {%- if media.media_type == 'image' -%}
+                  {{
+                    media
+                    | image_url: width: 1400
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'soar-pdp__img',
+                      widths: '420, 600, 840, 1100, 1400',
+                      sizes: '(min-width: 900px) 56vw, 100vw',
+                      alt: media.alt | default: product.title | escape
+                  }}
+                {%- else -%}
+                  {{ media | media_tag: image_size: '1400x', loading: 'lazy' }}
+                {%- endif -%}
+              </figure>
+            {%- endfor -%}
+          </div>
+
+          {%- if product.media.size > 1 -%}
+            <div class="soar-pdp__thumbs" role="list" aria-label="Product media">
+              {%- for media in product.media -%}
+                <button
+                  type="button"
+                  class="soar-pdp__thumb{% if forloop.first %} is-active{% endif %}"
+                  data-pdp-thumb
+                  data-index="{{ forloop.index0 }}"
+                  aria-label="View media {{ forloop.index }} of {{ product.media.size }}"
+                >
+                  {{
+                    media.preview_image
+                    | image_url: width: 200
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '100, 200',
+                      sizes: '88px',
+                      alt: ''
+                  }}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="soar-pdp__frame is-active" data-pdp-frame data-index="0">
+            {{ 'product-1' | placeholder_svg_tag: 'soar-pdp__img soar-placeholder' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ----- INFO COLUMN ----- {%- endcomment -%}
+      <div class="soar-pdp__info">
+        <div class="soar-pdp__head reveal">
+          {%- if product.vendor != blank and section.settings.show_vendor -%}
+            <p class="eyebrow soar-pdp__vendor">{{ product.vendor }}</p>
+          {%- endif -%}
+          <h1 class="h2 soar-pdp__title">{{ product.title }}</h1>
+
+          <div class="soar-pdp__price tnum" data-pdp-price>
+            <span class="soar-pdp__price-now" data-price>
+              {{ current_variant.price | money }}
+            </span>
+            {%- if current_variant.compare_at_price > current_variant.price -%}
+              <s class="soar-pdp__price-was" data-compare>{{ current_variant.compare_at_price | money }}</s>
+              <span class="soar-pdp__tag">Reduced</span>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} ----- PRODUCT FORM ----- {%- endcomment -%}
+        {%- form 'product', product, id: 'soar-product-form', class: 'soar-pdp__form reveal', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- liquid
+                assign opt_name_down = option.name | downcase
+                assign is_size = false
+                if opt_name_down contains 'size'
+                  assign is_size = true
+                endif
+              -%}
+              <fieldset class="soar-opt" data-option-index="{{ option.position }}">
+                <legend class="eyebrow soar-opt__label">
+                  {{ option.name }}
+                  {%- if is_size -%}
+                    {%- if section.settings.size_guide_page != blank -%}
+                      <a class="link soar-opt__guide" href="{{ pages[section.settings.size_guide_page].url }}">Size guide</a>
+                    {%- endif -%}
+                  {%- endif -%}
+                </legend>
+                <div class="soar-opt__values" role="radiogroup" aria-label="{{ option.name | escape }}">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign opt_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index
+                      assign checked = false
+                      if option.selected_value == value
+                        assign checked = true
+                      endif
+                    -%}
+                    <input
+                      type="radio"
+                      class="soar-opt__input visually-hidden"
+                      name="option-{{ option.position }}"
+                      id="{{ opt_id }}"
+                      value="{{ value | escape }}"
+                      data-option-selector
+                      data-option-position="{{ option.position }}"
+                      {% if checked %}checked{% endif %}
+                    >
+                    <label class="soar-opt__chip" for="{{ opt_id }}">{{ value }}</label>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+
+            {%- comment -%} JSON variant map for client-side switching {%- endcomment -%}
+            <script type="application/json" data-variant-json>
+              {{ product.variants | json }}
+            </script>
+          {%- endunless -%}
+
+          {%- comment -%} ----- INVENTORY STATE ----- {%- endcomment -%}
+          <p class="soar-pdp__stock" data-stock aria-live="polite">
+            {%- if current_variant.available -%}
+              {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= low_threshold -%}
+                <span class="soar-pdp__stock-low">Only {{ current_variant.inventory_quantity }} left</span>
+              {%- else -%}
+                <span class="soar-pdp__stock-in">In stock — ready to rise</span>
+              {%- endif -%}
+            {%- else -%}
+              <span class="soar-pdp__stock-out">Sold out</span>
+            {%- endif -%}
+          </p>
+
+          <div class="soar-pdp__actions">
+            <button
+              type="submit"
+              name="add"
+              class="btn soar-pdp__add"
+              data-atc
+              {% unless current_variant.available %}disabled{% endunless %}
+            >
+              <span data-atc-text>
+                {%- if current_variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}
+              </span>
+            </button>
+            {%- if section.settings.show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          </div>
+        {%- endform -%}
+
+        {%- comment -%} ----- TRUST ROW ----- {%- endcomment -%}
+        <ul class="soar-pdp__trust reveal" role="list">
+          <li>{% render 'icon', name: 'lock', size: 16 %} Secure checkout</li>
+          <li>{% render 'icon', name: 'arrow', size: 16 %} Free shipping over {{ section.settings.free_ship_threshold | times: 100 | money_without_trailing_zeros }}</li>
+          <li>{% render 'icon', name: 'arrow', size: 16 %} 30-day returns</li>
+        </ul>
+
+        {%- comment -%} ----- ACCORDION DETAILS ----- {%- endcomment -%}
+        <div class="soar-acc reveal">
+          {%- if product.description != blank -%}
+            <details class="soar-acc__item" open>
+              <summary class="soar-acc__summary">
+                <span class="eyebrow">Details</span>
+                <span class="soar-acc__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="soar-acc__body rte">{{ product.description }}</div>
+            </details>
+          {%- endif -%}
+
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'accordion' -%}
+                {%- if block.settings.heading != blank -%}
+                  <details class="soar-acc__item" {{ block.shopify_attributes }}>
+                    <summary class="soar-acc__summary">
+                      <span class="eyebrow">{{ block.settings.heading }}</span>
+                      <span class="soar-acc__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="soar-acc__body rte">{{ block.settings.content }}</div>
+                  </details>
+                {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%} ----- STICKY ADD-TO-CART (mobile) ----- {%- endcomment -%}
+  {%- if sticky_on -%}
+    <div class="soar-pdp__sticky" data-pdp-sticky aria-hidden="true">
+      <div class="soar-pdp__sticky-inner">
+        <div class="soar-pdp__sticky-meta">
+          <span class="soar-pdp__sticky-title">{{ product.title }}</span>
+          <span class="soar-pdp__sticky-price tnum" data-sticky-price>{{ current_variant.price | money }}</span>
+        </div>
+        <button
+          type="submit"
+          form="soar-product-form"
+          name="add"
+          class="btn soar-pdp__sticky-add"
+          data-sticky-atc
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          <span data-sticky-atc-text>{%- if current_variant.available -%}Add{%- else -%}Sold out{%- endif -%}</span>
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{%- comment -%} JSON-LD for SEO {%- endcomment -%}
+<script type="application/ld+json">
+{{ product | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "soar-section soar-section--product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Purchase"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout buttons (Shop Pay etc.)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc",
+      "label": "Sticky add-to-cart bar on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Low-stock threshold ('Only N left')",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Trust"
+    },
+    {
+      "type": "number",
+      "id": "free_ship_threshold",
+      "label": "Free shipping threshold (whole units of currency)",
+      "default": 150
+    },
+    {
+      "type": "page",
+      "id": "size_guide_page",
+      "label": "Size guide page (shown next to a 'Size' option)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shipping & returns"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Free shipping over threshold. 30-day returns on unworn pieces. Every order ships from a place that knows the climb.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product",
+      "blocks": [
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "Materials & care",
+            "content": "<p>Premium heavyweight construction. Wash cold, hang to dry. Made to last the distance.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Free shipping over threshold. 30-day returns on unworn pieces.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

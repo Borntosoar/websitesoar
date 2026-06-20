@@ -1,0 +1,96 @@
+{%- comment -%} SOAR — Blog (article list) {%- endcomment -%}
+<section class="soar-blog section" data-section-id="{{ section.id }}">
+  <div class="wrap">
+    <header class="soar-blog__head reveal">
+      <p class="eyebrow">{{ section.settings.eyebrow | default: 'Journal' }}</p>
+      <h1 class="display soar-blog__title">{{ blog.title }}</h1>
+    </header>
+
+    <div class="hair"></div>
+
+    {%- paginate blog.articles by section.settings.posts_per_page -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="soar-blog__grid">
+          {%- for article in blog.articles -%}
+            <article class="soar-article-card reveal">
+              <a class="soar-article-card__link" href="{{ article.url }}">
+                {%- if article.image -%}
+                  <div class="soar-article-card__media">
+                    {{
+                      article.image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '420, 600, 900',
+                        sizes: '(min-width: 750px) 33vw, 100vw',
+                        alt: article.title | escape,
+                        class: 'soar-article-card__img'
+                    }}
+                  </div>
+                {%- endif -%}
+                <div class="soar-article-card__body">
+                  {%- if article.tags.size > 0 -%}
+                    <span class="eyebrow soar-article-card__tag">{{ article.tags.first }}</span>
+                  {%- endif -%}
+                  <h2 class="soar-article-card__title">{{ article.title }}</h2>
+                  {%- if article.excerpt_or_content != blank -%}
+                    <p class="soar-article-card__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+                  {%- endif -%}
+                  <time class="soar-article-card__date tnum" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
+                </div>
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="soar-pagination" role="navigation" aria-label="Pagination">
+            {%- if paginate.previous -%}<a class="link soar-pagination__prev" href="{{ paginate.previous.url }}" rel="prev">Previous</a>{%- endif -%}
+            <ul class="soar-pagination__list tnum" role="list">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <li><a class="soar-pagination__num" href="{{ part.url }}">{{ part.title }}</a></li>
+                {%- else -%}
+                  <li><span class="soar-pagination__num is-current" aria-current="page">{{ part.title }}</span></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            {%- if paginate.next -%}<a class="link soar-pagination__next" href="{{ paginate.next.url }}" rel="next">Next</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="lede">No stories yet. The journal opens soon.</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "class": "soar-section soar-section--blog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Journal"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "label": "Posts per page",
+      "default": 9
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog"
+    }
+  ]
+}
+{% endschema %}
