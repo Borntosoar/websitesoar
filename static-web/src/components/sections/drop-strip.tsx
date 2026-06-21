@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { drop } from "@/lib/products";
 
 /** One drop, full architectural scale. No competing cards. */
@@ -19,9 +20,9 @@ export function DropStrip() {
           <div className="h-[2px] w-full max-w-md bg-black/12">
             <div className="h-full bg-black" style={{ width: `${pct}%` }} />
           </div>
-          <a href={`/product/${drop.handle}`} className="mono mt-2 w-fit bg-black px-8 py-3.5 text-white transition-opacity hover:opacity-80">
+          <Link href={`/product/${drop.handle}`} className="mono mt-2 w-fit bg-black px-8 py-3.5 text-white transition-opacity hover:opacity-80">
             Enter drop
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { flagship } from "@/lib/products";
 
@@ -67,9 +68,9 @@ export function ProductViewer() {
         </div>
         <div className="flex items-center gap-6">
           <span className="over text-2xl tabular-nums">${flagship.price}</span>
-          <a href={`/product/${flagship.handle}`} className="mono bg-black px-8 py-3.5 text-white transition-opacity hover:opacity-80">
+          <Link href={`/product/${flagship.handle}`} className="mono bg-black px-8 py-3.5 text-white transition-opacity hover:opacity-80">
             Add to bag
-          </a>
+          </Link>
         </div>
       </div>
     </section>

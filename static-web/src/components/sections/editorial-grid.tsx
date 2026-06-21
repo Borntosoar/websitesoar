@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { products } from "@/lib/products";
 
 /** The "flush" section — strict grid, consistent aspect ratio + gutter. */
@@ -10,7 +11,7 @@ export function EditorialGrid() {
       </div>
       <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 md:gap-x-8 md:gap-y-16">
         {products.map((p, i) => (
-          <a key={p.id} href={`/product/${p.handle}`} className="group">
+          <Link key={p.id} href={`/product/${p.handle}`} className="group">
             <div className="relative aspect-[3/4] overflow-hidden border border-black/12 bg-[#f1f1f1]">
               <div className="over absolute inset-0 flex items-center justify-center text-[20vw] text-black/[0.06] md:text-[6rem]">
                 {String(i + 1).padStart(2, "0")}
@@ -22,7 +23,7 @@ export function EditorialGrid() {
               <span className="mono truncate">{p.name}</span>
               <span className="mono shrink-0 tabular-nums">${p.price}</span>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
