@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Archivo, Space_Mono } from "next/font/google";
+import { CartProvider } from "@/components/cart/cart";
 import "./globals.css";
 
 const display = Anton({ weight: "400", subsets: ["latin"], variable: "--font-display" });
@@ -22,7 +23,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body><CartProvider>{children}</CartProvider></body>
     </html>
   );
 }

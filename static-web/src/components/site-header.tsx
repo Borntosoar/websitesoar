@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartButton } from "@/components/cart/cart-button";
 
 export function SiteHeader() {
   return (
@@ -10,7 +11,7 @@ export function SiteHeader() {
           <a className="mono" href="#shop">Shop</a>
           <a className="mono" href="#archive">Archive</a>
         </nav>
-        <a className="mono" href="#bag">Bag (0)</a>
+        <CartButton />
       </div>
     </header>
   );

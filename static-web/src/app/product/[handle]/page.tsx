@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { products, byHandle } from "@/lib/products";
+import { ProductBuy } from "@/components/product/product-buy";
 
 export function generateStaticParams() {
   return products.map((p) => ({ handle: p.handle }));
@@ -25,18 +26,7 @@ export default function ProductPage({ params }: { params: { handle: string } }) 
           <h1 className="over text-[clamp(2.4rem,6vw,4.5rem)]">{p.name}</h1>
           <span className="over text-2xl tabular-nums">${p.price}</span>
           <p className="mono text-black/55">{p.category} · {p.left > 0 ? `${p.left}/${p.total} remaining · ${pct}% claimed` : "Sold out"}</p>
-          <div className="flex flex-wrap gap-2">
-            {p.sizes.map((s) => (
-              <span key={s} className="mono border border-black/20 px-4 py-2">{s}</span>
-            ))}
-          </div>
-          <button
-            type="button"
-            disabled={p.left === 0}
-            className="mono mt-2 w-fit bg-black px-10 py-4 text-white transition-opacity hover:opacity-80 disabled:opacity-40"
-          >
-            {p.left === 0 ? "Sold out" : "Add to bag"}
-          </button>
+          <ProductBuy p={p} />
           <p className="mono text-black/35">Secure Shopify checkout · Shop Pay</p>
         </div>
       </main>
