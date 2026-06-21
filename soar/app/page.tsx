@@ -6,6 +6,7 @@ import { EditorialGrid } from "./components/EditorialGrid";
 import { NotifyAccess } from "./components/NotifyAccess";
 import { CommunityBand } from "./components/CommunityBand";
 import { SiteFooter } from "./components/SiteFooter";
+import { Entrance } from "./components/entrance/Entrance";
 import { isShopifyConfigured, getProducts, type SoarProduct } from "@/lib/shopify";
 
 export default async function Home() {
@@ -23,6 +24,7 @@ export default async function Home() {
 
   return (
     <>
+      <Entrance />
       <NavBar />
       <main>
         <GlitchHero />
