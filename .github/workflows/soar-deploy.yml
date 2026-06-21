@@ -1,0 +1,76 @@
+name: SOAR flagship · Deploy (Vercel)
+
+# Deploys soar/ to Vercel. The flagship uses middleware (proxy) + Server Actions,
+# so it needs a Node host — it cannot static-export to GitHub Pages like soar-web.
+#
+# This workflow is OPTIONAL and gracefully no-ops until you add three secrets:
+#   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+# (Settings → Secrets and variables → Actions). Your Shopify + access-gate env
+# vars live in the Vercel project itself and are pulled at deploy time — they are
+# never stored in this repo.
+#
+# Prefer Vercel's native Git integration? Skip this workflow entirely: connect the
+# repo in Vercel, set Root Directory = soar, and it deploys on every push with no
+# secrets. Use ONE path, not both, on the same Vercel project. See soar/README.md.
+
+on:
+  push:
+    branches: [main, claude/nifty-bohr-7hmkl5]
+    paths:
+      - "soar/**"
+      - ".github/workflows/soar-deploy.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: soar-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Check Vercel secrets
+        id: check
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::VERCEL_TOKEN not set — skipping deploy. Add VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID secrets to enable Vercel deploys."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.check.outputs.configured == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        if: steps.check.outputs.configured == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Vercel CLI
+        if: steps.check.outputs.configured == 'true'
+        run: npm i -g vercel@latest
+
+      - name: Pull Vercel environment
+        if: steps.check.outputs.configured == 'true'
+        working-directory: soar
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Build
+        if: steps.check.outputs.configured == 'true'
+        working-directory: soar
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy (production)
+        if: steps.check.outputs.configured == 'true'
+        working-directory: soar
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
