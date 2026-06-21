@@ -23,6 +23,8 @@ body {
   padding: 0;
   background: #000;
   color: #fff;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
@@ -42,6 +44,30 @@ img,
 canvas {
   display: block;
   max-width: 100%;
+}
+
+/* iOS / touch polish — no tap-flash, no double-tap delay, no focus-zoom */
+button,
+a,
+label,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  font-size: 16px; /* >=16px stops iOS Safari auto-zooming on focus */
+}
+
+/* In-page 3D sections must never trap the page scroll on touch: allow vertical
+   panning (the browser scrolls) while horizontal gestures still reach the
+   canvas. !important overrides OrbitControls' inline touch-action: none. */
+.r3f-scroll canvas {
+  touch-action: pan-y !important;
 }
 
 /* shared layout primitives */

@@ -57,7 +57,7 @@ export function GlitchHero() {
   const [settled, setSettled] = useState(false);
   return (
     <section className="relative h-svh w-full overflow-hidden bg-black">
-      <div className="absolute inset-0">
+      <div className="r3f-scroll absolute inset-0">
         <Canvas gl={{ antialias: false }} dpr={[1, 2]} camera={{ position: [0, 0, 1] }}>
           <GlitchPlane onSettle={() => setSettled(true)} />
         </Canvas>

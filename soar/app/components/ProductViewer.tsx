@@ -37,7 +37,7 @@ export function ProductViewer({ product }: { product?: SoarProduct }) {
   const price = product?.price ?? 280;
   return (
     <section className="relative grid border-y border-white/10 md:grid-cols-2">
-      <div className="relative aspect-square bg-[#070707] md:aspect-auto md:min-h-[80vh]">
+      <div className="r3f-scroll relative aspect-square bg-[#070707] md:aspect-auto md:min-h-[80vh]">
         <Canvas camera={{ position: [0, 0.4, 3.4], fov: 42 }} dpr={[1, 2]}>
           <ambientLight intensity={0.5} />
           <directionalLight position={[3, 5, 4]} intensity={1.4} />
@@ -45,7 +45,7 @@ export function ProductViewer({ product }: { product?: SoarProduct }) {
           <Garment />
           <OrbitControls enablePan={false} enableZoom={false} minPolarAngle={Math.PI / 2.6} maxPolarAngle={Math.PI / 1.7} />
         </Canvas>
-        <span className="mono absolute left-4 top-4 text-white/40">Drag to rotate</span>
+        <span className="mono absolute left-4 top-4 text-white/40">Drag ↔ to rotate</span>
       </div>
       <div className="flex flex-col justify-center gap-7 p-6 md:p-16">
         <span className="mono text-white/45">The piece — inspect</span>

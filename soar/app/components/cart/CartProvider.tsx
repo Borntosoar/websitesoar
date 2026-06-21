@@ -87,10 +87,10 @@ function CartDrawer() {
                   <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-white/10 py-5">
                     <p className="mono min-w-0 truncate">{l.name}</p>
                     <div className="flex items-center gap-5">
-                      <div className="mono flex items-center gap-3">
-                        <button aria-label="Decrease" onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
-                        <span className="tabular-nums">{l.qty}</span>
-                        <button aria-label="Increase" onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
+                      <div className="mono flex items-center gap-1">
+                        <button className="flex h-9 w-9 items-center justify-center text-base text-white/65 transition-colors hover:text-white" aria-label="Decrease" onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
+                        <span className="w-6 text-center tabular-nums">{l.qty}</span>
+                        <button className="flex h-9 w-9 items-center justify-center text-base text-white/65 transition-colors hover:text-white" aria-label="Increase" onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
                       </div>
                       <span className="mono shrink-0 tabular-nums">${l.price * l.qty}</span>
                     </div>
