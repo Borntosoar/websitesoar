@@ -111,7 +111,7 @@ export default function GlitchHero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="font-display select-none text-[16vw] leading-[0.85] tracking-tight text-white mix-blend-difference sm:text-[13vw] md:text-[10vw]"
         >
-          STATIC
+          SOAR
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -119,7 +119,7 @@ export default function GlitchHero() {
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="mt-6 max-w-md text-xs uppercase tracking-[0.35em] text-white/60 sm:text-sm"
         >
-          Everything is noise until you cut through it.
+          Growth begins where comfort ends.
         </motion.p>
         <motion.div
           initial={{ opacity: 0 }}

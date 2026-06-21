@@ -19,9 +19,9 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata: Metadata = {
-  title: "STATIC — Everything is noise until you cut through it.",
+  title: "SOAR — Growth begins where comfort ends.",
   description:
-    "STATIC is a headless 3D flagship for a brand built on signal over noise.",
+    "SOAR is a luxury streetwear flagship built for those with the courage to rise above limitations.",
 };
 
 export default function RootLayout({

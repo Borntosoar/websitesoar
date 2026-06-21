@@ -4,7 +4,7 @@ export default function DropInfo() {
       <div className="mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
         <div>
           <p className="text-[10px] uppercase tracking-[0.35em] text-white/40">
-            Drop 002 — Field Jacket 001
+            Drop 002 — Ascent Jacket 001
           </p>
           <p className="font-display mt-2 text-2xl tracking-tight text-white sm:text-3xl">
             64% claimed

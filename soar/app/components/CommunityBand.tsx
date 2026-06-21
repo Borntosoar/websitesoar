@@ -5,7 +5,7 @@ export default function CommunityBand() {
         12,406 on the waitlist
       </p>
       <p className="mt-3 text-xs uppercase tracking-[0.3em] text-white/40">
-        Signal over noise. Always.
+        Most people stay where they are. Few choose to SOAR.
       </p>
     </section>
   );

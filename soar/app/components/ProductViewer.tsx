@@ -58,7 +58,7 @@ export default function ProductViewer() {
           Drag to rotate
         </span>
         <span className="font-display text-sm tracking-tight text-white/80">
-          FIELD JACKET 001
+          ASCENT JACKET 001
         </span>
       </div>
     </section>
