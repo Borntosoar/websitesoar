@@ -6,16 +6,29 @@ import { EditorialGrid } from "./components/EditorialGrid";
 import { NotifyAccess } from "./components/NotifyAccess";
 import { CommunityBand } from "./components/CommunityBand";
 import { SiteFooter } from "./components/SiteFooter";
+import { isShopifyConfigured, getProducts, type SoarProduct } from "@/lib/shopify";
 
-export default function Home() {
+export default async function Home() {
+  // getProducts() is the source of truth; fall back to placeholder content
+  // (never crash the homepage just because credentials aren't set).
+  let products: SoarProduct[] = [];
+  if (isShopifyConfigured) {
+    try {
+      products = await getProducts(8);
+    } catch {
+      products = [];
+    }
+  }
+  const lead = products[0];
+
   return (
     <>
       <NavBar />
       <main>
         <GlitchHero />
-        <ProductViewer />
-        <DropInfo />
-        <EditorialGrid />
+        <ProductViewer product={lead} />
+        <DropInfo product={lead} />
+        <EditorialGrid products={products} />
         <NotifyAccess />
         <CommunityBand />
       </main>

@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useRef } from "react";
 import type { Group } from "three";
+import type { SoarProduct } from "@/lib/shopify";
 
 /** Garment from primitive geometries — capsule torso, cylinder sleeves, torus collar. */
 function Garment() {
@@ -31,7 +32,9 @@ function Garment() {
   );
 }
 
-export function ProductViewer() {
+export function ProductViewer({ product }: { product?: SoarProduct }) {
+  const name = product?.title ?? "Ascension Hoodie";
+  const price = product?.price ?? 280;
   return (
     <section className="relative grid border-y border-white/10 md:grid-cols-2">
       <div className="relative aspect-square bg-[#070707] md:aspect-auto md:min-h-[80vh]">
@@ -46,10 +49,10 @@ export function ProductViewer() {
       </div>
       <div className="flex flex-col justify-center gap-7 p-6 md:p-16">
         <span className="mono text-white/45">The piece — inspect</span>
-        <h2 className="display text-[clamp(2.4rem,6vw,5rem)] text-white">Ascension<br />Hoodie</h2>
+        <h2 className="display text-[clamp(2.4rem,6vw,5rem)] text-white">{name}</h2>
         <p className="max-w-md text-white/55">Heavyweight, architectural, built to outlast the moment. Rise above the disposable.</p>
         <div className="flex items-center gap-6">
-          <span className="display text-2xl text-white">$280</span>
+          <span className="display text-2xl text-white">${price}</span>
           <a href="#drop" className="mono bg-white px-8 py-3.5 text-black transition-opacity hover:opacity-80">View drop</a>
         </div>
       </div>
