@@ -83,3 +83,24 @@ export async function getProducts(first = 12): Promise<SoarProduct[]> {
     };
   });
 }
+
+/** Create a Shopify cart from line items and return its hosted checkout URL.
+ *  Returns null when no store is connected (or on error) so the UI degrades
+ *  gracefully instead of throwing during a user action. Runs server-side only. */
+export async function createCart(lines: { merchandiseId: string; quantity: number }[]): Promise<string | null> {
+  if (!isShopifyConfigured || lines.length === 0) return null;
+  try {
+    const data = await shopifyFetch<{ cartCreate: { cart: { checkoutUrl: string } | null; userErrors: { message: string }[] } }>(
+      `mutation CartCreate($lines: [CartLineInput!]!) {
+        cartCreate(input: { lines: $lines }) {
+          cart { checkoutUrl }
+          userErrors { message }
+        }
+      }`,
+      { lines },
+    );
+    return data.cartCreate?.cart?.checkoutUrl ?? null;
+  } catch {
+    return null;
+  }
+}

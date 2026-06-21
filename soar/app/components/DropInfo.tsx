@@ -1,4 +1,5 @@
 import type { SoarProduct } from "@/lib/shopify";
+import { AddToBag } from "./cart/AddToBag";
 
 // Claimed % needs an edition-size metafield to be honest; placeholder until then.
 const PLACEHOLDER_CLAIMED = 84;
@@ -29,7 +30,7 @@ export function DropInfo({ product }: { product?: SoarProduct }) {
           <div className="h-[2px] w-full max-w-md bg-white/12">
             <div className="h-full bg-white" style={{ width: `${claimed}%` }} />
           </div>
-          <button className="mono mt-2 w-fit bg-white px-8 py-3.5 text-black transition-opacity hover:opacity-80" type="button">Add to bag</button>
+          <AddToBag product={product} />
         </div>
       </div>
     </section>

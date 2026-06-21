@@ -1,3 +1,5 @@
+import { CartButton } from "./cart/CartButton";
+
 export function NavBar() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black/80 backdrop-blur">
@@ -8,7 +10,7 @@ export function NavBar() {
           <a className="mono text-white/70 transition-colors hover:text-white" href="#editorial">Editorial</a>
           <a className="mono text-white/70 transition-colors hover:text-white" href="#access">Access</a>
         </nav>
-        <button className="mono text-white/70 transition-colors hover:text-white" type="button">Bag (0)</button>
+        <CartButton />
       </div>
     </header>
   );
