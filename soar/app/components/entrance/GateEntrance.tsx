@@ -137,7 +137,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
           </AnimatePresence>
         </form>
 
-        <p className="mono max-w-xs leading-relaxed text-white/30">The road ahead isn&rsquo;t for everyone.</p>
+        <p className="mono max-w-xs leading-relaxed text-white/35">Born to soar</p>
       </motion.div>
 
       {/* breakthrough into the light — fades to paper, then navigates */}

@@ -83,8 +83,8 @@ export function ProductChapter({
 
         {/* honest scarcity */}
         <p className="mono mt-4 text-ash" aria-live="polite">
-          {total > 0 ? `${product.total} made` : "Limited"} — Drop 001
-          {low > 0 && <span className="text-ink"> · Only {low} left in {chosen.size}</span>}
+          {product.total > 0 ? `Edition of ${product.total}` : "Limited edition"} · individually numbered
+          {low > 0 && <span className="text-ink"> · {low} left in {chosen.size}</span>}
         </p>
 
         {/* size */}
@@ -131,7 +131,7 @@ export function ProductChapter({
         </div>
 
         {soldOut ? (
-          <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join the waitlist below</p>
+          <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join The Ascent for the next run</p>
         ) : (
           <button
             type="button"
@@ -149,7 +149,7 @@ export function ProductChapter({
         {/* complete the drop */}
         {others.length > 0 && (
           <div className="mt-10 border-t border-line pt-6">
-            <span className="mono text-ash">Complete the drop</span>
+            <span className="mono text-ash">The rest of the set</span>
             <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
               {others.map((o) => (
                 <a key={o.index} href={`#product-${o.index}`} className="text-[14px] text-ink/75 underline-offset-4 hover:text-ink hover:underline">

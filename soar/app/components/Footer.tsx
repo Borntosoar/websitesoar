@@ -8,7 +8,7 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Image src={soarLogo} alt="SOAR" height={64} className="h-14 w-auto" priority={false} />
-            <p className="serif mt-6 max-w-xs text-xl italic text-ink/80">Growth begins where comfort ends.</p>
+            <p className="serif mt-6 max-w-xs text-xl italic text-ink/80">Born to soar.</p>
           </div>
 
           <nav className="flex flex-col gap-3">
@@ -20,8 +20,9 @@ export function Footer() {
 
           <nav className="flex flex-col gap-3">
             <span className="mono mb-1 text-ash">Brand</span>
-            <a href="#world" className="text-[15px] text-ink/75 hover:text-ink">The Idea</a>
-            <a href="#access" className="text-[15px] text-ink/75 hover:text-ink">Access</a>
+            <a href="#approach" className="text-[15px] text-ink/75 hover:text-ink">The approach</a>
+            <a href="#story" className="text-[15px] text-ink/75 hover:text-ink">The origin</a>
+            <a href="#access" className="text-[15px] text-ink/75 hover:text-ink">The Ascent</a>
             <a href="mailto:soarnextlevel@gmail.com" className="text-[15px] text-ink/75 hover:text-ink">Contact</a>
           </nav>
         </div>

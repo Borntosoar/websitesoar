@@ -20,22 +20,22 @@ const hanken = Hanken_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://borntosoar.com"),
-  title: { default: "SOAR — Collection One", template: "%s — SOAR" },
+  title: { default: "SOAR — Born to soar", template: "%s — SOAR" },
   description:
-    "Growth begins where comfort ends. SOAR — Drop 001. A limited first release, designed in Alberta, Canada.",
+    "SOAR — Collection One. An edition of 200, individually numbered, made once. Drawn in Alberta, Canada.",
   applicationName: "SOAR",
-  keywords: ["SOAR", "Drop 001", "streetwear", "Alberta", "Canada", "limited release", "rise above"],
+  keywords: ["SOAR", "Born to soar", "Drop 001", "Collection One", "streetwear", "Alberta", "Canada", "limited edition", "numbered"],
   openGraph: {
-    title: "SOAR — Collection One",
-    description: "Growth begins where comfort ends. Drop 001 — a limited first release. 200 made.",
+    title: "SOAR — Born to soar",
+    description: "Collection One. An edition of 200, individually numbered, made once.",
     siteName: "SOAR",
     type: "website",
     locale: "en_CA",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SOAR — Collection One",
-    description: "Growth begins where comfort ends. Drop 001 — a limited first release.",
+    title: "SOAR — Born to soar",
+    description: "Collection One. An edition of 200, individually numbered, made once.",
   },
 };
 

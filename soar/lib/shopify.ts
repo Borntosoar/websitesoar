@@ -141,7 +141,7 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     images: [],
     productType: "Outerwear",
     description:
-      "Structured to carry you out of the box. Heavyweight structured denim with a clean, squared silhouette that holds its shape and ages with you. Minimal hardware. No loud branding. Just considered lines for those who let the work speak.",
+      "Heavyweight structured denim, cut clean and square. It holds its shape, softens with wear, and keeps the hardware tonal and the branding hidden. Drawn in Alberta, Canada.",
     available: true,
     total: 200,
     variantId: undefined,
@@ -158,7 +158,7 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     images: [],
     productType: "Tops",
     description:
-      "The everyday foundation, elevated. A heavyweight cotton long sleeve with a relaxed drape and a refined neckline that holds its shape wash after wash.",
+      "The one you reach for first. Heavyweight cotton with a relaxed drape and a neckline that keeps its shape, wash after wash. Quiet enough to go with anything.",
     available: true,
     total: 200,
     variantId: undefined,
@@ -175,7 +175,7 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     images: [],
     productType: "Bottoms",
     description:
-      "Movement without compromise. Technical-weave utility shorts cut for range and built with intent — clean pockets, a tailored length, and a matte finish.",
+      "Cut for range, finished matte. A technical weave with a tailored length, clean pockets, and nothing extra. Built to move, and to last.",
     available: true,
     total: 200,
     variantId: undefined,

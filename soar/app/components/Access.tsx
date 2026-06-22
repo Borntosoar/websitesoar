@@ -58,7 +58,7 @@ export function Access() {
       <div className="wrap grid gap-14 py-24 md:grid-cols-[1.1fr_0.9fr] md:gap-20 md:py-36">
         {/* left — pitch + countdown */}
         <div>
-          <span className="mono text-ash">Next drop unlocks in</span>
+          <span className="mono text-ash">Next drop in</span>
           <div className="mt-6 flex gap-8 md:gap-12" aria-hidden="true">
             {([["d", "Days"], ["h", "Hrs"], ["m", "Min"], ["s", "Sec"]] as const).map(([k, l]) => (
               <div key={l}>
@@ -67,14 +67,17 @@ export function Access() {
               </div>
             ))}
           </div>
-          <p className="sr-only">The next SOAR drop opens soon. Join the list to get the access code.</p>
-          <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Members enter first.</h2>
+          <p className="sr-only">Join The Ascent to get the access code before the next drop.</p>
+          <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Join The Ascent.</h2>
+          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ash">
+            Our early list. Members get the access code first — and the next run before it&rsquo;s gone.
+          </p>
         </div>
 
         {/* right — capture (owned audience) */}
         <div className="flex flex-col justify-center">
           {done ? (
-            <p className="serif text-2xl italic" role="status">You&rsquo;re on the list. Rise above.</p>
+            <p className="serif text-2xl italic" role="status">You&rsquo;re on The Ascent. Watch your inbox.</p>
           ) : (
             <form onSubmit={onSubmit} noValidate className="flex w-full max-w-md flex-col gap-5">
               <input ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" aria-label="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
@@ -87,7 +90,7 @@ export function Access() {
               </label>
               {err && <p role="alert" className="mono text-[#9a3030]">{err}</p>}
               <button type="submit" disabled={busy} className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-60">
-                {busy ? "Joining…" : "Request access"}
+                {busy ? "Joining…" : "Join The Ascent"}
               </button>
             </form>
           )}

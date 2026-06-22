@@ -11,7 +11,7 @@ export function Hero() {
       <Reveal>
         <div className="wrap flex items-center justify-between">
           <span className="mono text-ash">Collection One</span>
-          <span className="mono text-ash">Est. Alberta · Canada</span>
+          <span className="mono text-ash">Alberta · Canada</span>
         </div>
       </Reveal>
 
@@ -22,18 +22,17 @@ export function Hero() {
         </div>
 
         <Reveal>
-          <p className="mono mb-7 text-ash">The first release — Drop 001</p>
+          <p className="mono mb-7 text-ash">Drop 001</p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="display max-w-[14ch] text-[clamp(3.1rem,11vw,11.5rem)]">
-            Growth begins<br />
-            where <span className="italic">comfort</span> ends.
+          <h1 className="display max-w-[12ch] text-[clamp(3.4rem,12vw,12rem)]">
+            Born to <span className="italic">soar</span>.
           </h1>
         </Reveal>
         <Reveal delay={0.18}>
           <p className="mt-8 max-w-md text-[15px] leading-relaxed text-ash">
-            Three pieces, built with intent. A limited first release for those who
-            let the work speak — no loud branding, only considered lines.
+            Three pieces to begin with. An edition of 200 — individually
+            numbered, made once, and not again.
           </p>
         </Reveal>
       </div>
@@ -46,7 +45,7 @@ export function Hero() {
             <span className="inline-block h-px w-12 bg-ink transition-all duration-500 group-hover:w-20" />
             <span className="text-ink">↓</span>
           </a>
-          <span className="mono hidden text-ash sm:block">003 garments</span>
+          <span className="mono hidden text-ash sm:block">Three pieces</span>
         </div>
       </Reveal>
     </section>

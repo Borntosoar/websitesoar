@@ -135,7 +135,7 @@ function CartDrawer() {
             </div>
             <div className="flex-1 overflow-auto px-6 [overscroll-behavior:contain]">
               {lines.length === 0 ? (
-                <p className="mono py-24 text-center text-ash">Nothing yet. Rise above.</p>
+                <p className="mono py-24 text-center text-ash">Nothing here yet.</p>
               ) : (
                 lines.map((l) => (
                   <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-line py-5">

@@ -6,9 +6,9 @@ import { useCart } from "./cart/CartProvider";
 
 const LINKS = [
   { label: "Collection", href: "#collection" },
-  { label: "The Ascent", href: "#ascent" },
+  { label: "Approach", href: "#approach" },
   { label: "Story", href: "#story" },
-  { label: "Access", href: "#access" },
+  { label: "The Ascent", href: "#access" },
 ];
 
 export function Nav() {
@@ -28,7 +28,7 @@ export function Nav() {
       {/* drop ticker — honest, on-brand, always visible */}
       <div className="flex h-9 items-center justify-center bg-ink px-4 text-paper">
         <p className="mono truncate text-paper/85">
-          Drop 001 — 200 made, individually numbered<span className="hidden sm:inline"> · Complimentary shipping across Canada</span>
+          Drop 001 · Edition of 200, individually numbered<span className="hidden sm:inline"> · Free shipping in Canada</span>
         </p>
       </div>
 
