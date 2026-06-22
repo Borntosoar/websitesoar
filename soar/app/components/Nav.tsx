@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useCart } from "./cart/CartProvider";
 
 const LINKS = [
   { label: "Collection", href: "#collection" },
   { label: "The Ascent", href: "#ascent" },
+  { label: "Story", href: "#story" },
   { label: "Access", href: "#access" },
 ];
 
 export function Nav() {
   const { count, open, setOpen } = useCart();
   const [solid, setSolid] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24);
@@ -39,7 +42,11 @@ export function Nav() {
 
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 md:flex">
             {LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="mono text-ink/70 transition-colors hover:text-ink">
+              <a
+                key={l.href}
+                href={l.href}
+                className="mono relative text-ink/70 transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-ink after:transition-[width] after:duration-300 hover:text-ink hover:after:w-full"
+              >
                 {l.label}
               </a>
             ))}
@@ -52,7 +59,16 @@ export function Nav() {
             aria-label={`Open bag, ${count} ${count === 1 ? "item" : "items"}`}
             className="mono text-ink/80 transition-colors hover:text-ink"
           >
-            Bag<span className="tabular-nums"> ({count})</span>
+            Bag{" "}
+            <motion.span
+              key={count}
+              initial={reduce ? false : { scale: 1.5, opacity: 0.5 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 520, damping: 18 }}
+              className="inline-block tabular-nums"
+            >
+              ({count})
+            </motion.span>
           </button>
         </nav>
       </div>

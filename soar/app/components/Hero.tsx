@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { BoxMark } from "./BoxMark";
 
 // Bright editorial hero — typographic, architectural, gallery-quiet. The
 // fractured-box → star motif (the SOAR symbol) is rendered in hairlines.
@@ -17,7 +18,7 @@ export function Hero() {
       {/* center statement */}
       <div className="wrap relative">
         <div aria-hidden className="pointer-events-none absolute -top-4 right-2 hidden md:block">
-          <BoxBreak />
+          <BoxMark className="text-ink/30" />
         </div>
 
         <Reveal>
@@ -49,19 +50,5 @@ export function Hero() {
         </div>
       </Reveal>
     </section>
-  );
-}
-
-/** A square that fractures open at one corner, a star escaping — the SOAR mark
- *  in pure hairlines. Feel-before-read. */
-function BoxBreak() {
-  return (
-    <svg width="150" height="150" viewBox="0 0 150 150" fill="none" className="text-ink/30">
-      <path d="M20 12 H138 V108" stroke="currentColor" strokeWidth="1" />
-      <path d="M12 20 V138 H120" stroke="currentColor" strokeWidth="1" />
-      <path d="M120 138 L150 120" stroke="currentColor" strokeWidth="1" />
-      <path d="M138 108 L150 96" stroke="currentColor" strokeWidth="1" />
-      <path d="M132 26 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z" fill="currentColor" className="text-ink/55" />
-    </svg>
   );
 }

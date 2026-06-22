@@ -31,6 +31,7 @@ export function ProductChapter({
   const sellable = product.variants.filter((v) => v.available);
   const [size, setSize] = useState(() => (sellable[0] ?? product.variants[0])?.size);
   const [guide, setGuide] = useState(false);
+  const [added, setAdded] = useState(false);
   const chosen = product.variants.find((v) => v.size === size) ?? product.variants[0];
   const soldOut = sellable.length === 0;
   const low = chosen?.available && chosen.quantity > 0 && chosen.quantity <= LOW_STOCK ? chosen.quantity : 0;
@@ -46,6 +47,8 @@ export function ProductChapter({
   function addToBag() {
     if (!chosen) return;
     add({ variantId: chosen.id, name: `${product.title} — ${chosen.size}`, price: chosen.price });
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 1800);
   }
 
   return (
@@ -130,10 +133,18 @@ export function ProductChapter({
         {soldOut ? (
           <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join the waitlist below</p>
         ) : (
-          <button type="button" onClick={addToBag} className="mono mt-9 w-fit bg-ink px-12 py-4 text-paper transition-opacity hover:opacity-85">
-            Add to bag — ${product.price}
+          <button
+            type="button"
+            onClick={addToBag}
+            className="group mono mt-9 flex w-fit items-center gap-2 bg-ink px-12 py-4 text-paper transition-opacity hover:opacity-85"
+          >
+            <span>{added ? "Added to bag" : `Add to bag — $${product.price}`}</span>
+            <span className={`transition-all duration-300 ${added ? "w-3 opacity-100" : "w-0 opacity-0"}`}>✓</span>
           </button>
         )}
+        <span className="sr-only" aria-live="polite">
+          {added ? `${product.title}, size ${chosen?.size}, added to bag.` : ""}
+        </span>
 
         {/* complete the drop */}
         {others.length > 0 && (

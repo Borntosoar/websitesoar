@@ -3,6 +3,7 @@ import { Hero } from "./components/Hero";
 import { ProductChapter } from "./components/ProductChapter";
 import { AscentSequence } from "./components/AscentSequence";
 import { Manifesto } from "./components/Manifesto";
+import { Story } from "./components/Story";
 import { Access } from "./components/Access";
 import { Footer } from "./components/Footer";
 import { isShopifyConfigured, getProducts, FALLBACK_PRODUCTS, type SoarProduct } from "@/lib/shopify";
@@ -40,6 +41,7 @@ export default async function Home() {
         </section>
         <AscentSequence />
         <Manifesto />
+        <Story />
         <Access />
       </main>
       <Footer />

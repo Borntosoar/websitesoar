@@ -50,7 +50,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (e) return prev.map((x) => (x.variantId === l.variantId ? { ...x, qty: x.qty + 1 } : x));
       return [...prev, { ...l, qty: 1 }];
     });
-    setOpen(true);
+    // intentionally not auto-opening — ProductChapter shows an inline
+    // confirmation and the nav bag count pulses (less jarring on a drop page).
   }
   function setQty(variantId: string, q: number) {
     setLines((prev) => (q <= 0 ? prev.filter((x) => x.variantId !== variantId) : prev.map((x) => (x.variantId === variantId ? { ...x, qty: q } : x))));
