@@ -131,7 +131,7 @@ export function ProductChapter({
         </div>
 
         {soldOut ? (
-          <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join The Ascent for the next run</p>
+          <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join First Flight for the next run</p>
         ) : (
           <button
             type="button"

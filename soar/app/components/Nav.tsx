@@ -8,7 +8,7 @@ const LINKS = [
   { label: "Collection", href: "#collection" },
   { label: "Approach", href: "#approach" },
   { label: "Story", href: "#story" },
-  { label: "The Ascent", href: "#access" },
+  { label: "First Flight", href: "#access" },
 ];
 
 export function Nav() {

@@ -22,7 +22,7 @@ export function Footer() {
             <span className="mono mb-1 text-ash">Brand</span>
             <a href="#approach" className="text-[15px] text-ink/75 hover:text-ink">The approach</a>
             <a href="#story" className="text-[15px] text-ink/75 hover:text-ink">The origin</a>
-            <a href="#access" className="text-[15px] text-ink/75 hover:text-ink">The Ascent</a>
+            <a href="#access" className="text-[15px] text-ink/75 hover:text-ink">First Flight</a>
             <a href="mailto:soarnextlevel@gmail.com" className="text-[15px] text-ink/75 hover:text-ink">Contact</a>
           </nav>
         </div>

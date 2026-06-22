@@ -67,17 +67,17 @@ export function Access() {
               </div>
             ))}
           </div>
-          <p className="sr-only">Join The Ascent to get the access code before the next drop.</p>
-          <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Join The Ascent.</h2>
+          <p className="sr-only">Join First Flight to get the access code before the next drop.</p>
+          <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Join First Flight.</h2>
           <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ash">
-            Our early list. Members get the access code first — and the next run before it&rsquo;s gone.
+            A small early list. You&rsquo;ll get the access code before anyone, and the next run before it sells out.
           </p>
         </div>
 
         {/* right — capture (owned audience) */}
         <div className="flex flex-col justify-center">
           {done ? (
-            <p className="serif text-2xl italic" role="status">You&rsquo;re on The Ascent. Watch your inbox.</p>
+            <p className="serif text-2xl italic" role="status">You&rsquo;re in. Welcome to First Flight.</p>
           ) : (
             <form onSubmit={onSubmit} noValidate className="flex w-full max-w-md flex-col gap-5">
               <input ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" aria-label="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
@@ -90,7 +90,7 @@ export function Access() {
               </label>
               {err && <p role="alert" className="mono text-[#9a3030]">{err}</p>}
               <button type="submit" disabled={busy} className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-60">
-                {busy ? "Joining…" : "Join The Ascent"}
+                {busy ? "Joining…" : "Join First Flight"}
               </button>
             </form>
           )}
