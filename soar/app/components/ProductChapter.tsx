@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Reveal } from "./Reveal";
+import { GarmentFlat } from "./GarmentFlat";
 import { useCart } from "./cart/CartProvider";
 import type { SoarProduct } from "@/lib/shopify";
 
@@ -40,6 +41,7 @@ export function ProductChapter({
 
   const num = String(index + 1).padStart(3, "0");
   const flip = index % 2 === 1;
+  const kind = product.productType === "Outerwear" ? "jacket" : product.productType === "Bottoms" ? "shorts" : "top";
 
   function addToBag() {
     if (!chosen) return;
@@ -54,7 +56,7 @@ export function ProductChapter({
           {product.image ? (
             <Image src={product.image} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
           ) : (
-            <ImageFrame num={num} type={product.productType} />
+            <ImageFrame num={num} type={product.productType} kind={kind} />
           )}
         </div>
       </Reveal>
@@ -155,18 +157,22 @@ export function ProductChapter({
   );
 }
 
-/** Intentional, premium stand-in until photography lands — not an empty box. */
-function ImageFrame({ num, type }: { num: string; type?: string }) {
+/** Intentional, premium stand-in until photography lands — a tech-pack flat of
+ *  the actual garment, not an empty box. */
+function ImageFrame({ num, type, kind }: { num: string; type?: string; kind: "jacket" | "top" | "shorts" }) {
   return (
-    <div className="absolute inset-0 flex flex-col justify-between bg-gradient-to-b from-panel to-[#dedbd1] p-6">
+    <div className="absolute inset-0 flex flex-col justify-between bg-gradient-to-b from-panel to-[#e0ddd3] p-6">
       <div className="flex items-center justify-between">
-        <span className="mono text-ink/45">{type ?? "SOAR"}</span>
-        <span className="text-ink/40">✦</span>
+        <span className="mono text-ink/50">{type ?? "SOAR"}</span>
+        <span className="text-ink/35">✦</span>
       </div>
-      <span className="display pointer-events-none select-none text-center text-[34vw] leading-none text-ink/[0.06] md:text-[12rem]">{num}</span>
+      <div className="relative flex flex-1 items-center justify-center">
+        <span className="display pointer-events-none absolute select-none text-[34vw] leading-none text-ink/[0.05] md:text-[13rem]">{num}</span>
+        <GarmentFlat kind={kind} className="relative h-[78%] w-auto text-ink/30" />
+      </div>
       <div className="flex items-center justify-between">
-        <span className="mono text-ink/45">SOAR — Drop 001</span>
-        <span className="mono text-ink/35">Imagery coming</span>
+        <span className="mono text-ink/50">SOAR — Drop 001</span>
+        <span className="mono text-ink/40">Technical flat</span>
       </div>
     </div>
   );
