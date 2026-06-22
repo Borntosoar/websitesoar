@@ -1,6 +1,7 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { ProductChapter } from "./components/ProductChapter";
+import { AscentSequence } from "./components/AscentSequence";
 import { Manifesto } from "./components/Manifesto";
 import { Access } from "./components/Access";
 import { Footer } from "./components/Footer";
@@ -24,13 +25,20 @@ export default async function Home() {
   return (
     <>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <section id="collection">
           {drop.map((p, i) => (
-            <ProductChapter key={p.id} product={p} index={i} total={drop.length} />
+            <ProductChapter
+              key={p.id}
+              product={p}
+              index={i}
+              total={drop.length}
+              others={drop.map((o, j) => ({ title: o.title, index: j })).filter((x) => x.index !== i)}
+            />
           ))}
         </section>
+        <AscentSequence />
         <Manifesto />
         <Access />
       </main>

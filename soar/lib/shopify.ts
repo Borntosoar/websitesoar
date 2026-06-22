@@ -29,7 +29,7 @@ export async function shopifyFetch<T>(query: string, variables?: Record<string, 
   return json.data as T;
 }
 
-export type SoarVariant = { id: string; size: string; available: boolean; price: number };
+export type SoarVariant = { id: string; size: string; available: boolean; price: number; quantity: number };
 
 export type SoarProduct = {
   id: string;
@@ -60,7 +60,7 @@ type ProductsResponse = {
         totalInventory: number | null;
         featuredImage: { url: string } | null;
         images: { edges: { node: { url: string } }[] };
-        variants: { edges: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string } } }[] };
+        variants: { edges: { node: { id: string; title: string; availableForSale: boolean; quantityAvailable: number | null; price: { amount: string } } }[] };
       };
     }[];
   };
@@ -75,7 +75,7 @@ export async function getProducts(first = 12): Promise<SoarProduct[]> {
           id handle title description productType totalInventory
           featuredImage { url }
           images(first: 6) { edges { node { url } } }
-          variants(first: 12) { edges { node { id title availableForSale price { amount } } } }
+          variants(first: 12) { edges { node { id title availableForSale quantityAvailable price { amount } } } }
         } }
       }
     }`,
@@ -87,6 +87,7 @@ export async function getProducts(first = 12): Promise<SoarProduct[]> {
       size: v.title,
       available: v.availableForSale,
       price: Number(v.price.amount ?? 0),
+      quantity: v.quantityAvailable ?? 0,
     }));
     const firstSellable = variants.find((v) => v.available) ?? variants[0];
     const images = n.images.edges.map((e) => e.node.url);
@@ -144,7 +145,10 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     available: true,
     total: 200,
     variantId: undefined,
-    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-tj-${s}`, size: s, available: true, price: 230 })),
+    variants: ["S", "M", "L", "XL"].map((s) => {
+      const q = ({ S: 50, M: 4, L: 50, XL: 17 } as Record<string, number>)[s] ?? 0;
+      return { id: `fb-tj-${s}`, size: s, available: q > 0, price: 230, quantity: q };
+    }),
   },
   {
     id: "fallback-longsleeve",
@@ -158,7 +162,10 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     available: true,
     total: 200,
     variantId: undefined,
-    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-ls-${s}`, size: s, available: true, price: 80 })),
+    variants: ["S", "M", "L", "XL"].map((s) => {
+      const q = ({ S: 50, M: 50, L: 9, XL: 50 } as Record<string, number>)[s] ?? 0;
+      return { id: `fb-ls-${s}`, size: s, available: q > 0, price: 80, quantity: q };
+    }),
   },
   {
     id: "fallback-shorts",
@@ -172,6 +179,9 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     available: true,
     total: 200,
     variantId: undefined,
-    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-sh-${s}`, size: s, available: true, price: 50 })),
+    variants: ["S", "M", "L", "XL"].map((s) => {
+      const q = ({ S: 0, M: 50, L: 6, XL: 50 } as Record<string, number>)[s] ?? 0;
+      return { id: `fb-sh-${s}`, size: s, available: q > 0, price: 50, quantity: q };
+    }),
   },
 ];

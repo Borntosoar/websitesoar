@@ -2,47 +2,65 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Reveal } from "./Reveal";
 import { useCart } from "./cart/CartProvider";
 import type { SoarProduct } from "@/lib/shopify";
 
-/** One garment, one full screen. Alternating gallery layout — the clothes are
- *  the show. Falls back to an intentional "imagery coming" frame until product
- *  photography is uploaded to Shopify, then the real shot flows straight in. */
-export function ProductChapter({ product, index, total }: { product: SoarProduct; index: number; total: number }) {
-  const { add, setOpen } = useCart();
+const LOW_STOCK = 10;
+
+function fitNote(type?: string) {
+  if (type === "Bottoms") return "Tailored length, regular fit — true to size.";
+  return "Boxy, modern fit — true to size. Size down for a sharper silhouette.";
+}
+
+/** One garment, one full screen. Real inventory drives honest scarcity; an
+ *  intentional frame stands in until photography is uploaded. */
+export function ProductChapter({
+  product,
+  index,
+  total,
+  others,
+}: {
+  product: SoarProduct;
+  index: number;
+  total: number;
+  others: { title: string; index: number }[];
+}) {
+  const { add } = useCart();
   const sellable = product.variants.filter((v) => v.available);
   const [size, setSize] = useState(() => (sellable[0] ?? product.variants[0])?.size);
+  const [guide, setGuide] = useState(false);
   const chosen = product.variants.find((v) => v.size === size) ?? product.variants[0];
   const soldOut = sellable.length === 0;
+  const low = chosen?.available && chosen.quantity > 0 && chosen.quantity <= LOW_STOCK ? chosen.quantity : 0;
 
   const dot = product.description ? product.description.indexOf(".") : -1;
   const lead = dot > 0 ? product.description!.slice(0, dot + 1) : product.title;
   const body = dot > 0 ? product.description!.slice(dot + 1).trim() : product.description ?? "";
 
   const num = String(index + 1).padStart(3, "0");
-  const flip = index % 2 === 1; // alternate sides
+  const flip = index % 2 === 1;
 
   function addToBag() {
     if (!chosen) return;
     add({ variantId: chosen.id, name: `${product.title} — ${chosen.size}`, price: chosen.price });
-    setOpen(true);
   }
 
   return (
-    <article className="wrap grid items-center gap-y-10 py-16 md:min-h-svh md:grid-cols-2 md:gap-x-16 md:py-24">
+    <article id={`product-${index}`} className="wrap grid items-center gap-y-10 py-16 md:min-h-svh md:grid-cols-2 md:gap-x-16 md:py-24">
       {/* image / frame */}
-      <div className={flip ? "md:order-2" : ""}>
+      <Reveal className={flip ? "md:order-2" : ""}>
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-panel">
           {product.image ? (
-            <Image src={product.image} alt={product.title} fill sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
+            <Image src={product.image} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
           ) : (
             <ImageFrame num={num} type={product.productType} />
           )}
         </div>
-      </div>
+      </Reveal>
 
       {/* detail */}
-      <div className={`flex flex-col ${flip ? "md:order-1" : ""}`}>
+      <Reveal delay={0.05} className={`flex flex-col ${flip ? "md:order-1" : ""}`}>
         <div className="mono mb-6 flex items-center gap-4 text-ash">
           <span>{num}</span>
           <span className="h-px w-8 bg-line" />
@@ -58,9 +76,26 @@ export function ProductChapter({ product, index, total }: { product: SoarProduct
           <span className="mono text-ash">CAD</span>
         </div>
 
+        {/* honest scarcity */}
+        <p className="mono mt-4 text-ash" aria-live="polite">
+          {total > 0 ? `${product.total} made` : "Limited"} — Drop 001
+          {low > 0 && <span className="text-ink"> · Only {low} left in {chosen.size}</span>}
+        </p>
+
         {/* size */}
         <div className="mt-8">
-          <p className="mono mb-3 text-ash">Size</p>
+          <div className="mb-3 flex items-center justify-between">
+            <span className="mono text-ash">Size</span>
+            <button
+              type="button"
+              onClick={() => setGuide((g) => !g)}
+              aria-expanded={guide}
+              aria-controls={`guide-${index}`}
+              className="mono text-ash underline-offset-4 hover:text-ink hover:underline"
+            >
+              Size guide
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {product.variants.map((v) => {
               const active = v.size === size;
@@ -69,6 +104,8 @@ export function ProductChapter({ product, index, total }: { product: SoarProduct
                   key={v.id}
                   type="button"
                   disabled={!v.available}
+                  aria-pressed={active}
+                  aria-label={`Size ${v.size}${v.available ? "" : " — sold out"}`}
                   onClick={() => setSize(v.size)}
                   className={`mono h-11 min-w-[3rem] border px-3 transition-colors ${
                     active ? "border-ink bg-ink text-paper" : "border-line text-ink hover:border-ink"
@@ -79,21 +116,41 @@ export function ProductChapter({ product, index, total }: { product: SoarProduct
               );
             })}
           </div>
+
+          {guide && (
+            <div id={`guide-${index}`} className="mt-4 border-l border-line pl-4 text-[13px] leading-relaxed text-ash">
+              <p className="text-ink">{fitNote(product.productType)}</p>
+              <p className="mt-2">Measure a garment you own flat and compare. Full garment measurements are coming — email us for specifics in the meantime.</p>
+            </div>
+          )}
         </div>
 
-        <button
-          type="button"
-          onClick={addToBag}
-          disabled={soldOut}
-          className="mono mt-9 w-fit bg-ink px-12 py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-40"
-        >
-          {soldOut ? "Sold out" : "Add to bag"}
-        </button>
+        {soldOut ? (
+          <p className="mono mt-9 w-fit border border-line px-12 py-4 text-ash">Sold out — join the waitlist below</p>
+        ) : (
+          <button type="button" onClick={addToBag} className="mono mt-9 w-fit bg-ink px-12 py-4 text-paper transition-opacity hover:opacity-85">
+            Add to bag — ${product.price}
+          </button>
+        )}
 
-        <span className="mono mt-6 text-ash">
+        {/* complete the drop */}
+        {others.length > 0 && (
+          <div className="mt-10 border-t border-line pt-6">
+            <span className="mono text-ash">Complete the drop</span>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+              {others.map((o) => (
+                <a key={o.index} href={`#product-${o.index}`} className="text-[14px] text-ink/75 underline-offset-4 hover:text-ink hover:underline">
+                  {o.title} ↓
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <span className="mono mt-8 text-ash">
           {num} / {String(total).padStart(3, "0")} — Drop 001
         </span>
-      </div>
+      </Reveal>
     </article>
   );
 }
@@ -106,9 +163,7 @@ function ImageFrame({ num, type }: { num: string; type?: string }) {
         <span className="mono text-ink/45">{type ?? "SOAR"}</span>
         <span className="text-ink/40">✦</span>
       </div>
-      <span className="display pointer-events-none select-none text-center text-[34vw] leading-none text-ink/[0.06] md:text-[12rem]">
-        {num}
-      </span>
+      <span className="display pointer-events-none select-none text-center text-[34vw] leading-none text-ink/[0.06] md:text-[12rem]">{num}</span>
       <div className="flex items-center justify-between">
         <span className="mono text-ink/45">SOAR — Drop 001</span>
         <span className="mono text-ink/35">Imagery coming</span>

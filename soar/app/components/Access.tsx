@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { joinWaitlist } from "@/app/actions";
 
 function nextThursday() {
   const now = new Date();
@@ -14,7 +15,10 @@ function nextThursday() {
 
 export function Access() {
   const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
   const [t, setT] = useState({ d: "—", h: "—", m: "—", s: "—" });
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const target = nextThursday();
@@ -30,18 +34,32 @@ export function Access() {
     return () => clearInterval(id);
   }, []);
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
+    const data = new FormData(e.currentTarget);
+    const email = String(data.get("email") ?? "").trim();
+    const phone = String(data.get("phone") ?? "").trim();
+    const sms = data.get("sms") === "on";
+    setBusy(true);
+    setErr("");
+    const ok = await joinWaitlist({ email, phone, sms });
+    if (!ok) {
+      setErr("Enter a valid email address.");
+      setBusy(false);
+      emailRef.current?.focus();
+      return;
+    }
     setDone(true);
   }
 
   return (
     <section id="access" className="border-t border-line">
       <div className="wrap grid gap-14 py-24 md:grid-cols-[1.1fr_0.9fr] md:gap-20 md:py-36">
-        {/* left — the pitch + countdown */}
+        {/* left — pitch + countdown */}
         <div>
           <span className="mono text-ash">Next drop unlocks in</span>
-          <div className="mt-6 flex gap-8 md:gap-12">
+          <div className="mt-6 flex gap-8 md:gap-12" aria-hidden="true">
             {([["d", "Days"], ["h", "Hrs"], ["m", "Min"], ["s", "Sec"]] as const).map(([k, l]) => (
               <div key={l}>
                 <div className="display text-[clamp(2.6rem,7vw,5rem)] tabular-nums">{t[k]}</div>
@@ -49,24 +67,28 @@ export function Access() {
               </div>
             ))}
           </div>
+          <p className="sr-only">The next SOAR drop opens soon. Join the list to get the access code.</p>
           <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Members enter first.</h2>
         </div>
 
         {/* right — capture (owned audience) */}
         <div className="flex flex-col justify-center">
           {done ? (
-            <p className="serif text-2xl italic">You&rsquo;re on the list. Rise above.</p>
+            <p className="serif text-2xl italic" role="status">You&rsquo;re on the list. Rise above.</p>
           ) : (
-            <form onSubmit={onSubmit} className="flex w-full max-w-md flex-col gap-5">
-              <input type="email" required placeholder="Email address" aria-label="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus:border-ink" />
-              <input type="tel" placeholder="Phone (for drop alerts)" aria-label="Phone number" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus:border-ink" />
+            <form onSubmit={onSubmit} noValidate className="flex w-full max-w-md flex-col gap-5">
+              <input ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" aria-label="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
+              <input type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone (for drop alerts)" aria-label="Phone number" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
               <label className="flex items-start gap-2.5 text-[12px] leading-snug text-ash">
-                <input type="checkbox" required className="mt-0.5 accent-ink" /> I agree to the Privacy Policy and Terms of Service.
+                <input type="checkbox" name="terms" required className="mt-0.5 accent-ink" /> I agree to the Privacy Policy and Terms of Service.
               </label>
               <label className="flex items-start gap-2.5 text-[12px] leading-snug text-ash">
-                <input type="checkbox" className="mt-0.5 accent-ink" /> Send me drop announcements by email & SMS.
+                <input type="checkbox" name="sms" className="mt-0.5 accent-ink" /> Send me drop announcements by email &amp; SMS.
               </label>
-              <button type="submit" className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85">Request access</button>
+              {err && <p role="alert" className="mono text-[#9a3030]">{err}</p>}
+              <button type="submit" disabled={busy} className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-60">
+                {busy ? "Joining…" : "Request access"}
+              </button>
             </form>
           )}
         </div>

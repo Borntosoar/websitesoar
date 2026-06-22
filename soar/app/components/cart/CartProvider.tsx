@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { startCheckout } from "@/app/actions";
 
 type Line = { variantId: string; name: string; price: number; qty: number };
@@ -16,6 +16,7 @@ type Ctx = {
 };
 
 const CartCtx = createContext<Ctx | null>(null);
+const STORAGE_KEY = "soar-bag";
 
 export function useCart() {
   const c = useContext(CartCtx);
@@ -26,6 +27,22 @@ export function useCart() {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<Line[]>([]);
   const [open, setOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  // persist the bag across reloads/sessions (drop-day mobile reality)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) setLines(JSON.parse(raw));
+    } catch {}
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+    } catch {}
+  }, [lines, hydrated]);
 
   function add(l: Omit<Line, "qty">) {
     setLines((prev) => {
@@ -53,6 +70,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
 function CartDrawer() {
   const { lines, open, setOpen, subtotal, setQty } = useCart();
   const [busy, setBusy] = useState(false);
+  const asideRef = useRef<HTMLElement>(null);
+  const restoreTo = useRef<HTMLElement | null>(null);
+
+  // modal behaviour: focus in, trap Tab, Escape to close, return focus on close
+  useEffect(() => {
+    if (!open) return;
+    restoreTo.current = document.activeElement as HTMLElement;
+    const focusables = () =>
+      asideRef.current
+        ? Array.from(asideRef.current.querySelectorAll<HTMLElement>('button, a[href], input, [tabindex]:not([tabindex="-1"])')).filter((el) => !el.hasAttribute("disabled"))
+        : [];
+    const id = setTimeout(() => focusables()[0]?.focus(), 0);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return setOpen(false);
+      if (e.key !== "Tab") return;
+      const f = focusables();
+      if (f.length === 0) return;
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      clearTimeout(id);
+      document.removeEventListener("keydown", onKey);
+      restoreTo.current?.focus?.();
+    };
+  }, [open, setOpen]);
 
   async function checkout() {
     setBusy(true);
@@ -67,19 +118,21 @@ function CartDrawer() {
         <>
           <motion.div className="fixed inset-0 z-[60] bg-ink/35" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
           <motion.aside
+            ref={asideRef}
             className="fixed right-0 top-0 z-[61] flex h-svh w-full max-w-sm flex-col border-l border-line bg-paper text-ink"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 36 }}
             role="dialog"
+            aria-modal="true"
             aria-label="Bag"
           >
             <div className="flex items-center justify-between border-b border-line px-6 py-5">
               <span className="mono">Bag ({lines.length})</span>
-              <button className="mono text-ash hover:text-ink" onClick={() => setOpen(false)}>Close</button>
+              <button type="button" className="mono text-ash hover:text-ink" onClick={() => setOpen(false)}>Close</button>
             </div>
-            <div className="flex-1 overflow-auto px-6">
+            <div className="flex-1 overflow-auto px-6 [overscroll-behavior:contain]">
               {lines.length === 0 ? (
                 <p className="mono py-24 text-center text-ash">Nothing yet. Rise above.</p>
               ) : (
@@ -88,9 +141,9 @@ function CartDrawer() {
                     <p className="min-w-0 truncate text-[14px]">{l.name}</p>
                     <div className="flex items-center gap-5">
                       <div className="mono flex items-center gap-1">
-                        <button className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label="Decrease" onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
+                        <button type="button" className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label={`Decrease ${l.name}`} onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
                         <span className="w-6 text-center tabular-nums">{l.qty}</span>
-                        <button className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label="Increase" onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
+                        <button type="button" className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label={`Increase ${l.name}`} onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
                       </div>
                       <span className="mono shrink-0 tabular-nums">${l.price * l.qty}</span>
                     </div>
@@ -104,7 +157,7 @@ function CartDrawer() {
                   <span>Subtotal</span>
                   <span className="tabular-nums">${subtotal} CAD</span>
                 </div>
-                <button onClick={checkout} disabled={busy} className="mono w-full bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-50">
+                <button type="button" onClick={checkout} disabled={busy} className="mono w-full bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-50">
                   {busy ? "Redirecting…" : "Checkout"}
                 </button>
                 <p className="mono mt-3 text-center text-ash">Secure Shopify checkout</p>

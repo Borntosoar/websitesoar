@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useReducedMotion } from "framer-motion";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -8,8 +9,9 @@ const N = 700;
 const SPREAD = 64;
 
 /** A quiet field of light rising through the dark — the only motif. On "enter"
- *  it accelerates upward and the camera presses forward: the breakthrough. */
-function Field({ entering }: { entering: boolean }) {
+ *  it accelerates upward and the camera presses forward: the breakthrough.
+ *  Honors prefers-reduced-motion (renders a static field, no camera move). */
+function Field({ entering, reduce }: { entering: boolean; reduce: boolean }) {
   const ref = useRef<THREE.Points>(null);
   const arr = useMemo(() => {
     const p = new Float32Array(N * 3);
@@ -32,7 +34,7 @@ function Field({ entering }: { entering: boolean }) {
 
   useFrame((state, dt) => {
     const pts = ref.current;
-    if (!pts) return;
+    if (!pts || reduce) return;
     const speed = entering ? 34 : 2.1;
     const d = Math.min(dt, 0.05);
     for (let i = 0; i < N; i++) {
@@ -41,7 +43,6 @@ function Field({ entering }: { entering: boolean }) {
       arr[i * 3 + 1] = y;
     }
     (geo.getAttribute("position") as THREE.BufferAttribute).needsUpdate = true;
-    // gentle pointer parallax
     pts.rotation.x += (state.pointer.y * 0.08 - pts.rotation.x) * 0.04;
     pts.rotation.y += (state.pointer.x * 0.08 - pts.rotation.y) * 0.04;
   });
@@ -49,9 +50,10 @@ function Field({ entering }: { entering: boolean }) {
   return <points ref={ref} geometry={geo} material={mat} />;
 }
 
-function Rig({ entering }: { entering: boolean }) {
+function Rig({ entering, reduce }: { entering: boolean; reduce: boolean }) {
   const { camera } = useThree();
   useFrame(() => {
+    if (reduce) return;
     const targetZ = entering ? 0.5 : 9;
     camera.position.z += (targetZ - camera.position.z) * 0.045;
   });
@@ -59,12 +61,13 @@ function Rig({ entering }: { entering: boolean }) {
 }
 
 export function GateScene({ entering }: { entering: boolean }) {
+  const reduce = useReducedMotion() ?? false;
   return (
-    <Canvas camera={{ position: [0, 0, 9], fov: 60 }} dpr={[1, 2]} gl={{ antialias: true }}>
+    <Canvas camera={{ position: [0, 0, 9], fov: 60 }} dpr={[1, 2]} gl={{ antialias: true }} frameloop={reduce ? "demand" : "always"}>
       <color attach="background" args={["#0b0a09"]} />
       <fog attach="fog" args={["#0b0a09", 14, 52]} />
-      <Field entering={entering} />
-      <Rig entering={entering} />
+      <Field entering={entering} reduce={reduce} />
+      <Rig entering={entering} reduce={reduce} />
     </Canvas>
   );
 }

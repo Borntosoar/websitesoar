@@ -7,7 +7,7 @@
   --color-paper: #f4f3ef; /* soft warm white — the dominant ground */
   --color-panel: #e9e7df; /* tonal panel (product frames, fills) */
   --color-ink: #16140f; /* near-black */
-  --color-ash: #76726a; /* mid grey — secondary text, hairline labels */
+  --color-ash: #5c584f; /* mid grey — secondary text, hairline labels (AA on paper) */
   --color-line: rgba(22, 20, 15, 0.14); /* hairlines */
   --color-pitch: #131210; /* the single dark section + footer */
 
@@ -44,6 +44,21 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* visible keyboard focus everywhere (never bare outline:none) */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+/* inverted focus ring on the dark gate + dark sections */
+.on-dark :focus-visible {
+  outline-color: #ffffff;
+}
+/* anchor jumps clear the fixed nav + announcement bar */
+[id] {
+  scroll-margin-top: 6.5rem;
 }
 img,
 canvas {
