@@ -1,22 +1,33 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Archivo_Black } from "next/font/google";
+import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { CartProvider } from "./components/cart/CartProvider";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
-const archivo = Archivo_Black({ weight: "400", subsets: ["latin"], variable: "--font-archivo-black" });
+// Fraunces — high-contrast editorial serif (fashion-house display).
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  style: ["normal", "italic"],
+  axes: ["opsz", "SOFT"],
+  display: "swap",
+});
+// Hanken Grotesk — refined grotesque for UI, labels and body (brand grotesque).
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-hanken",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: { default: "SOAR — Born To Soar", template: "%s — SOAR" },
+  title: { default: "SOAR — Collection One", template: "%s — SOAR" },
   description:
-    "Growth begins where comfort ends. True success comes from having the courage to rise above limitations.",
+    "Growth begins where comfort ends. SOAR — Drop 001. A limited first release, designed in Alberta, Canada.",
   applicationName: "SOAR",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
-  colorScheme: "dark",
+  themeColor: "#f4f3ef",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -24,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${archivo.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${hanken.variable}`}>
       <body>
         <CartProvider>{children}</CartProvider>
       </body>

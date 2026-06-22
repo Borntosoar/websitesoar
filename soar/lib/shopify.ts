@@ -29,15 +29,23 @@ export async function shopifyFetch<T>(query: string, variables?: Record<string, 
   return json.data as T;
 }
 
+export type SoarVariant = { id: string; size: string; available: boolean; price: number };
+
 export type SoarProduct = {
   id: string;
   handle: string;
   title: string;
   price: number;
+  /** Featured product image URL (undefined until photography is uploaded). */
   image?: string;
+  images: string[];
+  description?: string;
+  productType?: string;
   available: boolean;
   total: number;
+  /** First sellable variant — the default add-to-bag target. */
   variantId?: string;
+  variants: SoarVariant[];
 };
 
 type ProductsResponse = {
@@ -47,39 +55,54 @@ type ProductsResponse = {
         id: string;
         handle: string;
         title: string;
+        description: string | null;
+        productType: string | null;
         totalInventory: number | null;
         featuredImage: { url: string } | null;
-        variants: { edges: { node: { id: string; availableForSale: boolean; price: { amount: string } } }[] };
+        images: { edges: { node: { url: string } }[] };
+        variants: { edges: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string } } }[] };
       };
     }[];
   };
 };
 
-/** Source of truth for drop name, claimed %, and the editorial grid. */
+/** Source of truth for the drop: product chapters, sizes, price, availability. */
 export async function getProducts(first = 12): Promise<SoarProduct[]> {
   const data = await shopifyFetch<ProductsResponse>(
     `query Products($first: Int!) {
       products(first: $first, sortKey: CREATED_AT, reverse: true) {
         edges { node {
-          id handle title totalInventory
+          id handle title description productType totalInventory
           featuredImage { url }
-          variants(first: 1) { edges { node { id availableForSale price { amount } } } }
+          images(first: 6) { edges { node { url } } }
+          variants(first: 12) { edges { node { id title availableForSale price { amount } } } }
         } }
       }
     }`,
     { first },
   );
   return data.products.edges.map(({ node: n }) => {
-    const v = n.variants.edges[0]?.node;
+    const variants: SoarVariant[] = n.variants.edges.map(({ node: v }) => ({
+      id: v.id,
+      size: v.title,
+      available: v.availableForSale,
+      price: Number(v.price.amount ?? 0),
+    }));
+    const firstSellable = variants.find((v) => v.available) ?? variants[0];
+    const images = n.images.edges.map((e) => e.node.url);
     return {
       id: n.id,
       handle: n.handle,
       title: n.title,
       total: n.totalInventory ?? 0,
-      image: n.featuredImage?.url,
-      available: v?.availableForSale ?? false,
-      price: Number(v?.price.amount ?? 0),
-      variantId: v?.id,
+      image: n.featuredImage?.url ?? images[0],
+      images,
+      description: n.description ?? undefined,
+      productType: n.productType ?? undefined,
+      available: variants.some((v) => v.available),
+      price: firstSellable?.price ?? 0,
+      variantId: firstSellable?.id,
+      variants,
     };
   });
 }
@@ -104,3 +127,51 @@ export async function createCart(lines: { merchandiseId: string; quantity: numbe
     return null;
   }
 }
+
+/** Curated fallback content — the REAL Drop 001 garments, so the site is fully
+ *  designed even before the Storefront API is wired or photography is uploaded.
+ *  Live Shopify data (getProducts) always takes precedence when configured. */
+export const FALLBACK_PRODUCTS: SoarProduct[] = [
+  {
+    id: "fallback-trucker",
+    handle: "the-trucker-jacket",
+    title: "The Trucker Jacket",
+    price: 230,
+    images: [],
+    productType: "Outerwear",
+    description:
+      "Structured to carry you out of the box. Heavyweight structured denim with a clean, squared silhouette that holds its shape and ages with you. Minimal hardware. No loud branding. Just considered lines for those who let the work speak.",
+    available: true,
+    total: 200,
+    variantId: undefined,
+    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-tj-${s}`, size: s, available: true, price: 230 })),
+  },
+  {
+    id: "fallback-longsleeve",
+    handle: "long-sleeve",
+    title: "Long Sleeve",
+    price: 80,
+    images: [],
+    productType: "Tops",
+    description:
+      "The everyday foundation, elevated. A heavyweight cotton long sleeve with a relaxed drape and a refined neckline that holds its shape wash after wash.",
+    available: true,
+    total: 200,
+    variantId: undefined,
+    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-ls-${s}`, size: s, available: true, price: 80 })),
+  },
+  {
+    id: "fallback-shorts",
+    handle: "utility-shorts",
+    title: "Utility Shorts",
+    price: 50,
+    images: [],
+    productType: "Bottoms",
+    description:
+      "Movement without compromise. Technical-weave utility shorts cut for range and built with intent — clean pockets, a tailored length, and a matte finish.",
+    available: true,
+    total: 200,
+    variantId: undefined,
+    variants: ["S", "M", "L", "XL"].map((s) => ({ id: `fb-sh-${s}`, size: s, available: true, price: 50 })),
+  },
+];

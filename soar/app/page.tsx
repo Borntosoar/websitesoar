@@ -1,17 +1,14 @@
-import { NavBar } from "./components/NavBar";
-import { GlitchHero } from "./components/GlitchHero";
-import { ProductViewer } from "./components/ProductViewer";
-import { DropInfo } from "./components/DropInfo";
-import { EditorialGrid } from "./components/EditorialGrid";
-import { NotifyAccess } from "./components/NotifyAccess";
-import { CommunityBand } from "./components/CommunityBand";
-import { SiteFooter } from "./components/SiteFooter";
-import { Entrance } from "./components/entrance/Entrance";
-import { isShopifyConfigured, getProducts, type SoarProduct } from "@/lib/shopify";
+import { Nav } from "./components/Nav";
+import { Hero } from "./components/Hero";
+import { ProductChapter } from "./components/ProductChapter";
+import { Manifesto } from "./components/Manifesto";
+import { Access } from "./components/Access";
+import { Footer } from "./components/Footer";
+import { isShopifyConfigured, getProducts, FALLBACK_PRODUCTS, type SoarProduct } from "@/lib/shopify";
 
 export default async function Home() {
-  // getProducts() is the source of truth; fall back to placeholder content
-  // (never crash the homepage just because credentials aren't set).
+  // Live Shopify data is the source of truth; fall back to the curated Drop 001
+  // content so the site is fully designed before the store is wired.
   let products: SoarProduct[] = [];
   if (isShopifyConfigured) {
     try {
@@ -20,21 +17,24 @@ export default async function Home() {
       products = [];
     }
   }
-  const lead = products[0];
+  if (products.length === 0) products = FALLBACK_PRODUCTS;
+  // Lead with the flagship piece (highest price first reads as the hero garment).
+  const drop = [...products].sort((a, b) => b.price - a.price).slice(0, 3);
 
   return (
     <>
-      <Entrance />
-      <NavBar />
+      <Nav />
       <main>
-        <GlitchHero />
-        <ProductViewer product={lead} />
-        <DropInfo product={lead} />
-        <EditorialGrid products={products} />
-        <NotifyAccess />
-        <CommunityBand />
+        <Hero />
+        <section id="collection">
+          {drop.map((p, i) => (
+            <ProductChapter key={p.id} product={p} index={i} total={drop.length} />
+          ))}
+        </section>
+        <Manifesto />
+        <Access />
       </main>
-      <SiteFooter />
+      <Footer />
     </>
   );
 }

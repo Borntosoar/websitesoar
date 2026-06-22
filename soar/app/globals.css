@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
-/* SOAR — Tailwind v4 design tokens (dark flagship). */
+/* SOAR — bright editorial monochrome. Light-dominant (the "freedom" end of the
+   brand arc); one inverted section carries the "breakthrough". B&W per the brand
+   bible — warm near-neutrals, zero chroma, high contrast, gallery-quiet. */
 @theme {
-  --color-ink: #000000;
-  --color-paper: #ffffff;
-  --color-ash: #8a8a8a;
-  --color-line: rgba(255, 255, 255, 0.14);
-  --font-display: var(--font-archivo-black), system-ui, sans-serif;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-paper: #f4f3ef; /* soft warm white — the dominant ground */
+  --color-panel: #e9e7df; /* tonal panel (product frames, fills) */
+  --color-ink: #16140f; /* near-black */
+  --color-ash: #76726a; /* mid grey — secondary text, hairline labels */
+  --color-line: rgba(22, 20, 15, 0.14); /* hairlines */
+  --color-pitch: #131210; /* the single dark section + footer */
+
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 * {
   box-sizing: border-box;
@@ -21,20 +25,21 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #000;
-  color: #fff;
+  background: var(--color-paper);
+  color: var(--color-ink);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-hanken), system-ui, sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 ::selection {
-  background: #fff;
-  color: #000;
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 a {
   color: inherit;
@@ -63,37 +68,58 @@ select {
   font-size: 16px; /* >=16px stops iOS Safari auto-zooming on focus */
 }
 
-/* In-page 3D sections must never trap the page scroll on touch: allow vertical
-   panning (the browser scrolls) while horizontal gestures still reach the
-   canvas. !important overrides OrbitControls' inline touch-action: none. */
-.r3f-scroll canvas {
-  touch-action: pan-y !important;
-}
-
-/* shared layout primitives */
+/* layout primitive */
 .wrap {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1640px;
   margin-inline: auto;
-  padding-inline: 24px;
+  padding-inline: 22px;
 }
 @media (min-width: 768px) {
   .wrap {
-    padding-inline: 48px;
+    padding-inline: 56px;
   }
 }
+
+/* type roles */
 .display {
-  font-family: var(--font-archivo-black), system-ui, sans-serif;
-  text-transform: uppercase;
-  line-height: 0.84;
-  letter-spacing: -0.02em;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.018em;
+  font-optical-sizing: auto;
 }
-.mono {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+.serif {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+/* letter-spaced caps labels (kept as .mono for markup compatibility) */
+.mono,
+.label {
+  font-family: var(--font-hanken), system-ui, sans-serif;
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
+
+/* hairline rule */
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* subtle film grain — premium texture, barely there (brand §11) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

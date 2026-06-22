@@ -65,9 +65,9 @@ function CartDrawer() {
     <AnimatePresence>
       {open && (
         <>
-          <motion.div className="fixed inset-0 z-[60] bg-black/50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
+          <motion.div className="fixed inset-0 z-[60] bg-ink/35" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
           <motion.aside
-            className="fixed right-0 top-0 z-[61] flex h-svh w-full max-w-sm flex-col border-l border-white/15 bg-[#0a0a0a] text-white"
+            className="fixed right-0 top-0 z-[61] flex h-svh w-full max-w-sm flex-col border-l border-line bg-paper text-ink"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -75,22 +75,22 @@ function CartDrawer() {
             role="dialog"
             aria-label="Bag"
           >
-            <div className="flex items-center justify-between border-b border-white/15 px-6 py-5">
+            <div className="flex items-center justify-between border-b border-line px-6 py-5">
               <span className="mono">Bag ({lines.length})</span>
-              <button className="mono text-white/60 hover:text-white" onClick={() => setOpen(false)}>Close</button>
+              <button className="mono text-ash hover:text-ink" onClick={() => setOpen(false)}>Close</button>
             </div>
             <div className="flex-1 overflow-auto px-6">
               {lines.length === 0 ? (
-                <p className="mono py-24 text-center text-white/40">Nothing yet. Rise above.</p>
+                <p className="mono py-24 text-center text-ash">Nothing yet. Rise above.</p>
               ) : (
                 lines.map((l) => (
-                  <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-white/10 py-5">
-                    <p className="mono min-w-0 truncate">{l.name}</p>
+                  <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-line py-5">
+                    <p className="min-w-0 truncate text-[14px]">{l.name}</p>
                     <div className="flex items-center gap-5">
                       <div className="mono flex items-center gap-1">
-                        <button className="flex h-9 w-9 items-center justify-center text-base text-white/65 transition-colors hover:text-white" aria-label="Decrease" onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
+                        <button className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label="Decrease" onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
                         <span className="w-6 text-center tabular-nums">{l.qty}</span>
-                        <button className="flex h-9 w-9 items-center justify-center text-base text-white/65 transition-colors hover:text-white" aria-label="Increase" onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
+                        <button className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label="Increase" onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
                       </div>
                       <span className="mono shrink-0 tabular-nums">${l.price * l.qty}</span>
                     </div>
@@ -99,15 +99,15 @@ function CartDrawer() {
               )}
             </div>
             {lines.length > 0 && (
-              <div className="border-t border-white/15 px-6 py-5">
+              <div className="border-t border-line px-6 py-5">
                 <div className="mono mb-4 flex items-baseline justify-between">
                   <span>Subtotal</span>
-                  <span className="tabular-nums">${subtotal}</span>
+                  <span className="tabular-nums">${subtotal} CAD</span>
                 </div>
-                <button onClick={checkout} disabled={busy} className="mono w-full bg-white py-4 text-black transition-opacity hover:opacity-80 disabled:opacity-50">
+                <button onClick={checkout} disabled={busy} className="mono w-full bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-50">
                   {busy ? "Redirecting…" : "Checkout"}
                 </button>
-                <p className="mono mt-3 text-center text-white/35">Shopify-hosted checkout — connects when a store is set</p>
+                <p className="mono mt-3 text-center text-ash">Secure Shopify checkout</p>
               </div>
             )}
           </motion.aside>
