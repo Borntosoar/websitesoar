@@ -60,6 +60,11 @@ a {
 [id] {
   scroll-margin-top: 6.5rem;
 }
+/* the gate's code field shows its own animated underline as the focus cue,
+   so it opts out of the boxed focus ring */
+.field-bare:focus-visible {
+  outline: none;
+}
 img,
 canvas {
   display: block;

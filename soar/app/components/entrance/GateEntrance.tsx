@@ -21,9 +21,10 @@ function hasWebGL() {
   }
 }
 
-/** The gated threshold: minimal dark void, the SOAR mark, a password — then the
- *  breakthrough into the bright site. Server-validated (the password never
- *  touches the client). Honors prefers-reduced-motion. */
+const EASE = [0.22, 0.61, 0.36, 1] as const; // calm ease-out
+
+/** The gated threshold — simple, still, expensive. Deep black, the mark, a quiet
+ *  code field. Server-validated (the password never touches the client). */
 export function GateEntrance({ from = "/" }: { from?: string }) {
   const reduce = useReducedMotion() ?? false;
   const [pwd, setPwd] = useState("");
@@ -56,46 +57,38 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
     }
     setEntering(true);
     const dest = from.startsWith("/") && !from.startsWith("//") ? from : "/";
-    setTimeout(() => window.location.assign(dest), reduce ? 250 : 1600);
+    setTimeout(() => window.location.assign(dest), reduce ? 250 : 1400);
   }
-
-  const T = (d: number, delay = 0) => (reduce ? { duration: 0 } : { duration: d, ease: [0.7, 0, 0.3, 1] as const, delay });
 
   return (
     <main className="on-dark fixed inset-0 z-[100] overflow-hidden bg-[#0b0a09] text-white">
       {webgl && (
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 opacity-70">
           <GateScene entering={entering} />
         </div>
       )}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_46%,transparent_38%,rgba(0,0,0,0.82))]" />
-
-      {/* center glow — breathes while idle, blooms on breakthrough */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[42vmin] w-[42vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(196,205,255,0.20), transparent 65%)" }}
-        animate={entering ? { opacity: 1, scale: 3.4 } : reduce ? { opacity: 0.5, scale: 1 } : { opacity: [0.4, 0.6, 0.4], scale: [1, 1.06, 1] }}
-        transition={entering ? T(1.4) : reduce ? { duration: 0 } : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
+      {/* soft, expensive vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_95%_at_50%_42%,rgba(255,255,255,0.045),transparent_38%,rgba(0,0,0,0.92))]" />
 
       <motion.div
-        className="relative z-10 flex h-full flex-col items-center justify-center gap-7 px-6 text-center"
-        animate={{ y: entering && !reduce ? -40 : 0, opacity: entering ? 0 : 1 }}
-        transition={T(1.1)}
+        className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center"
+        animate={{ opacity: entering ? 0 : 1, y: entering && !reduce ? -14 : 0 }}
+        transition={{ duration: reduce ? 0 : 1.0, ease: EASE }}
       >
-        {/* the mark — scales through the viewport on breakthrough */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 14 }}
-          animate={entering ? { opacity: 0, scale: reduce ? 1 : 1.9 } : { opacity: 1, y: 0, scale: 1 }}
-          transition={entering ? T(1.2) : T(1)}
-        >
-          <Image src={logoWhite} alt="SOAR" height={120} className="h-24 w-auto md:h-28" priority />
+        <motion.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}>
+          <Image src={logoWhite} alt="SOAR" height={84} className="h-16 w-auto md:h-[76px]" priority />
         </motion.div>
 
-        <p className="mono text-white/45">Members only — Drop 001</p>
+        <motion.p
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: EASE, delay: 0.35 }}
+          className="serif mt-10 text-[clamp(1.4rem,3.4vw,2rem)] italic text-white/80"
+        >
+          Welcome.
+        </motion.p>
 
-        <form onSubmit={onSubmit} className="flex w-full max-w-xs flex-col items-center gap-4">
+        <form onSubmit={onSubmit} className="mt-10 flex w-full max-w-[260px] flex-col items-center gap-7">
           <div className="relative w-full">
             <input
               ref={inputRef}
@@ -114,39 +107,41 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
               placeholder="Access code"
               aria-label="Access code"
               aria-invalid={err}
-              className="w-full border-b border-white/20 bg-transparent py-3 text-center tracking-[0.35em] text-white outline-none placeholder:tracking-[0.2em] placeholder:text-white/35"
+              className="field-bare w-full border-b border-white/15 bg-transparent pb-3 text-center text-[15px] tracking-[0.4em] text-white outline-none placeholder:tracking-[0.25em] placeholder:text-white/30"
             />
             <motion.span
               aria-hidden
-              className="absolute inset-x-0 bottom-0 mx-auto h-px origin-center bg-white"
+              className="absolute inset-x-0 bottom-0 mx-auto h-px origin-center"
               initial={false}
               animate={{ scaleX: focused || err ? 1 : 0 }}
-              transition={{ duration: reduce ? 0 : 0.35, ease: [0.7, 0, 0.3, 1] }}
-              style={{ background: err ? "#fca5a5" : "#ffffff" }}
+              transition={{ duration: reduce ? 0 : 0.5, ease: EASE }}
+              style={{ background: err ? "rgba(220,180,180,0.8)" : "rgba(255,255,255,0.7)" }}
             />
           </div>
-          <button type="submit" disabled={busy} className="mono mt-1 w-full bg-white py-3.5 text-black transition-opacity hover:opacity-85 disabled:opacity-50">
-            {busy ? "Entering…" : "Enter ↑"}
+
+          <button type="submit" disabled={busy} className="mono tracking-[0.3em] text-white/65 transition-colors hover:text-white disabled:opacity-50">
+            {busy ? "One moment…" : "Enter"}
           </button>
+
           <AnimatePresence>
             {err && (
-              <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mono text-red-300/80">
-                Not on the list.
+              <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mono text-white/40">
+                That code isn&rsquo;t right.
               </motion.p>
             )}
           </AnimatePresence>
         </form>
 
-        <p className="mono max-w-xs leading-relaxed text-white/35">Born to soar</p>
+        <p className="mono absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-white/20">Born to soar</p>
       </motion.div>
 
-      {/* breakthrough into the light — fades to paper, then navigates */}
+      {/* calm fade into the light, then navigate */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[#f4f3ef]"
         initial={{ opacity: 0 }}
         animate={{ opacity: entering ? 1 : 0 }}
-        transition={reduce ? { duration: 0 } : { duration: 1.3, ease: [0.7, 0, 0.3, 1], delay: 0.35 }}
+        transition={reduce ? { duration: 0 } : { duration: 1.2, ease: EASE, delay: 0.2 }}
       />
     </main>
   );

@@ -5,7 +5,7 @@ import { useReducedMotion } from "framer-motion";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const N = 700;
+const N = 170;
 const SPREAD = 64;
 
 /** A quiet field of light rising through the dark — the only motif. On "enter"
@@ -28,14 +28,14 @@ function Field({ entering, reduce }: { entering: boolean; reduce: boolean }) {
     return g;
   }, [arr]);
   const mat = useMemo(
-    () => new THREE.PointsMaterial({ color: "#ffffff", size: 0.07, transparent: true, opacity: 0.72, sizeAttenuation: true, depthWrite: false }),
+    () => new THREE.PointsMaterial({ color: "#ffffff", size: 0.05, transparent: true, opacity: 0.4, sizeAttenuation: true, depthWrite: false }),
     [],
   );
 
   useFrame((state, dt) => {
     const pts = ref.current;
     if (!pts || reduce) return;
-    const speed = entering ? 34 : 2.1;
+    const speed = entering ? 8 : 1.1;
     const d = Math.min(dt, 0.05);
     for (let i = 0; i < N; i++) {
       let y = arr[i * 3 + 1] + d * speed;
