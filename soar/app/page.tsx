@@ -1,6 +1,7 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { ProductChapter } from "./components/ProductChapter";
+import { ProductRow } from "./components/ProductRow";
+import { SplitBanner } from "./components/SplitBanner";
 import { AscentSequence } from "./components/AscentSequence";
 import { Manifesto } from "./components/Manifesto";
 import { Story } from "./components/Story";
@@ -20,7 +21,6 @@ export default async function Home() {
     }
   }
   if (products.length === 0) products = FALLBACK_PRODUCTS;
-  // Lead with the flagship piece (highest price first reads as the hero garment).
   const drop = [...products].sort((a, b) => b.price - a.price).slice(0, 3);
 
   return (
@@ -28,17 +28,8 @@ export default async function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <section id="collection">
-          {drop.map((p, i) => (
-            <ProductChapter
-              key={p.id}
-              product={p}
-              index={i}
-              total={drop.length}
-              others={drop.map((o, j) => ({ title: o.title, index: j })).filter((x) => x.index !== i)}
-            />
-          ))}
-        </section>
+        <ProductRow products={drop} />
+        <SplitBanner />
         <AscentSequence />
         <Manifesto />
         <Story />

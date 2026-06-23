@@ -1,53 +1,47 @@
 import { Reveal } from "./Reveal";
 import { BoxMark } from "./BoxMark";
 
-// Bright editorial hero — typographic, architectural, gallery-quiet. The
-// fractured-box → star motif (the SOAR symbol) is rendered in hairlines.
-
+// Represent-style full-screen campaign hero — dark, centered, ghost CTA. The
+// SOAR mark sits large and faint behind (a real campaign image/video drops in
+// here later).
 export function Hero() {
   return (
-    <section id="top" className="relative flex min-h-svh flex-col justify-between overflow-hidden pt-28 pb-10 md:pt-32">
-      {/* top meta row */}
-      <Reveal>
-        <div className="wrap flex items-center justify-between">
-          <span className="mono text-ash">Collection One</span>
-          <span className="mono text-ash">Alberta · Canada</span>
-        </div>
-      </Reveal>
+    <section id="top" className="on-dark relative flex min-h-svh flex-col items-center justify-end overflow-hidden bg-pitch pb-[13vh] text-center text-paper">
+      {/* faint mark backdrop */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <BoxMark className="h-[46vmin] w-[46vmin] text-paper/[0.08]" />
+      </div>
+      {/* depth */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_30%,transparent_45%,rgba(0,0,0,0.6))]" />
 
-      {/* center statement */}
-      <div className="wrap relative">
-        <div aria-hidden className="pointer-events-none absolute -top-4 right-2 hidden md:block">
-          <BoxMark className="text-ink/30" />
-        </div>
-
+      <div className="relative z-10 flex flex-col items-center gap-6 px-6">
         <Reveal>
-          <p className="mono mb-7 text-ash">Drop 001</p>
+          <p className="mono text-paper/60">Collection One — Drop 001</p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="display max-w-[14ch] text-[clamp(3.1rem,11vw,11.5rem)]">
+          <h1 className="display text-[clamp(2.8rem,8vw,7rem)]">
             The long way <span className="italic">up</span>.
           </h1>
         </Reveal>
-        <Reveal delay={0.18}>
-          <p className="mt-8 max-w-md text-[15px] leading-relaxed text-ash">
-            Three pieces to begin with. An edition of 200 — individually
-            numbered, made once, and not again.
+        <Reveal delay={0.16}>
+          <p className="max-w-md text-[14px] leading-relaxed text-paper/65">
+            Three pieces to begin with. An edition of 200 — individually numbered, made once, and not again.
           </p>
+        </Reveal>
+        <Reveal delay={0.24}>
+          <a
+            href="#collection"
+            className="mono mt-2 border border-paper/55 px-12 py-4 text-paper transition-colors hover:bg-paper hover:text-ink"
+          >
+            Shop the drop
+          </a>
         </Reveal>
       </div>
 
-      {/* bottom row */}
-      <Reveal delay={0.26}>
-        <div className="wrap flex items-end justify-between">
-          <a href="#collection" className="group inline-flex items-center gap-3">
-            <span className="mono text-ink">View the collection</span>
-            <span className="inline-block h-px w-12 bg-ink transition-all duration-500 group-hover:w-20" />
-            <span className="text-ink">↓</span>
-          </a>
-          <span className="mono hidden text-ash sm:block">Three pieces</span>
-        </div>
-      </Reveal>
+      {/* scroll hint */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+        <span className="mono text-paper/40">Scroll</span>
+      </div>
     </section>
   );
 }
