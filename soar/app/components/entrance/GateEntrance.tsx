@@ -71,19 +71,24 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_95%_at_50%_42%,rgba(255,255,255,0.045),transparent_38%,rgba(0,0,0,0.92))]" />
 
       <motion.div
-        className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 flex h-full flex-col items-center px-6 text-center"
         animate={{ opacity: entering ? 0 : 1, y: entering && !reduce ? -14 : 0 }}
         transition={{ duration: reduce ? 0 : 1.0, ease: EASE }}
       >
-        <motion.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}>
-          <Image src={logoWhite} alt="SOAR" height={84} className="h-16 w-auto md:h-[76px]" priority />
-        </motion.div>
+        {/* logo stage — the 3D mark renders here; flat image only when no WebGL */}
+        <div className="flex h-[52vh] w-full items-end justify-center pb-2">
+          {!webgl && (
+            <motion.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}>
+              <Image src={logoWhite} alt="SOAR" height={84} className="h-16 w-auto md:h-[76px]" priority />
+            </motion.div>
+          )}
+        </div>
 
         <motion.p
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, ease: EASE, delay: 0.35 }}
-          className="serif mt-10 text-[clamp(1.4rem,3.4vw,2rem)] italic text-white/80"
+          className="serif mt-5 text-[clamp(1.4rem,3.4vw,2rem)] italic text-white/80"
         >
           Welcome.
         </motion.p>
