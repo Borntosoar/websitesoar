@@ -1,18 +1,16 @@
 import { Reveal } from "./Reveal";
-import { BoxMark } from "./BoxMark";
+import { HeroBackdrop } from "./HeroBackdrop";
 
-// Represent-style full-screen campaign hero — dark, centered, ghost CTA. The
-// SOAR mark sits large and faint behind (a real campaign image/video drops in
-// here later).
+// Full-screen campaign hero — a procedural monochrome ascent scene (the road →
+// north star motif, alive) behind centered copy + a ghost CTA. A real campaign
+// film can replace the backdrop later; this stands in, on-brand and free.
 export function Hero() {
   return (
     <section id="top" className="on-dark relative flex min-h-svh flex-col items-center justify-end overflow-hidden bg-pitch pb-[13vh] text-center text-paper">
-      {/* faint mark backdrop */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <BoxMark className="h-[46vmin] w-[46vmin] text-paper/[0.08]" />
-      </div>
-      {/* depth */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_30%,transparent_45%,rgba(0,0,0,0.6))]" />
+      {/* living backdrop — the road climbing toward the star */}
+      <HeroBackdrop />
+      {/* legibility — darken the lower band where the copy sits */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(11,10,9,0.3)_0%,transparent_28%,transparent_52%,rgba(11,10,9,0.88)_100%)]" />
 
       <div className="relative z-10 flex flex-col items-center gap-6 px-6">
         <Reveal>
@@ -38,8 +36,7 @@ export function Hero() {
         </Reveal>
       </div>
 
-      {/* scroll hint */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2">
         <span className="mono text-paper/40">Scroll</span>
       </div>
     </section>
