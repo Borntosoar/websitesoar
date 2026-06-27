@@ -172,13 +172,13 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
         <p className="mono absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-white/20">Born to soar</p>
       </motion.div>
 
-      {/* calm fade into the light, then navigate */}
+      {/* calm fade straight into the dark hero (no white flash), then navigate */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[#f4f3ef]"
+        className="pointer-events-none absolute inset-0 bg-[#0b0a09]"
         initial={{ opacity: 0 }}
         animate={{ opacity: entering ? 1 : 0 }}
-        transition={reduce ? { duration: 0 } : { duration: 1.2, ease: EASE, delay: 0.2 }}
+        transition={reduce ? { duration: 0 } : { duration: 1.1, ease: EASE, delay: 0.15 }}
       />
     </main>
   );

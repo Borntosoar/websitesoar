@@ -17,8 +17,8 @@ export function Hero() {
           <p className="mono text-paper/60">Collection One — Drop 001</p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="display text-[clamp(2.8rem,8vw,7rem)]">
-            The long way <span className="italic">up</span>.
+          <h1 className="display text-[clamp(3rem,8.5vw,7.4rem)]">
+            Born to <span className="italic">soar</span>.
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
