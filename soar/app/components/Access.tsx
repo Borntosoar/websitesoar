@@ -43,9 +43,9 @@ export function Access() {
     const sms = data.get("sms") === "on";
     setBusy(true);
     setErr("");
-    const ok = await joinWaitlist({ email, phone, sms });
-    if (!ok) {
-      setErr("Enter a valid email address.");
+    const res = await joinWaitlist({ email, phone, sms });
+    if (res !== "ok") {
+      setErr(res === "invalid" ? "Enter a valid email address." : "Couldn’t add you just now — email soarnextlevel@gmail.com");
       setBusy(false);
       emailRef.current?.focus();
       return;
