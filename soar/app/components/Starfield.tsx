@@ -14,7 +14,15 @@ export function Starfield({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       {STARS.map(([x, y, r], i) => (
-        <circle key={i} cx={x} cy={y} r={r} fill="currentColor" />
+        <circle
+          key={i}
+          cx={x}
+          cy={y}
+          r={r}
+          fill="currentColor"
+          className="twinkle"
+          style={{ animationDelay: `${(i % 7) * 0.5}s`, animationDuration: `${3 + (i % 4)}s` }}
+        />
       ))}
     </svg>
   );

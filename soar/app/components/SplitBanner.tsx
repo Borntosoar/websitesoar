@@ -22,18 +22,18 @@ function Banner({
   const markTone = dark ? "text-paper/[0.09]" : "text-ink/[0.06]";
   const border = dark ? "border-paper/55 hover:bg-paper hover:text-ink" : "border-ink/40 hover:bg-ink hover:text-paper";
   return (
-    <div className={`relative flex min-h-[78svh] flex-col justify-end overflow-hidden p-10 md:p-14 ${dark ? "bg-pitch" : "bg-panel"} ${text} ${dark ? "on-dark" : ""}`}>
+    <div className={`group relative flex min-h-[78svh] flex-col justify-end overflow-hidden p-10 md:p-14 ${dark ? "bg-pitch" : "bg-panel"} ${text} ${dark ? "on-dark" : ""}`}>
       {/* atmosphere */}
       {dark && (
         <>
           <Starfield className="pointer-events-none absolute inset-0 h-full w-full text-paper/45" />
           <div
-            className="pointer-events-none absolute right-[16%] top-[18%] h-40 w-40 rounded-full"
+            className="pointer-events-none absolute right-[16%] top-[18%] h-40 w-40 rounded-full transition-transform duration-700 ease-out group-hover:scale-150"
             style={{ background: "radial-gradient(circle, rgba(230,234,255,0.22), transparent 68%)" }}
           />
         </>
       )}
-      <div aria-hidden className="pointer-events-none absolute -right-10 -top-8">
+      <div aria-hidden className="pointer-events-none absolute -right-10 -top-8 transition-transform duration-700 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2 group-hover:rotate-2">
         <BoxMark className={`h-[34vmin] w-[34vmin] ${markTone}`} />
       </div>
       <div aria-hidden className={`pointer-events-none absolute inset-0 ${dark ? "opacity-[0.06] mix-blend-screen" : "opacity-[0.035] mix-blend-multiply"}`} style={{ backgroundImage: GRAIN }} />
