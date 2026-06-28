@@ -18,8 +18,8 @@ function ProductCard({ product }: { product: SoarProduct }) {
   const dot = product.description ? product.description.indexOf(".") : -1;
   const lead = dot > 0 ? product.description!.slice(0, dot + 1) : product.description ?? "";
 
-  function quickAdd(variantId: string, size: string, price: number) {
-    add({ variantId, name: `${product.title} — ${size}`, price });
+  function quickAdd(variantId: string, size: string, price: number, max: number) {
+    add({ variantId, name: `${product.title} — ${size}`, price, max });
     setOpen(true);
   }
 
@@ -56,7 +56,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
                 key={v.id}
                 type="button"
                 disabled={!v.available}
-                onClick={() => quickAdd(v.id, v.size, v.price)}
+                onClick={() => quickAdd(v.id, v.size, v.price, v.quantity)}
                 aria-label={`Add size ${v.size}`}
                 className="mono flex h-11 min-w-11 items-center justify-center px-2 text-ink transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:text-ash/70 disabled:line-through disabled:hover:bg-transparent disabled:hover:text-ash/70"
               >

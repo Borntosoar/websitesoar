@@ -48,9 +48,10 @@ export async function joinWaitlist(input: { email: string; phone?: string; sms?:
         }),
       });
       const json = await res.json().catch(() => null);
-      const errs: { message: string }[] = json?.data?.customerCreate?.userErrors ?? [];
-      // "already been taken" = they're already on the list → success for the user
-      if (errs.length && !errs.some((e) => /taken|already/i.test(e.message))) {
+      const errs: { field: string[] | null; message: string }[] = json?.data?.customerCreate?.userErrors ?? [];
+      // an email already on file = they're already on the list → success for them
+      const benign = errs.length > 0 && errs.every((e) => (e.field ?? []).includes("email") && /taken|already/i.test(e.message));
+      if (errs.length && !benign) {
         console.error("[waitlist] shopify userErrors", errs);
         return "error";
       }

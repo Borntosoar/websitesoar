@@ -40,7 +40,7 @@ function Banner({
 
       <Reveal>
         <p className="mono opacity-70">{eyebrow}</p>
-        <h3 className="display mt-4 text-[clamp(2.4rem,5vw,4.6rem)]">{title}</h3>
+        <h2 className="display mt-4 text-[clamp(2.4rem,5vw,4.6rem)]">{title}</h2>
         <a href={href} className={`mono mt-8 inline-block border px-10 py-3.5 transition-colors ${border}`}>
           {cta}
         </a>

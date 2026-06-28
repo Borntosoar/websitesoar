@@ -3,7 +3,7 @@ import soarLogo from "@/public/soar-logo.png";
 
 function Col({ title, links }: { title: string; links: [string, string][] }) {
   return (
-    <nav className="flex flex-col gap-3">
+    <nav className="flex flex-col gap-3" aria-label={title}>
       <span className="mono mb-1 text-ash">{title}</span>
       {links.map(([label, href]) => (
         <a key={label} href={href} className="text-[14px] text-ink/75 transition-colors hover:text-ink">{label}</a>
@@ -22,33 +22,30 @@ export function Footer() {
           <div>
             <span className="mono text-ash">Join First Flight</span>
             <p className="serif mt-3 max-w-[24ch] text-lg italic text-ink/85">Members get the access code, and the next drop, first.</p>
-            <a href="#access" className="mono mt-5 inline-flex items-center gap-2 text-ink transition-all hover:gap-3">→ Sign up</a>
+            <a href="/#access" className="mono mt-5 inline-flex items-center gap-2 text-ink transition-all hover:gap-3">→ Sign up</a>
           </div>
 
           <Col
             title="Help"
             links={[
+              ["Shipping & Returns", "/policies#shipping"],
               ["Contact", "mailto:soarnextlevel@gmail.com"],
-              ["Shipping", "#"],
-              ["Returns", "#"],
-              ["Size guide", "#collection"],
             ]}
           />
           <Col
             title="SOAR"
             links={[
-              ["The Collection", "#collection"],
-              ["The approach", "#approach"],
-              ["On the name", "#name"],
-              ["The origin", "#story"],
+              ["The Collection", "/#collection"],
+              ["The approach", "/#approach"],
+              ["On the name", "/#name"],
+              ["The origin", "/#story"],
             ]}
           />
           <Col
-            title="Social"
+            title="Legal"
             links={[
-              ["Instagram", "#"],
-              ["TikTok", "#"],
-              ["YouTube", "#"],
+              ["Terms", "/policies#terms"],
+              ["Privacy", "/policies#privacy"],
             ]}
           />
 
@@ -61,13 +58,9 @@ export function Footer() {
         </div>
 
         <div className="rule mt-14" />
-        <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <span className="mono text-ash">© {year} SOAR — Designed in Alberta · Canada</span>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {["Terms", "Privacy", "Shipping & Returns", "Cookie Policy"].map((t) => (
-              <a key={t} href="#" className="mono text-ash transition-colors hover:text-ink">{t}</a>
-            ))}
-          </div>
+        <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <span className="mono text-ash">© {year} SOAR — All rights reserved</span>
+          <span className="mono text-ash">Designed in Alberta · Canada</span>
         </div>
       </div>
     </footer>

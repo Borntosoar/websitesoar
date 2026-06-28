@@ -14,7 +14,7 @@ export function AscentSequence() {
       <div className="wrap py-24 md:py-36">
         <Reveal>
           <div className="mb-14 flex items-baseline justify-between md:mb-20">
-            <span className="mono text-ash">The approach</span>
+            <h2 className="mono text-ash">The approach</h2>
             <span className="mono text-ash">Less, made better</span>
           </div>
         </Reveal>

@@ -5,7 +5,7 @@ export function Manifesto() {
   return (
     <section id="name" className="bg-pitch text-paper">
       <div className="wrap flex min-h-[80svh] flex-col justify-center py-28 md:py-40">
-        <span className="mono text-paper/45">On the name</span>
+        <span className="mono text-paper/60">On the name</span>
 
         <h2 className="display mt-8 max-w-[16ch] text-[clamp(2.2rem,6vw,5.4rem)]">
           A bird, drawn

@@ -36,8 +36,8 @@ export function Hero() {
         </Reveal>
       </div>
 
-      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2">
-        <span className="mono text-paper/40">Scroll</span>
+      <div aria-hidden className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2">
+        <span className="mono text-paper/55">Scroll</span>
       </div>
     </section>
   );

@@ -4,12 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { startCheckout } from "@/app/actions";
 
-type Line = { variantId: string; name: string; price: number; qty: number };
+type Line = { variantId: string; name: string; price: number; qty: number; max?: number };
 type Ctx = {
   lines: Line[];
   count: number;
   subtotal: number;
   open: boolean;
+  configured: boolean;
   setOpen: (o: boolean) => void;
   add: (l: Omit<Line, "qty">) => void;
   setQty: (variantId: string, q: number) => void;
@@ -24,12 +25,11 @@ export function useCart() {
   return c;
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ children, configured = false }: { children: ReactNode; configured?: boolean }) {
   const [lines, setLines] = useState<Line[]>([]);
   const [open, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
-  // persist the bag across reloads/sessions (drop-day mobile reality)
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -44,24 +44,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [lines, hydrated]);
 
+  function clamp(qty: number, max?: number) {
+    const m = max && max > 0 ? max : 25;
+    return Math.max(1, Math.min(m, Math.floor(qty) || 1));
+  }
+
   function add(l: Omit<Line, "qty">) {
     setLines((prev) => {
       const e = prev.find((x) => x.variantId === l.variantId);
-      if (e) return prev.map((x) => (x.variantId === l.variantId ? { ...x, qty: x.qty + 1 } : x));
+      if (e) return prev.map((x) => (x.variantId === l.variantId ? { ...x, qty: clamp(x.qty + 1, l.max ?? x.max) } : x));
       return [...prev, { ...l, qty: 1 }];
     });
-    // intentionally not auto-opening — ProductChapter shows an inline
-    // confirmation and the nav bag count pulses (less jarring on a drop page).
   }
   function setQty(variantId: string, q: number) {
-    setLines((prev) => (q <= 0 ? prev.filter((x) => x.variantId !== variantId) : prev.map((x) => (x.variantId === variantId ? { ...x, qty: q } : x))));
+    setLines((prev) => (q <= 0 ? prev.filter((x) => x.variantId !== variantId) : prev.map((x) => (x.variantId === variantId ? { ...x, qty: clamp(q, x.max) } : x))));
   }
 
   const count = lines.reduce((n, i) => n + i.qty, 0);
   const subtotal = lines.reduce((s, i) => s + i.price * i.qty, 0);
 
   return (
-    <CartCtx.Provider value={{ lines, count, subtotal, open, setOpen, add, setQty }}>
+    <CartCtx.Provider value={{ lines, count, subtotal, open, configured, setOpen, add, setQty }}>
       {children}
       <CartDrawer />
     </CartCtx.Provider>
@@ -69,14 +72,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 function CartDrawer() {
-  const { lines, open, setOpen, subtotal, setQty } = useCart();
+  const { lines, open, setOpen, subtotal, setQty, configured } = useCart();
   const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(false);
   const asideRef = useRef<HTMLElement>(null);
   const restoreTo = useRef<HTMLElement | null>(null);
 
-  // modal behaviour: focus in, trap Tab, Escape to close, return focus on close
   useEffect(() => {
     if (!open) return;
+    setErr(false);
     restoreTo.current = document.activeElement as HTMLElement;
     const focusables = () =>
       asideRef.current
@@ -108,9 +112,14 @@ function CartDrawer() {
 
   async function checkout() {
     setBusy(true);
+    setErr(false);
     const url = await startCheckout(lines.map((l) => ({ merchandiseId: l.variantId, quantity: l.qty })));
-    if (url) window.location.href = url;
-    else setBusy(false);
+    if (url) {
+      window.location.href = url;
+    } else {
+      setErr(true);
+      setBusy(false);
+    }
   }
 
   return (
@@ -135,21 +144,27 @@ function CartDrawer() {
             </div>
             <div className="flex-1 overflow-auto px-6 [overscroll-behavior:contain]">
               {lines.length === 0 ? (
-                <p className="mono py-24 text-center text-ash">Nothing here yet.</p>
+                <div className="flex flex-col items-center gap-5 py-24 text-center">
+                  <p className="mono text-ash">Nothing here yet.</p>
+                  <a href="/#collection" onClick={() => setOpen(false)} className="mono bg-ink px-8 py-3 text-paper transition-opacity hover:opacity-85">Shop the collection →</a>
+                </div>
               ) : (
-                lines.map((l) => (
-                  <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-line py-5">
-                    <p className="min-w-0 truncate text-[14px]">{l.name}</p>
-                    <div className="flex items-center gap-5">
-                      <div className="mono flex items-center gap-1">
-                        <button type="button" className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label={`Decrease ${l.name}`} onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
-                        <span className="w-6 text-center tabular-nums">{l.qty}</span>
-                        <button type="button" className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label={`Increase ${l.name}`} onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
+                lines.map((l) => {
+                  const atMax = l.max != null && l.qty >= l.max;
+                  return (
+                    <div key={l.variantId} className="flex items-center justify-between gap-4 border-b border-line py-5">
+                      <p className="min-w-0 truncate text-[14px]">{l.name}</p>
+                      <div className="flex items-center gap-5">
+                        <div className="mono flex items-center gap-1">
+                          <button type="button" className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink" aria-label={`Decrease ${l.name}`} onClick={() => setQty(l.variantId, l.qty - 1)}>−</button>
+                          <span className="w-6 text-center tabular-nums">{l.qty}</span>
+                          <button type="button" disabled={atMax} className="flex h-9 w-9 items-center justify-center text-base text-ash transition-colors hover:text-ink disabled:opacity-30" aria-label={atMax ? `Max available for ${l.name}` : `Increase ${l.name}`} onClick={() => setQty(l.variantId, l.qty + 1)}>+</button>
+                        </div>
+                        <span className="mono shrink-0 tabular-nums">${l.price * l.qty}</span>
                       </div>
-                      <span className="mono shrink-0 tabular-nums">${l.price * l.qty}</span>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
             {lines.length > 0 && (
@@ -158,10 +173,23 @@ function CartDrawer() {
                   <span>Subtotal</span>
                   <span className="tabular-nums">${subtotal} CAD</span>
                 </div>
-                <button type="button" onClick={checkout} disabled={busy} className="mono w-full bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-50">
-                  {busy ? "Redirecting…" : "Checkout"}
-                </button>
-                <p className="mono mt-3 text-center text-ash">Secure Shopify checkout</p>
+                {configured ? (
+                  <>
+                    <button type="button" onClick={checkout} disabled={busy} className="mono w-full bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-50">
+                      {busy ? "Redirecting…" : "Checkout"}
+                    </button>
+                    {err ? (
+                      <p role="alert" className="mono mt-3 text-center text-[#9a3030]">Couldn’t start checkout — try again, or email us.</p>
+                    ) : (
+                      <p className="mono mt-3 text-center text-ash">Secure Shopify checkout</p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <button type="button" disabled className="mono w-full bg-ink py-4 text-paper opacity-50" aria-disabled="true">Checkout</button>
+                    <p className="mono mt-3 text-center text-ash">Store opening soon — join First Flight for access.</p>
+                  </>
+                )}
               </div>
             )}
           </motion.aside>

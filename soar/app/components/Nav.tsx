@@ -27,7 +27,8 @@ export function Nav() {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > window.innerHeight * 0.7);
+    // hysteresis: avoids flicker as the mobile address bar collapses near the fold
+    const onScroll = () => setSolid((s) => (s ? window.scrollY > window.innerHeight * 0.55 : window.scrollY > window.innerHeight * 0.7));
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -67,12 +68,6 @@ export function Nav() {
               <a key={l.label} href={l.href} className="mono hidden opacity-80 transition-opacity hover:opacity-100 lg:inline">{l.label}</a>
             ))}
             <span className="mono hidden opacity-80 sm:inline">CA / CAD</span>
-            <button aria-label="Search" className="opacity-80 transition-opacity hover:opacity-100">
-              <Icon d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3" />
-            </button>
-            <button aria-label="Account" className="hidden opacity-80 transition-opacity hover:opacity-100 sm:block">
-              <Icon d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0" />
-            </button>
             <button
               onClick={() => setOpen(true)}
               aria-haspopup="dialog"

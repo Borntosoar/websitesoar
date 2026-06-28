@@ -46,7 +46,7 @@ export function ProductChapter({
 
   function addToBag() {
     if (!chosen) return;
-    add({ variantId: chosen.id, name: `${product.title} — ${chosen.size}`, price: chosen.price });
+    add({ variantId: chosen.id, name: `${product.title} — ${chosen.size}`, price: chosen.price, max: chosen.quantity });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }

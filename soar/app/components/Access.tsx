@@ -3,29 +3,30 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { joinWaitlist } from "@/app/actions";
 
-function nextThursday() {
-  const now = new Date();
-  const t = new Date(now);
-  t.setHours(11, 0, 0, 0);
-  let add = (4 - t.getDay() + 7) % 7;
-  if (add === 0 && now.getTime() >= t.getTime()) add = 7;
-  t.setDate(t.getDate() + add);
-  return t;
-}
+// A real, shared drop time (ISO 8601, e.g. "2026-07-10T17:00:00Z"). Optional —
+// when unset we don't fake a countdown.
+const DROP_AT = process.env.NEXT_PUBLIC_NEXT_DROP_AT;
+const target = DROP_AT ? new Date(DROP_AT) : null;
+const hasTarget = target != null && !Number.isNaN(target.getTime());
 
 export function Access() {
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [t, setT] = useState({ d: "—", h: "—", m: "—", s: "—" });
+  const [t, setT] = useState<{ d: string; h: string; m: string; s: string } | null>(null);
+  const [live, setLive] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const target = nextThursday();
+    if (!hasTarget) return;
     const p = (v: number) => String(v).padStart(2, "0");
     const tick = () => {
-      let diff = +target - Date.now();
-      if (diff < 0) diff = 0;
+      const diff = target!.getTime() - Date.now();
+      if (diff <= 0) {
+        setLive(true);
+        setT({ d: "00", h: "00", m: "00", s: "00" });
+        return;
+      }
       const tot = Math.floor(diff / 1000);
       setT({ d: p(Math.floor(tot / 86400)), h: p(Math.floor((tot % 86400) / 3600)), m: p(Math.floor((tot % 3600) / 60)), s: p(tot % 60) });
     };
@@ -53,21 +54,44 @@ export function Access() {
     setDone(true);
   }
 
+  const srSummary = hasTarget
+    ? live
+      ? "The drop is live now."
+      : "The next drop opens soon. Join First Flight to get the access code first."
+    : "The next drop date will be announced. Join First Flight to hear first.";
+
   return (
     <section id="access" className="border-t border-line">
       <div className="wrap grid gap-14 py-24 md:grid-cols-[1.1fr_0.9fr] md:gap-20 md:py-36">
-        {/* left — pitch + countdown */}
+        {/* left — drop status + pitch */}
         <div>
-          <span className="mono text-ash">Next drop in</span>
-          <div className="mt-6 flex gap-8 md:gap-12" aria-hidden="true">
-            {([["d", "Days"], ["h", "Hrs"], ["m", "Min"], ["s", "Sec"]] as const).map(([k, l]) => (
-              <div key={l}>
-                <div className="display text-[clamp(2.6rem,7vw,5rem)] tabular-nums">{t[k]}</div>
-                <div className="mono mt-2 text-ash">{l}</div>
+          {hasTarget && !live && (
+            <>
+              <span className="mono text-ash">Next drop in</span>
+              <div className="mt-6 flex gap-8 md:gap-12" aria-hidden="true">
+                {([["d", "Days"], ["h", "Hrs"], ["m", "Min"], ["s", "Sec"]] as const).map(([k, l]) => (
+                  <div key={l}>
+                    <div className="display text-[clamp(2.6rem,7vw,5rem)] tabular-nums">{t?.[k] ?? "—"}</div>
+                    <div className="mono mt-2 text-ash">{l}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p className="sr-only">Join First Flight to get the access code before the next drop.</p>
+            </>
+          )}
+          {hasTarget && live && (
+            <>
+              <span className="mono text-ash">The drop is</span>
+              <p className="display mt-3 text-[clamp(2.6rem,7vw,5rem)]">Live now.</p>
+            </>
+          )}
+          {!hasTarget && (
+            <>
+              <span className="mono text-ash">The next drop</span>
+              <p className="display mt-3 max-w-[14ch] text-[clamp(2.2rem,6vw,4.4rem)]">To be announced.</p>
+            </>
+          )}
+          <p className="sr-only">{srSummary}</p>
+
           <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Join First Flight.</h2>
           <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ash">
             A small early list. You&rsquo;ll get the access code before anyone, and the next run before it sells out.
@@ -80,8 +104,10 @@ export function Access() {
             <p className="serif text-2xl italic" role="status">You&rsquo;re in. Welcome to First Flight.</p>
           ) : (
             <form onSubmit={onSubmit} noValidate className="flex w-full max-w-md flex-col gap-5">
-              <input ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" aria-label="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
-              <input type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone (for drop alerts)" aria-label="Phone number" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
+              <label htmlFor="ff-email" className="sr-only">Email address</label>
+              <input id="ff-email" ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
+              <label htmlFor="ff-phone" className="sr-only">Phone number (optional)</label>
+              <input id="ff-phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone (for drop alerts)" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
               <label className="flex items-start gap-2.5 text-[12px] leading-snug text-ash">
                 <input type="checkbox" name="terms" required className="mt-0.5 accent-ink" /> I agree to the Privacy Policy and Terms of Service.
               </label>
@@ -90,7 +116,7 @@ export function Access() {
               </label>
               {err && <p role="alert" className="mono text-[#9a3030]">{err}</p>}
               <button type="submit" disabled={busy} className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-60">
-                {busy ? "Joining…" : "Join First Flight"}
+                {busy ? "Joining…" : "Request access"}
               </button>
             </form>
           )}

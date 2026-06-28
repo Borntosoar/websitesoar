@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { CartProvider } from "./components/cart/CartProvider";
+import { isShopifyConfigured } from "@/lib/shopify";
 import "./globals.css";
 
 // Fraunces — high-contrast editorial serif (fashion-house display).
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
           Skip to content
         </a>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider configured={isShopifyConfigured}>{children}</CartProvider>
       </body>
     </html>
   );
