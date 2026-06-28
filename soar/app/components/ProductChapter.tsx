@@ -4,15 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { Reveal } from "./Reveal";
 import { GarmentFlat } from "./GarmentFlat";
+import { SizeGuide } from "./SizeGuide";
 import { useCart } from "./cart/CartProvider";
 import type { SoarProduct } from "@/lib/shopify";
 
 const LOW_STOCK = 10;
-
-function fitNote(type?: string) {
-  if (type === "Bottoms") return "Tailored length, regular fit — true to size.";
-  return "Boxy, modern fit — true to size. Size down for a sharper silhouette.";
-}
 
 /** One garment, one full screen. Real inventory drives honest scarcity; an
  *  intentional frame stands in until photography is uploaded. */
@@ -93,9 +89,8 @@ export function ProductChapter({
             <span className="mono text-ash">Size</span>
             <button
               type="button"
-              onClick={() => setGuide((g) => !g)}
-              aria-expanded={guide}
-              aria-controls={`guide-${index}`}
+              onClick={() => setGuide(true)}
+              aria-haspopup="dialog"
               className="mono text-ash underline-offset-4 hover:text-ink hover:underline"
             >
               Size guide
@@ -121,13 +116,6 @@ export function ProductChapter({
               );
             })}
           </div>
-
-          {guide && (
-            <div id={`guide-${index}`} className="mt-4 border-l border-line pl-4 text-[13px] leading-relaxed text-ash">
-              <p className="text-ink">{fitNote(product.productType)}</p>
-              <p className="mt-2">Measure a garment you own flat and compare. Full garment measurements are coming — email us for specifics in the meantime.</p>
-            </div>
-          )}
         </div>
 
         {soldOut ? (
@@ -164,6 +152,7 @@ export function ProductChapter({
           {num} / {String(total).padStart(3, "0")} — Drop 001
         </span>
       </Reveal>
+      <SizeGuide kind={kind} open={guide} onClose={() => setGuide(false)} />
     </article>
   );
 }

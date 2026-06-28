@@ -1,6 +1,7 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { ProductRow } from "./components/ProductRow";
+import { Lookbook } from "./components/Lookbook";
 import { SplitBanner } from "./components/SplitBanner";
 import { AscentSequence } from "./components/AscentSequence";
 import { Manifesto } from "./components/Manifesto";
@@ -37,6 +38,7 @@ export default async function Home() {
       <main id="main">
         <Hero />
         <ProductRow products={drop} />
+        <Lookbook products={drop} />
         <SplitBanner />
         <AscentSequence />
         <Manifesto />
