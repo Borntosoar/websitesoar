@@ -22,8 +22,10 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Gate everything except the access page itself, Next internals, and assets.
+  // Gate everything except the access page itself (segment-anchored so
+  // /accessibility etc. can't slip past), Next internals, crawler files, and
+  // assets.
   matcher: [
-    "/((?!access|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)",
+    "/((?!access(?:/|$)|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|opengraph-image|icon.png|apple-icon.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)",
   ],
 };

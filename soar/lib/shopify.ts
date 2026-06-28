@@ -1,27 +1,30 @@
-// SOAR — Shopify Storefront API client. Reads credentials from env; never
-// fabricated. `isShopifyConfigured` lets pages fall back to placeholder content
-// gracefully instead of crashing when no store is connected yet.
+// SOAR — Shopify Storefront API client (headless). Reads credentials from env;
+// never fabricated. `isShopifyConfigured` lets pages fall back to placeholder
+// content gracefully instead of crashing when no store is connected yet.
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-const API_VERSION = "2024-10";
+export const SHOPIFY_API_VERSION = "2024-10"; // bump periodically; Shopify deprecates ~12mo
 
 export const isShopifyConfigured = Boolean(domain && token);
 
-export async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
-  if (!isShopifyConfigured) {
-    throw new Error(
-      "Shopify is not configured. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN (see .env.example).",
-    );
+export async function shopifyFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>,
+  opts?: { revalidate?: number },
+): Promise<T> {
+  if (!domain || !token) {
+    throw new Error("Shopify is not configured (SHOPIFY_STORE_DOMAIN / SHOPIFY_STOREFRONT_ACCESS_TOKEN).");
   }
-  const res = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
+  const res = await fetch(`https://${domain}/api/${SHOPIFY_API_VERSION}/graphql.json`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": token as string,
+      "X-Shopify-Storefront-Access-Token": token,
     },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    // reads can be cached (ISR); mutations pass no opts → no-store
+    ...(opts?.revalidate != null ? { next: { revalidate: opts.revalidate } } : { cache: "no-store" }),
   });
   if (!res.ok) throw new Error(`Shopify request failed: ${res.status}`);
   const json = await res.json();
@@ -36,83 +39,100 @@ export type SoarProduct = {
   handle: string;
   title: string;
   price: number;
-  /** Featured product image URL (undefined until photography is uploaded). */
   image?: string;
   images: string[];
   description?: string;
   productType?: string;
   available: boolean;
   total: number;
-  /** First sellable variant — the default add-to-bag target. */
   variantId?: string;
   variants: SoarVariant[];
 };
 
-type ProductsResponse = {
-  products: {
-    edges: {
-      node: {
-        id: string;
-        handle: string;
-        title: string;
-        description: string | null;
-        productType: string | null;
-        totalInventory: number | null;
-        featuredImage: { url: string } | null;
-        images: { edges: { node: { url: string } }[] };
-        variants: { edges: { node: { id: string; title: string; availableForSale: boolean; quantityAvailable: number | null; price: { amount: string } } }[] };
-      };
-    }[];
-  };
+type ProductNode = {
+  id: string;
+  handle: string;
+  title: string;
+  description: string | null;
+  productType: string | null;
+  totalInventory: number | null;
+  featuredImage: { url: string } | null;
+  images: { edges: { node: { url: string } }[] };
+  variants: { edges: { node: { id: string; title: string; availableForSale: boolean; quantityAvailable: number | null; price: { amount: string } } }[] };
 };
 
-/** Source of truth for the drop: product chapters, sizes, price, availability. */
+const PRODUCT_FIELDS = `
+  id handle title description productType totalInventory
+  featuredImage { url }
+  images(first: 6) { edges { node { url } } }
+  variants(first: 12) { edges { node { id title availableForSale quantityAvailable price { amount } } } }
+`;
+
+function mapProduct(n: ProductNode): SoarProduct {
+  const variants: SoarVariant[] = n.variants.edges.map(({ node: v }) => ({
+    id: v.id,
+    size: v.title,
+    available: v.availableForSale,
+    price: Number(v.price.amount ?? 0),
+    quantity: v.quantityAvailable ?? 0,
+  }));
+  const firstSellable = variants.find((v) => v.available) ?? variants[0];
+  const images = n.images.edges.map((e) => e.node.url);
+  return {
+    id: n.id,
+    handle: n.handle,
+    title: n.title,
+    total: n.totalInventory ?? 0,
+    image: n.featuredImage?.url ?? images[0],
+    images,
+    description: n.description ?? undefined,
+    productType: n.productType ?? undefined,
+    available: variants.some((v) => v.available),
+    price: firstSellable?.price ?? 0,
+    variantId: firstSellable?.id,
+    variants,
+  };
+}
+
+/** Source of truth for the drop. ISR-cached (~60s) so the homepage stays static. */
 export async function getProducts(first = 12): Promise<SoarProduct[]> {
-  const data = await shopifyFetch<ProductsResponse>(
+  const data = await shopifyFetch<{ products: { edges: { node: ProductNode }[] } }>(
     `query Products($first: Int!) {
       products(first: $first, sortKey: CREATED_AT, reverse: true) {
-        edges { node {
-          id handle title description productType totalInventory
-          featuredImage { url }
-          images(first: 6) { edges { node { url } } }
-          variants(first: 12) { edges { node { id title availableForSale quantityAvailable price { amount } } } }
-        } }
+        edges { node { ${PRODUCT_FIELDS} } }
       }
     }`,
     { first },
+    { revalidate: 60 },
   );
-  return data.products.edges.map(({ node: n }) => {
-    const variants: SoarVariant[] = n.variants.edges.map(({ node: v }) => ({
-      id: v.id,
-      size: v.title,
-      available: v.availableForSale,
-      price: Number(v.price.amount ?? 0),
-      quantity: v.quantityAvailable ?? 0,
-    }));
-    const firstSellable = variants.find((v) => v.available) ?? variants[0];
-    const images = n.images.edges.map((e) => e.node.url);
-    return {
-      id: n.id,
-      handle: n.handle,
-      title: n.title,
-      total: n.totalInventory ?? 0,
-      image: n.featuredImage?.url ?? images[0],
-      images,
-      description: n.description ?? undefined,
-      productType: n.productType ?? undefined,
-      available: variants.some((v) => v.available),
-      price: firstSellable?.price ?? 0,
-      variantId: firstSellable?.id,
-      variants,
-    };
-  });
+  return data.products.edges.map(({ node }) => mapProduct(node));
 }
 
-/** Create a Shopify cart from line items and return its hosted checkout URL.
- *  Returns null when no store is connected (or on error) so the UI degrades
- *  gracefully instead of throwing during a user action. Runs server-side only. */
+/** Single product for the PDP route. Falls back to the curated content. */
+export async function getProductByHandle(handle: string): Promise<SoarProduct | null> {
+  if (!isShopifyConfigured) return FALLBACK_PRODUCTS.find((p) => p.handle === handle) ?? null;
+  try {
+    const data = await shopifyFetch<{ productByHandle: ProductNode | null }>(
+      `query Product($handle: String!) {
+        productByHandle(handle: $handle) { ${PRODUCT_FIELDS} }
+      }`,
+      { handle },
+      { revalidate: 60 },
+    );
+    return data.productByHandle ? mapProduct(data.productByHandle) : FALLBACK_PRODUCTS.find((p) => p.handle === handle) ?? null;
+  } catch {
+    return FALLBACK_PRODUCTS.find((p) => p.handle === handle) ?? null;
+  }
+}
+
+/** Create a Shopify cart and return its hosted checkout URL. Quantities are
+ *  clamped server-side (defensive — never trust the client). Returns null when
+ *  no store is connected (or on error) so the UI degrades gracefully. */
 export async function createCart(lines: { merchandiseId: string; quantity: number }[]): Promise<string | null> {
-  if (!isShopifyConfigured || lines.length === 0) return null;
+  const clean = lines
+    .filter((l) => typeof l.merchandiseId === "string" && l.merchandiseId.startsWith("gid://"))
+    .map((l) => ({ merchandiseId: l.merchandiseId, quantity: Math.max(1, Math.min(25, Math.floor(Number(l.quantity)) || 1)) }));
+  if (!isShopifyConfigured || clean.length === 0) return null;
   try {
     const data = await shopifyFetch<{ cartCreate: { cart: { checkoutUrl: string } | null; userErrors: { message: string }[] } }>(
       `mutation CartCreate($lines: [CartLineInput!]!) {
@@ -121,7 +141,7 @@ export async function createCart(lines: { merchandiseId: string; quantity: numbe
           userErrors { message }
         }
       }`,
-      { lines },
+      { lines: clean },
     );
     return data.cartCreate?.cart?.checkoutUrl ?? null;
   } catch {
@@ -131,7 +151,7 @@ export async function createCart(lines: { merchandiseId: string; quantity: numbe
 
 /** Curated fallback content — the REAL Drop 001 garments, so the site is fully
  *  designed even before the Storefront API is wired or photography is uploaded.
- *  Live Shopify data (getProducts) always takes precedence when configured. */
+ *  Live Shopify data always takes precedence when configured. */
 export const FALLBACK_PRODUCTS: SoarProduct[] = [
   {
     id: "fallback-trucker",

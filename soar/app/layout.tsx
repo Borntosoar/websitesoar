@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "SOAR — Collection One. An edition of 200, individually numbered, made once. Drawn in Alberta, Canada.",
   applicationName: "SOAR",
+  alternates: { canonical: "/" },
   keywords: ["SOAR", "Born to soar", "Drop 001", "Collection One", "streetwear", "Alberta", "Canada", "limited edition", "numbered"],
   openGraph: {
     title: "SOAR — Born to soar",
@@ -47,11 +48,18 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://borntosoar.com";
+const jsonLd = [
+  { "@context": "https://schema.org", "@type": "Organization", name: "SOAR", url: SITE, logo: `${SITE}/icon.png`, slogan: "Born to soar.", areaServed: "CA" },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "SOAR", url: SITE },
+];
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${hanken.variable}`}>
       <body>
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
           Skip to content
         </a>

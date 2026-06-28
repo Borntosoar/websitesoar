@@ -7,7 +7,15 @@ import { Manifesto } from "./components/Manifesto";
 import { Story } from "./components/Story";
 import { Access } from "./components/Access";
 import { Footer } from "./components/Footer";
+import type { Metadata } from "next";
 import { isShopifyConfigured, getProducts, FALLBACK_PRODUCTS, type SoarProduct } from "@/lib/shopify";
+
+export const metadata: Metadata = {
+  title: "Collection One — Drop 001",
+  description:
+    "The Trucker Jacket, Long Sleeve, and Utility Shorts — an edition of 200, individually numbered. Designed in Alberta, Canada.",
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   // Live Shopify data is the source of truth; fall back to the curated Drop 001

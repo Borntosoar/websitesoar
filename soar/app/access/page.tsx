@@ -1,6 +1,6 @@
 import { GateEntrance } from "../components/entrance/GateEntrance";
 
-export const metadata = { title: "Enter" };
+export const metadata = { title: "Enter", robots: { index: false, follow: false } };
 
 // The pre-launch gate IS the entrance. proxy.ts routes unauthenticated visitors
 // here when SOAR_ACCESS_PASSWORD is set; GateEntrance validates server-side and,

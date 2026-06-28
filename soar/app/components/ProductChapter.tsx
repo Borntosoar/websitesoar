@@ -25,7 +25,7 @@ export function ProductChapter({
   product: SoarProduct;
   index: number;
   total: number;
-  others: { title: string; index: number }[];
+  others: { title: string; href: string }[];
 }) {
   const { add } = useCart();
   const sellable = product.variants.filter((v) => v.available);
@@ -152,8 +152,8 @@ export function ProductChapter({
             <span className="mono text-ash">The rest of the set</span>
             <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
               {others.map((o) => (
-                <a key={o.index} href={`#product-${o.index}`} className="text-[14px] text-ink/75 underline-offset-4 hover:text-ink hover:underline">
-                  {o.title} ↓
+                <a key={o.href} href={o.href} className="text-[14px] text-ink/75 underline-offset-4 hover:text-ink hover:underline">
+                  {o.title} →
                 </a>
               ))}
             </div>

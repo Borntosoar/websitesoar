@@ -15,6 +15,8 @@ function ProductCard({ product }: { product: SoarProduct }) {
   const { add, setOpen } = useCart();
   const [openSizes, setOpenSizes] = useState(false);
   const soldOut = !product.variants.some((v) => v.available);
+  const dot = product.description ? product.description.indexOf(".") : -1;
+  const lead = dot > 0 ? product.description!.slice(0, dot + 1) : product.description ?? "";
 
   function quickAdd(variantId: string, size: string, price: number) {
     add({ variantId, name: `${product.title} — ${size}`, price });
@@ -38,9 +40,9 @@ function ProductCard({ product }: { product: SoarProduct }) {
         {!soldOut && (
           <button
             onClick={() => setOpenSizes((o) => !o)}
-            aria-label={`Quick add ${product.title}`}
+            aria-label={openSizes ? `Hide sizes for ${product.title}` : `Choose a size for ${product.title}`}
             aria-expanded={openSizes}
-            className="absolute bottom-4 right-4 z-30 flex h-9 w-9 items-center justify-center border border-ink/25 bg-paper text-lg leading-none text-ink transition-colors hover:bg-ink hover:text-paper"
+            className="absolute bottom-4 right-4 z-30 flex h-11 w-11 items-center justify-center border border-ink/25 bg-paper text-lg leading-none text-ink transition-colors hover:bg-ink hover:text-paper"
           >
             {openSizes ? "×" : "+"}
           </button>
@@ -48,7 +50,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
 
         {/* size bar — slides up on hover (desktop) or via + (touch) */}
         {!soldOut && (
-          <div className={`absolute inset-x-0 bottom-0 z-20 flex items-center justify-center gap-1.5 border-t border-line bg-paper/95 p-3 backdrop-blur-sm transition-transform duration-300 ${openSizes ? "translate-y-0" : "translate-y-full"} group-hover:translate-y-0`}>
+          <div className={`absolute inset-x-0 bottom-0 z-20 flex items-center justify-center gap-1.5 border-t border-line bg-paper/95 p-3 backdrop-blur-sm transition-transform duration-300 ${openSizes ? "translate-y-0" : "translate-y-full"} group-hover:translate-y-0 group-focus-within:translate-y-0`}>
             {product.variants.map((v) => (
               <button
                 key={v.id}
@@ -56,7 +58,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
                 disabled={!v.available}
                 onClick={() => quickAdd(v.id, v.size, v.price)}
                 aria-label={`Add size ${v.size}`}
-                className="mono flex h-9 min-w-9 items-center justify-center px-2 text-ink transition-colors hover:bg-ink hover:text-paper disabled:text-ash/40 disabled:line-through disabled:hover:bg-transparent disabled:hover:text-ash/40"
+                className="mono flex h-11 min-w-11 items-center justify-center px-2 text-ink transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:text-ash/70 disabled:line-through disabled:hover:bg-transparent disabled:hover:text-ash/70"
               >
                 {v.size}
               </button>
@@ -67,13 +69,15 @@ function ProductCard({ product }: { product: SoarProduct }) {
 
       {/* meta */}
       <div className="mt-4 flex items-start justify-between gap-4">
-        <div>
-          <a href="#collection" className="text-[15px] text-ink hover:underline">{product.title}</a>
+        <div className="min-w-0">
+          <a href={`/products/${product.handle}`} className="text-[15px] text-ink hover:underline">{product.title}</a>
           <p className="mono mt-1.5 text-ash">{product.productType ?? "Drop 001"}</p>
         </div>
-        <span className="tabular-nums text-[15px] text-ink">${product.price} CAD</span>
+        <span className="shrink-0 tabular-nums text-[15px] text-ink">${product.price} CAD</span>
       </div>
-      <p className="mono mt-1.5 text-ash">Edition of {product.total} · individually numbered</p>
+      {lead && <p className="mt-2 max-w-[36ch] text-[13px] leading-snug text-ash">{lead}</p>}
+      <p className="mono mt-2 text-ash">Edition of {product.total} · individually numbered</p>
+      <a href={`/products/${product.handle}`} className="mono mt-3 inline-block text-ash underline-offset-4 transition-colors hover:text-ink hover:underline">View details →</a>
     </div>
   );
 }
