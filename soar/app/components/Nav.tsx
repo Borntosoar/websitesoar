@@ -82,8 +82,7 @@ export function Nav() {
                   initial={reduce ? false : { scale: 1.6 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 520, damping: 18 }}
-                  className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-bold tabular-nums text-paper"
-                  style={{ backgroundColor: solid ? undefined : "var(--color-paper)", color: solid ? undefined : "var(--color-ink)" }}
+                  className={`absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold tabular-nums transition-colors duration-500 ${solid ? "bg-ink text-paper" : "bg-paper text-ink"}`}
                 >
                   {count}
                 </motion.span>

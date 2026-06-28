@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Reveal } from "./Reveal";
 import { GarmentFlat } from "./GarmentFlat";
 import { SizeGuide } from "./SizeGuide";
+import { Tilt } from "./Tilt";
 import { useCart } from "./cart/CartProvider";
 import type { SoarProduct } from "@/lib/shopify";
 
@@ -51,13 +52,13 @@ export function ProductChapter({
     <article id={`product-${index}`} className="wrap grid items-center gap-y-10 py-16 md:min-h-svh md:grid-cols-2 md:gap-x-16 md:py-24">
       {/* image / frame */}
       <Reveal className={flip ? "md:order-2" : ""}>
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-panel">
+        <Tilt className="relative aspect-[4/5] w-full overflow-hidden bg-panel" max={5}>
           {product.image ? (
             <Image src={product.image} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
           ) : (
             <ImageFrame num={num} type={product.productType} kind={kind} />
           )}
-        </div>
+        </Tilt>
       </Reveal>
 
       {/* detail */}

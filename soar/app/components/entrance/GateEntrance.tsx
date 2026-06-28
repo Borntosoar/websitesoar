@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { enterWithPassword } from "@/app/actions";
+import { EASE_QUIET as EASE } from "@/lib/motion";
 import logoWhite from "@/public/soar-logo-white.png";
 
 const GateScene = dynamic(() => import("./GateScene").then((m) => m.GateScene), {
@@ -21,7 +22,6 @@ function hasWebGL() {
   }
 }
 
-const EASE = [0.22, 0.61, 0.36, 1] as const; // calm ease-out
 const EXIT_MS = 1400; // kept in step with the fade-to-light below
 
 function EyeIcon({ off }: { off: boolean }) {

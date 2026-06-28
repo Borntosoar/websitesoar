@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
+import { EASE_QUIET_CSS } from "@/lib/motion";
 
 /** Subtle cursor-reactive 3D tilt (CSS perspective — no WebGL). Mouse only;
  *  disabled for touch and prefers-reduced-motion. */
@@ -23,7 +24,7 @@ export function Tilt({ children, className, max = 6 }: { children: ReactNode; cl
   }
 
   return (
-    <div ref={ref} onPointerMove={onMove} onPointerLeave={reset} className={className} style={{ transition: "transform 0.4s ease-out", willChange: "transform" }}>
+    <div ref={ref} onPointerMove={onMove} onPointerLeave={reset} className={className} style={{ transition: `transform 0.4s ${EASE_QUIET_CSS}`, willChange: "transform" }}>
       {children}
     </div>
   );

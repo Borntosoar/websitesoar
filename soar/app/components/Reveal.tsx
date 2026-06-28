@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { EASE_QUIET } from "@/lib/motion";
 
 /** Quiet scroll reveal — staggered fade/rise. Fully disabled under
  *  prefers-reduced-motion (renders content statically). */
@@ -14,7 +15,7 @@ export function Reveal({ children, delay = 0, className }: { children: ReactNode
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12% 0px" }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay }}
+      transition={{ duration: 0.8, ease: EASE_QUIET, delay }}
     >
       {children}
     </motion.div>

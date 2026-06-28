@@ -14,7 +14,7 @@ export function Manifesto() {
         </h2>
 
         <div className="mt-12 grid max-w-4xl gap-8 md:grid-cols-2">
-          <p className="serif text-[clamp(1.15rem,2.6vw,1.6rem)] italic leading-snug text-paper/90">
+          <p className="lede text-paper/90">
             That&rsquo;s the whole mark. We don&rsquo;t explain it much further.
           </p>
           <p className="text-[14px] leading-relaxed text-paper/55">

@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { EASE_QUIET } from "@/lib/motion";
 
 type Kind = "jacket" | "top" | "shorts";
 
@@ -49,7 +50,7 @@ export function SizeGuide({ kind, open, onClose }: { kind: Kind; open: boolean; 
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
-            transition={{ duration: 0.25, ease: [0.22, 0.61, 0.36, 1] }}
+            transition={{ duration: 0.25, ease: EASE_QUIET }}
           >
             <div className="flex items-center justify-between">
               <h2 className="display text-2xl">Size guide</h2>

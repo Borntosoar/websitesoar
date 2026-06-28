@@ -17,7 +17,7 @@ export function Story() {
 
         <div className="mt-12 grid gap-10 md:grid-cols-2 md:gap-16">
           <Reveal delay={0.1}>
-            <p className="serif text-[clamp(1.2rem,2.6vw,1.7rem)] italic leading-snug text-ink/85">
+            <p className="lede text-ink/85">
               We started SOAR in the middle of figuring our own lives out — not at
               the top of anything.
             </p>
