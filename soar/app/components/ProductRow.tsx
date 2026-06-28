@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Reveal } from "./Reveal";
 import { GarmentFlat } from "./GarmentFlat";
+import { Tilt } from "./Tilt";
 import { useCart } from "./cart/CartProvider";
 import type { SoarProduct } from "@/lib/shopify";
 
@@ -25,7 +26,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
 
   return (
     <div className="group flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden bg-panel">
+      <Tilt className="relative aspect-[4/5] overflow-hidden bg-panel">
         <span className="mono absolute left-4 top-4 z-20 text-ink/55">{soldOut ? "Sold out" : "Drop 001"}</span>
 
         {product.image ? (
@@ -65,7 +66,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
             ))}
           </div>
         )}
-      </div>
+      </Tilt>
 
       {/* meta */}
       <div className="mt-4 flex items-start justify-between gap-4">
