@@ -11,6 +11,28 @@ import type { SoarProduct } from "@/lib/shopify";
 
 const LOW_STOCK = 10;
 
+type Kind = "jacket" | "top" | "shorts";
+// Honest, per-garment detail for the PDP disclosure — calm and specific.
+const SPECS: Record<Kind, { materials: string; fit: string; care: string }> = {
+  jacket: {
+    materials: "Heavyweight structured denim, cut clean and square. Tonal hardware, branding kept hidden.",
+    fit: "Boxy and modern. True to size; size down for a sharper silhouette.",
+    care: "Machine wash cold, inside out. Hang to dry. It softens with wear and holds its shape.",
+  },
+  top: {
+    materials: "Heavyweight cotton with a relaxed drape and a neckline built to keep its shape.",
+    fit: "Relaxed and modern. True to size.",
+    care: "Machine wash cold. Lay flat or hang to dry — skip the dryer to keep the drape.",
+  },
+  shorts: {
+    materials: "A technical weave finished matte, with a tailored length and clean pockets.",
+    fit: "Tailored length, regular fit — true to size. Go by your waist.",
+    care: "Machine wash cold. Hang to dry.",
+  },
+};
+const SHIPPING =
+  "Ships from Alberta within 2–5 business days, tracked. Free standard shipping in Canada; international at checkout. 14-day returns on unworn pieces.";
+
 /** One garment, one full screen. Real inventory drives honest scarcity; an
  *  intentional frame stands in until photography is uploaded. */
 export function ProductChapter({
@@ -148,6 +170,37 @@ export function ProductChapter({
             </div>
           </div>
         )}
+
+        {/* details — materials / fit / shipping */}
+        <div className="mt-10 border-t border-line">
+          {[
+            { label: "Materials & care", body: `${SPECS[kind].materials} ${SPECS[kind].care}` },
+            { label: "Fit", body: SPECS[kind].fit },
+            { label: "Shipping & returns", body: SHIPPING, href: "/policies#shipping" },
+          ].map((row) => (
+            <details key={row.label} className="group border-b border-line">
+              <summary className="mono flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-ink [&::-webkit-details-marker]:hidden">
+                <span>{row.label}</span>
+                <span aria-hidden className="relative h-3.5 w-3.5 shrink-0 text-ash transition-transform duration-300 group-open:rotate-45">
+                  <span className="absolute left-1/2 top-1/2 h-px w-3.5 -translate-x-1/2 -translate-y-1/2 bg-current" />
+                  <span className="absolute left-1/2 top-1/2 h-3.5 w-px -translate-x-1/2 -translate-y-1/2 bg-current" />
+                </span>
+              </summary>
+              <p className="max-w-md pb-5 text-[13px] leading-relaxed text-ash">
+                {row.body}
+                {row.href && (
+                  <>
+                    {" "}
+                    <a href={row.href} className="text-ink underline underline-offset-4 hover:no-underline">
+                      Full policy
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
+            </details>
+          ))}
+        </div>
 
         <span className="mono mt-8 text-ash">
           {num} / {String(total).padStart(3, "0")} — Drop 001
