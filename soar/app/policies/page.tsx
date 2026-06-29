@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nav } from "@/app/components/Nav";
 import { Footer } from "@/app/components/Footer";
+import { SHIP } from "@/lib/policy";
 
 export const metadata: Metadata = {
   title: "Shipping, Returns & Policies",
@@ -31,8 +32,8 @@ export default function PoliciesPage() {
           </p>
 
           <Section id="shipping" title="Shipping & returns">
-            <p>Every piece ships from Alberta, Canada. Orders are processed within 2–5 business days; you&rsquo;ll get a tracking link by email when yours is on the way. Complimentary standard shipping across Canada; international rates are shown at checkout.</p>
-            <p>Returns are accepted within 14 days of delivery on unworn items with tags attached. Email us to start a return. Because Drop 001 is a numbered, limited edition, sizes can sell out before an exchange can be fulfilled — reach out early and we&rsquo;ll do our best.</p>
+            <p>Every piece ships from Alberta, Canada. Orders are processed within {SHIP.processing}; you&rsquo;ll get a tracking link by email when yours is on the way. Complimentary standard shipping across Canada; international rates are shown at checkout.</p>
+            <p>Returns are accepted within {SHIP.returnDays} days of delivery on unworn items with tags attached. Email us to start a return. Because Drop 001 is a numbered, limited edition, sizes can sell out before an exchange can be fulfilled — reach out early and we&rsquo;ll do our best.</p>
             <p>Not sure on sizing? Each product page has a fit note and size guide, or just ask us.</p>
           </Section>
 

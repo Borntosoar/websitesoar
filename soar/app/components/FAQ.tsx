@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { SHIP } from "@/lib/policy";
 
 // Calm, honest answers — aligned with /policies. Quiet voice, no hype.
 const FAQS: { q: string; a: string }[] = [
@@ -16,11 +17,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "When will my order ship?",
-    a: "Every piece ships from Alberta, Canada, processed within 2–5 business days, with a tracking link by email. Standard shipping across Canada is on us; international rates show at checkout.",
+    a: `Every piece ships from Alberta, Canada, processed within ${SHIP.processing}, with a tracking link by email. Standard shipping across Canada is on us; international rates show at checkout.`,
   },
   {
     q: "Can I return or exchange?",
-    a: "Within 14 days of delivery, on unworn pieces with tags attached — email us to start. Because each size is limited, reach out early; we'll do our best on an exchange before it sells out.",
+    a: `Within ${SHIP.returnDays} days of delivery, on unworn pieces with tags attached — email us to start. Because each size is limited, reach out early; we'll do our best on an exchange before it sells out.`,
   },
   {
     q: "Where is SOAR from?",
@@ -40,8 +41,8 @@ export function FAQ() {
   };
 
   return (
-    <section id="faq" className="border-t border-line">
-      <div className="wrap py-24 md:py-36">
+    <section id="faq" className="border-t border-line bg-panel">
+      <div className="wrap py-20 md:py-28">
         <Reveal>
           <div className="mb-10 flex items-baseline justify-between md:mb-14">
             <h2 className="mono text-ash">Questions</h2>

@@ -7,6 +7,7 @@ import { GarmentFlat } from "./GarmentFlat";
 import { SizeGuide } from "./SizeGuide";
 import { Tilt } from "./Tilt";
 import { useCart } from "./cart/CartProvider";
+import { SHIPPING_SUMMARY } from "@/lib/policy";
 import type { SoarProduct } from "@/lib/shopify";
 
 const LOW_STOCK = 10;
@@ -30,8 +31,6 @@ const SPECS: Record<Kind, { materials: string; fit: string; care: string }> = {
     care: "Machine wash cold. Hang to dry.",
   },
 };
-const SHIPPING =
-  "Ships from Alberta within 2–5 business days, tracked. Free standard shipping in Canada; international at checkout. 14-day returns on unworn pieces.";
 
 /** One garment, one full screen. Real inventory drives honest scarcity; an
  *  intentional frame stands in until photography is uploaded. */
@@ -176,7 +175,7 @@ export function ProductChapter({
           {[
             { label: "Materials & care", body: `${SPECS[kind].materials} ${SPECS[kind].care}` },
             { label: "Fit", body: SPECS[kind].fit },
-            { label: "Shipping & returns", body: SHIPPING, href: "/policies#shipping" },
+            { label: "Shipping & returns", body: SHIPPING_SUMMARY, href: "/policies#shipping" },
           ].map((row) => (
             <details key={row.label} className="group border-b border-line">
               <summary className="mono flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-ink [&::-webkit-details-marker]:hidden">
