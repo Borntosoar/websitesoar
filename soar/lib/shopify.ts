@@ -158,7 +158,14 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     handle: "the-trucker-jacket",
     title: "The Trucker Jacket",
     price: 230,
-    images: [],
+    image: "/lookbook/jacket-grey.webp",
+    images: [
+      "/lookbook/jacket-grey.webp",
+      "/lookbook/jacket-front.webp",
+      "/lookbook/jacket-back.webp",
+      "/lookbook/jacket-blue.webp",
+      "/lookbook/jacket-olive.webp",
+    ],
     productType: "Outerwear",
     description:
       "Heavyweight structured denim, cut clean and square. It holds its shape, softens with wear, and keeps the hardware tonal and the branding hidden. Drawn in Alberta, Canada.",

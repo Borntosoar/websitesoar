@@ -35,13 +35,14 @@ export default async function Home() {
   if (products.length === 0) products = FALLBACK_PRODUCTS;
   const drop = [...products].sort((a, b) => b.price - a.price).slice(0, 3);
 
-  // campaign tiles — a real B&W AI model photo per piece (browser-fetched), with
-  // the silhouette as the instant fallback. Swaps for real photography later.
+  // campaign tiles — real photography when we have it (the jacket), a stylized
+  // silhouette placeholder for pieces not yet shot.
   const tiles = drop.map((p, i) => ({
+    image: p.image,
     fit: fitOf(p.productType),
-    tone: (i === 1 ? "dark" : "light") as "light" | "dark",
-    seed: 13 + i * 9,
+    tone: "dark" as const,
     flip: i === 2,
+    position: "object-top",
     eyebrow: p.productType ?? "Drop 001",
     title: p.title,
     cta: "Shop",
