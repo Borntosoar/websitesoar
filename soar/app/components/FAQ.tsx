@@ -41,29 +41,29 @@ export function FAQ() {
   };
 
   return (
-    <section id="faq" className="border-t border-line bg-panel">
+    <section id="faq" className="on-dark border-t border-paper/10 bg-pitch text-paper">
       <div className="wrap py-20 md:py-28">
         <Reveal>
           <div className="mb-10 flex items-baseline justify-between md:mb-14">
-            <h2 className="mono text-ash">Questions</h2>
-            <a href="mailto:soarnextlevel@gmail.com" className="mono text-ash underline-offset-4 transition-colors hover:text-ink hover:underline">
+            <h2 className="mono text-paper/55">Questions</h2>
+            <a href="mailto:soarnextlevel@gmail.com" className="mono text-paper/55 underline-offset-4 transition-colors hover:text-paper hover:underline">
               Anything else — email us
             </a>
           </div>
         </Reveal>
 
         <Reveal delay={0.05}>
-          <div className="border-t border-line">
+          <div className="border-t border-paper/12">
             {FAQS.map((f) => (
-              <details key={f.q} className="group border-b border-line">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[clamp(1.05rem,2.4vw,1.35rem)] text-ink [&::-webkit-details-marker]:hidden">
+              <details key={f.q} className="group border-b border-paper/12">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[clamp(1.05rem,2.4vw,1.35rem)] text-paper [&::-webkit-details-marker]:hidden">
                   <span>{f.q}</span>
-                  <span aria-hidden className="relative h-4 w-4 shrink-0 text-ash transition-transform duration-300 group-open:rotate-45">
+                  <span aria-hidden className="relative h-4 w-4 shrink-0 text-paper/55 transition-transform duration-300 group-open:rotate-45">
                     <span className="absolute left-1/2 top-1/2 h-px w-4 -translate-x-1/2 -translate-y-1/2 bg-current" />
                     <span className="absolute left-1/2 top-1/2 h-4 w-px -translate-x-1/2 -translate-y-1/2 bg-current" />
                   </span>
                 </summary>
-                <p className="max-w-2xl pb-6 text-[14px] leading-relaxed text-ash">{f.a}</p>
+                <p className="max-w-2xl pb-6 text-[14px] leading-relaxed text-paper/55">{f.a}</p>
               </details>
             ))}
           </div>

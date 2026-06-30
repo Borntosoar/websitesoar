@@ -44,7 +44,7 @@ export function PhotoTile({
           src={image}
           alt={title ?? ""}
           loading="lazy"
-          className={`absolute inset-0 h-full w-full object-cover ${position} transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]`}
+          className={`absolute inset-0 h-full w-full object-cover ${position} contrast-[1.06] saturate-[.82] brightness-[.95] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]`}
         />
       ) : (
         <>
@@ -59,10 +59,16 @@ export function PhotoTile({
         </>
       )}
 
+      {/* unifying grade — vignette so bright-studio + dark-garage shots read as one shoot */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(115% 95% at 50% 32%, transparent 44%, rgba(8,7,6,0.5))" }}
+      />
       {/* grain */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay"
+        className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay"
         style={{ backgroundImage: GRAIN }}
       />
       {(title || cta) && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/65 to-transparent" />}

@@ -61,18 +61,18 @@ export function Access() {
     : "The next drop date will be announced. Join First Flight to hear first.";
 
   return (
-    <section id="access" className="border-t border-line">
+    <section id="access" className="on-dark border-t border-paper/10 bg-pitch text-paper">
       <div className="wrap grid gap-14 py-24 md:grid-cols-[1.1fr_0.9fr] md:gap-20 md:py-36">
         {/* left — drop status + pitch */}
         <div>
           {hasTarget && !live && (
             <>
-              <span className="mono text-ash">Next drop in</span>
+              <span className="mono text-paper/55">Next drop in</span>
               <div className="mt-6 flex gap-8 md:gap-12" aria-hidden="true">
                 {([["d", "Days"], ["h", "Hrs"], ["m", "Min"], ["s", "Sec"]] as const).map(([k, l]) => (
                   <div key={l}>
                     <div className="display text-[clamp(2.6rem,7vw,5rem)] tabular-nums">{t?.[k] ?? "—"}</div>
-                    <div className="mono mt-2 text-ash">{l}</div>
+                    <div className="mono mt-2 text-paper/55">{l}</div>
                   </div>
                 ))}
               </div>
@@ -80,20 +80,20 @@ export function Access() {
           )}
           {hasTarget && live && (
             <>
-              <span className="mono text-ash">The drop is</span>
+              <span className="mono text-paper/55">The drop is</span>
               <p className="display mt-3 text-[clamp(2.6rem,7vw,5rem)]">Live now.</p>
             </>
           )}
           {!hasTarget && (
             <>
-              <span className="mono text-ash">The next drop</span>
+              <span className="mono text-paper/55">The next drop</span>
               <p className="display mt-3 max-w-[14ch] text-[clamp(2.2rem,6vw,4.4rem)]">To be announced.</p>
             </>
           )}
           <p className="sr-only">{srSummary}</p>
 
           <h2 className="display mt-12 max-w-[16ch] text-[clamp(2rem,5vw,3.8rem)]">Join First Flight.</h2>
-          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-ash">
+          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-paper/55">
             A small early list. You&rsquo;ll get the access code before anyone, and the next run before it sells out.
           </p>
         </div>
@@ -105,17 +105,17 @@ export function Access() {
           ) : (
             <form onSubmit={onSubmit} noValidate className="flex w-full max-w-md flex-col gap-5">
               <label htmlFor="ff-email" className="sr-only">Email address</label>
-              <input id="ff-email" ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
+              <input id="ff-email" ref={emailRef} type="email" name="email" required autoComplete="email" inputMode="email" spellCheck={false} placeholder="Email address" className="border-b border-paper/20 bg-transparent py-3 text-paper outline-none placeholder:text-paper/40 focus-visible:border-paper" />
               <label htmlFor="ff-phone" className="sr-only">Phone number (optional)</label>
-              <input id="ff-phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone (for drop alerts)" className="border-b border-line bg-transparent py-3 text-ink outline-none placeholder:text-ash focus-visible:border-ink" />
-              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-ash">
-                <input type="checkbox" name="terms" required className="mt-0.5 accent-ink" /> I agree to the Privacy Policy and Terms of Service.
+              <input id="ff-phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone (for drop alerts)" className="border-b border-paper/20 bg-transparent py-3 text-paper outline-none placeholder:text-paper/40 focus-visible:border-paper" />
+              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-paper/55">
+                <input type="checkbox" name="terms" required className="mt-0.5 accent-paper" /> I agree to the Privacy Policy and Terms of Service.
               </label>
-              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-ash">
-                <input type="checkbox" name="sms" className="mt-0.5 accent-ink" /> Send me drop announcements by email &amp; SMS.
+              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-paper/55">
+                <input type="checkbox" name="sms" className="mt-0.5 accent-paper" /> Send me drop announcements by email &amp; SMS.
               </label>
-              {err && <p role="alert" className="mono text-[#9a3030]">{err}</p>}
-              <button type="submit" disabled={busy} className="mono mt-2 bg-ink py-4 text-paper transition-opacity hover:opacity-85 disabled:opacity-60">
+              {err && <p role="alert" className="mono text-[#d98a8a]">{err}</p>}
+              <button type="submit" disabled={busy} className="mono mt-2 bg-paper py-4 text-ink transition-opacity hover:opacity-85 disabled:opacity-60">
                 {busy ? "Joining…" : "Request access"}
               </button>
             </form>
