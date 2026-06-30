@@ -50,6 +50,8 @@ export function ProductChapter({
   const [size, setSize] = useState(() => (sellable[0] ?? product.variants[0])?.size);
   const [guide, setGuide] = useState(false);
   const [added, setAdded] = useState(false);
+  const gallery = product.images.length > 0 ? product.images : product.image ? [product.image] : [];
+  const [shot, setShot] = useState<string | undefined>(gallery[0] ?? product.image);
   const chosen = product.variants.find((v) => v.size === size) ?? product.variants[0];
   const soldOut = sellable.length === 0;
   const low = chosen?.available && chosen.quantity > 0 && chosen.quantity <= LOW_STOCK ? chosen.quantity : 0;
@@ -61,6 +63,7 @@ export function ProductChapter({
   const num = String(index + 1).padStart(3, "0");
   const flip = index % 2 === 1;
   const kind = product.productType === "Outerwear" ? "jacket" : product.productType === "Bottoms" ? "shorts" : "top";
+  const selColor = product.colorways?.find((c) => c.image === shot)?.name ?? product.colorways?.[0]?.name;
 
   function addToBag() {
     if (!chosen) return;
@@ -71,15 +74,33 @@ export function ProductChapter({
 
   return (
     <article id={`product-${index}`} className="wrap grid items-center gap-y-10 py-16 md:min-h-svh md:grid-cols-2 md:gap-x-16 md:py-24">
-      {/* image / frame */}
+      {/* image / gallery */}
       <Reveal className={flip ? "md:order-2" : ""}>
-        <Tilt className="relative aspect-[4/5] w-full overflow-hidden bg-panel" max={5}>
-          {product.image ? (
-            <Image src={product.image} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
-          ) : (
-            <ImageFrame num={num} type={product.productType} kind={kind} />
+        <div className="flex flex-col gap-3">
+          <Tilt className="relative aspect-[4/5] w-full overflow-hidden bg-panel" max={5}>
+            {shot ? (
+              <Image src={shot} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
+            ) : (
+              <ImageFrame num={num} type={product.productType} kind={kind} />
+            )}
+          </Tilt>
+          {gallery.length > 1 && (
+            <div className="flex gap-2">
+              {gallery.map((src) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setShot(src)}
+                  aria-label="View photo"
+                  aria-pressed={shot === src}
+                  className={`relative aspect-[4/5] w-16 shrink-0 overflow-hidden border transition-colors md:w-[72px] ${shot === src ? "border-ink" : "border-line hover:border-ink/50"}`}
+                >
+                  <Image src={src} alt="" fill sizes="72px" className="object-cover" />
+                </button>
+              ))}
+            </div>
           )}
-        </Tilt>
+        </div>
       </Reveal>
 
       {/* detail */}
@@ -104,6 +125,33 @@ export function ProductChapter({
           {product.total > 0 ? `Edition of ${product.total}` : "Limited edition"} · individually numbered
           {low > 0 && <span className="text-ink"> · {low} left in {chosen.size}</span>}
         </p>
+
+        {/* colourways */}
+        {product.colorways && product.colorways.length > 0 && (
+          <div className="mt-8">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="mono text-ash">Colour</span>
+              {selColor && <span className="mono text-ink">· {selColor}</span>}
+            </div>
+            <div className="flex items-center gap-3">
+              {product.colorways.map((c) => {
+                const on = shot === c.image;
+                return (
+                  <button
+                    key={c.name}
+                    type="button"
+                    onClick={() => setShot(c.image)}
+                    aria-label={c.name}
+                    aria-pressed={on}
+                    title={c.name}
+                    className={`h-8 w-8 rounded-full border transition-all ${on ? "border-paper ring-2 ring-ink" : "border-line hover:border-ash"}`}
+                    style={{ backgroundColor: c.hex }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* size */}
         <div className="mt-8">

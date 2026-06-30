@@ -46,6 +46,7 @@ export type SoarProduct = {
   available: boolean;
   total: number;
   variantId?: string;
+  colorways?: { name: string; hex: string; image: string }[];
   variants: SoarVariant[];
 };
 
@@ -158,13 +159,18 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     handle: "the-trucker-jacket",
     title: "The Trucker Jacket",
     price: 230,
-    image: "/lookbook/jacket-grey.webp",
+    image: "/lookbook/jacket-front.webp",
     images: [
-      "/lookbook/jacket-grey.webp",
       "/lookbook/jacket-front.webp",
+      "/lookbook/jacket-grey.webp",
       "/lookbook/jacket-back.webp",
       "/lookbook/jacket-blue.webp",
       "/lookbook/jacket-olive.webp",
+    ],
+    colorways: [
+      { name: "Washed Grey", hex: "#7c7873", image: "/lookbook/jacket-front.webp" },
+      { name: "Indigo", hex: "#3f4d66", image: "/lookbook/jacket-blue.webp" },
+      { name: "Olive", hex: "#4d5040", image: "/lookbook/jacket-olive.webp" },
     ],
     productType: "Outerwear",
     description:
