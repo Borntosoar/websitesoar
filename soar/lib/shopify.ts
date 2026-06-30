@@ -188,7 +188,8 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     handle: "long-sleeve",
     title: "Long Sleeve",
     price: 80,
-    images: [],
+    image: "/lookbook/ls-model.webp",
+    images: ["/lookbook/ls-model.webp", "/lookbook/ls-flat.webp"],
     productType: "Tops",
     description:
       "The one you reach for first. Heavyweight cotton with a relaxed drape and a neckline that keeps its shape, wash after wash. Quiet enough to go with anything.",
@@ -205,7 +206,8 @@ export const FALLBACK_PRODUCTS: SoarProduct[] = [
     handle: "utility-shorts",
     title: "Utility Shorts",
     price: 50,
-    images: [],
+    image: "/lookbook/shorts-model.webp",
+    images: ["/lookbook/shorts-model.webp", "/lookbook/shorts-flat.webp"],
     productType: "Bottoms",
     description:
       "Cut for range, finished matte. A technical weave with a tailored length, clean pockets, and nothing extra. Built to move, and to last.",
