@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { enterWithPassword, joinWaitlist } from "@/app/actions";
+import { enterWithPassword, enterViaSignup } from "@/app/actions";
 import { EASE_QUIET as EASE } from "@/lib/motion";
 import logoWhite from "@/public/soar-logo-white.png";
 
@@ -78,10 +78,18 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
 
   async function onSignup(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (signup === "busy") return;
+    if (signup === "busy" || entering) return;
     setSignup("busy");
-    const res = await joinWaitlist({ email });
-    setSignup(res === "ok" ? "ok" : res === "invalid" ? "invalid" : "error");
+    const res = await enterViaSignup(email);
+    if (res === "invalid") {
+      setSignup("invalid");
+      return;
+    }
+    setSignup("ok");
+    // instant access — break straight through into the site
+    setEntering(true);
+    const dest = from.startsWith("/") && !from.startsWith("//") ? from : "/";
+    setTimeout(() => window.location.assign(dest), reduce ? 250 : EXIT_MS);
   }
 
   return (
@@ -188,7 +196,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
           <div className="min-h-[78px] w-full">
             {signup === "ok" ? (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="serif text-[15px] italic text-white/85">
-                You&rsquo;re on the list — we&rsquo;ll send the code first.
+                Welcome in — entering SOAR…
               </motion.p>
             ) : (
               <form onSubmit={onSignup} className="flex w-full flex-col items-center gap-3">

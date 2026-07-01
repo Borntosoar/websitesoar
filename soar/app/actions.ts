@@ -128,3 +128,28 @@ export async function enterWithPassword(password: string): Promise<boolean> {
   });
   return true;
 }
+
+/** First Flight sign-up that ALSO grants entry — the "double opt-in" model: a
+ *  valid email lets you straight in (capture is best-effort, so entry never
+ *  depends on the email backend being wired). Curiosity has somewhere to go. */
+export async function enterViaSignup(email: string): Promise<"ok" | "invalid"> {
+  const clean = (email ?? "").trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) return "invalid";
+  try {
+    await joinWaitlist({ email: clean });
+  } catch {
+    // capture is best-effort; don't block entry on it
+  }
+  const required = process.env.SOAR_ACCESS_PASSWORD;
+  if (required) {
+    const jar = await cookies();
+    jar.set(ACCESS_COOKIE, await accessToken(required), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  }
+  return "ok";
+}
