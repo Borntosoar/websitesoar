@@ -118,7 +118,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
           className="w-full max-w-[360px] rounded-[2px] border border-white/12 bg-black/35 px-7 py-8 backdrop-blur-md"
         >
           <p className="serif text-[clamp(1.25rem,3vw,1.7rem)] italic text-white/85">Welcome to SOAR</p>
-          <p className="mono mt-2 text-white/45">Members enter here</p>
+          <p className="mono mt-2 text-white/60">Members enter here</p>
 
           {/* access code */}
           <form onSubmit={onSubmit} className="mt-7 flex w-full flex-col items-center gap-5">
@@ -141,7 +141,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
                 placeholder="Access code"
                 aria-invalid={err}
                 style={{ touchAction: "manipulation" }}
-                className="field-bare h-11 w-full border-b border-white/20 bg-transparent px-9 text-center text-[16px] tracking-[0.3em] text-white outline-none placeholder:tracking-[0.2em] placeholder:text-white/35"
+                className="field-bare h-11 w-full border-b border-white/20 bg-transparent px-9 text-center text-[16px] tracking-[0.3em] text-white outline-none placeholder:tracking-[0.2em] placeholder:text-white/50"
               />
               <button
                 type="button"
@@ -180,7 +180,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
           {/* divider */}
           <div className="my-5 flex w-full items-center gap-3">
             <span className="h-px flex-1 bg-white/15" />
-            <span className="mono text-white/40">or</span>
+            <span className="mono text-white/55">or</span>
             <span className="h-px flex-1 bg-white/15" />
           </div>
 
@@ -205,13 +205,14 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
                     }}
                     required
                     placeholder="Email address"
-                    className="field-bare h-11 w-full bg-transparent px-1 text-[16px] text-white outline-none placeholder:text-white/35"
+                    className="field-bare h-11 w-full bg-transparent px-1 text-[16px] text-white outline-none placeholder:text-white/50"
                   />
                   <button type="submit" disabled={signup === "busy"} className="mono shrink-0 px-2 text-white/70 transition-colors hover:text-white disabled:opacity-50">
                     {signup === "busy" ? "…" : "Join"}
                   </button>
                 </div>
-                <p aria-live="polite" className="mono min-h-[1.1em] text-white/45">
+                <p className="mono text-[9px] leading-snug text-white/50">By joining you agree to receive emails from SOAR. Unsubscribe anytime.</p>
+                <p aria-live="polite" className="mono min-h-[1.1em] text-white/55">
                   {signup === "invalid" && "Enter a valid email."}
                   {signup === "error" && "Hmm — try again in a moment."}
                 </p>
@@ -220,7 +221,7 @@ export function GateEntrance({ from = "/" }: { from?: string }) {
           </div>
         </motion.div>
 
-        <p className="mono absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-white/25">Born to soar</p>
+        <p className="mono absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.3em] text-white/55">Born to soar</p>
       </motion.div>
 
       {/* calm fade into the dark site (no flash), then navigate */}

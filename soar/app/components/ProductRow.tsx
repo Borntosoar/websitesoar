@@ -30,7 +30,7 @@ function ProductCard({ product }: { product: SoarProduct }) {
         <span className="mono absolute left-4 top-4 z-20 text-ink/55">{soldOut ? "Sold out" : "Drop 001"}</span>
 
         {product.image ? (
-          <Image src={product.image} alt={product.title} fill sizes="(max-width:768px) 80vw, 33vw" className="object-cover" />
+          <Image src={product.image} alt={product.title} fill sizes="(max-width:768px) 80vw, 33vw" className="photo-grade object-cover" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-panel to-[#e0ddd3]">
             <GarmentFlat kind={kindOf(product.productType)} className="h-[74%] w-auto text-ink/30" />

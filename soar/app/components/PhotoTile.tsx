@@ -44,7 +44,7 @@ export function PhotoTile({
           src={image}
           alt={title ?? ""}
           loading="lazy"
-          className={`absolute inset-0 h-full w-full object-cover ${position} contrast-[1.06] saturate-[.82] brightness-[.95] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]`}
+          className={`photo-grade absolute inset-0 h-full w-full object-cover ${position} transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]`}
         />
       ) : (
         <>

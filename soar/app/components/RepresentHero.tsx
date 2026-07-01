@@ -11,7 +11,15 @@ export function RepresentHero() {
       <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3">
         {SHOTS.map((s, i) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={s} src={s} alt="" className={`h-full w-full object-cover object-top ${i > 0 ? "hidden md:block" : ""}`} />
+          <img
+            key={s}
+            src={s}
+            alt=""
+            loading="eager"
+            decoding="async"
+            fetchPriority={i === 0 ? "high" : "auto"}
+            className={`photo-grade h-full w-full object-cover object-top ${i > 0 ? "hidden md:block" : ""}`}
+          />
         ))}
       </div>
 
@@ -45,7 +53,7 @@ export function RepresentHero() {
       </div>
 
       <div aria-hidden className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2">
-        <span className="mono text-paper/45">Scroll</span>
+        <span className="mono text-paper/60">Scroll</span>
       </div>
     </section>
   );

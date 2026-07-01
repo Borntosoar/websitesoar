@@ -136,6 +136,12 @@ select {
   background: var(--color-line);
 }
 
+/* one shared photographic grade — bright-studio and dark-garage shots read as
+   one shoot across cards, PDP and hero, not only the lookbook tiles (council) */
+.photo-grade {
+  filter: contrast(1.06) saturate(0.82) brightness(0.95);
+}
+
 /* subtle film grain — premium texture, barely there (brand §11) */
 body::after {
   content: "";

@@ -63,7 +63,12 @@ export function ProductChapter({
   const num = String(index + 1).padStart(3, "0");
   const flip = index % 2 === 1;
   const kind = product.productType === "Outerwear" ? "jacket" : product.productType === "Bottoms" ? "shorts" : "top";
-  const selColor = product.colorways?.find((c) => c.image === shot)?.name ?? product.colorways?.[0]?.name;
+  // map any shot (incl. the grey front/back alts) to its colourway, so the label
+  // and the selected swatch stay correct when browsing the gallery (council)
+  const colorOf = (src?: string) =>
+    product.colorways?.find((c) => c.image === src)?.name ??
+    (src?.includes("blue") ? product.colorways?.[1]?.name : src?.includes("olive") ? product.colorways?.[2]?.name : product.colorways?.[0]?.name);
+  const selColor = colorOf(shot);
 
   function addToBag() {
     if (!chosen) return;
@@ -79,7 +84,7 @@ export function ProductChapter({
         <div className="flex flex-col gap-3">
           <Tilt className="relative aspect-[4/5] w-full overflow-hidden bg-panel" max={5}>
             {shot ? (
-              <Image src={shot} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
+              <Image src={shot} alt={product.title} fill priority={index === 0} sizes="(max-width:768px) 100vw, 50vw" className="photo-grade object-cover" />
             ) : (
               <ImageFrame num={num} type={product.productType} kind={kind} />
             )}
@@ -135,7 +140,7 @@ export function ProductChapter({
             </div>
             <div className="flex items-center gap-3">
               {product.colorways.map((c) => {
-                const on = shot === c.image;
+                const on = colorOf(shot) === c.name;
                 return (
                   <button
                     key={c.name}

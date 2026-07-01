@@ -3,7 +3,9 @@ import { RepresentHero } from "./components/RepresentHero";
 import { ProductRow } from "./components/ProductRow";
 import { TileRow } from "./components/TileRow";
 import { SplitBanner } from "./components/SplitBanner";
+import { AscentSequence } from "./components/AscentSequence";
 import { Manifesto } from "./components/Manifesto";
+import { Story } from "./components/Story";
 import { Access } from "./components/Access";
 import { FAQ } from "./components/FAQ";
 import { Footer } from "./components/Footer";
@@ -57,7 +59,9 @@ export default async function Home() {
         <ProductRow products={drop} />
         <TileRow id="lookbook" heading="The lookbook" sub="Collection One · Worn" items={tiles} />
         <SplitBanner />
+        <AscentSequence />
         <Manifesto />
+        <Story />
         <Access />
         <FAQ />
       </main>
