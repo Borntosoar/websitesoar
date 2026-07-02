@@ -1,26 +1,22 @@
 import { Reveal } from "./Reveal";
+import { HeroFilm } from "./HeroFilm";
 
-// Full-viewport campaign hero (Represent move) — three real Drop 001 shots side
-// by side, the collection line + Shop Now over the bottom.
-const SHOTS = ["/lookbook/jacket-grey.webp", "/lookbook/jacket-front.webp", "/lookbook/jacket-back.webp"];
-
+// Full-viewport campaign hero (Represent move) — the SOAR film in the centre,
+// flanked by real Drop 001 shots on desktop; the film fills the frame on mobile.
 export function RepresentHero() {
   return (
     <section id="top" className="on-dark relative flex min-h-svh w-full flex-col justify-end overflow-hidden bg-[#0b0a09] text-paper">
-      {/* campaign photos */}
-      <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3">
-        {SHOTS.map((s, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={s}
-            src={s}
-            alt=""
-            loading="eager"
-            decoding="async"
-            fetchPriority={i === 0 ? "high" : "auto"}
-            className={`photo-grade h-full w-full object-cover object-top ${i > 0 ? "hidden md:block" : ""}`}
-          />
-        ))}
+      {/* mobile: the film fills */}
+      <div className="absolute inset-0 md:hidden">
+        <HeroFilm />
+      </div>
+      {/* desktop: jacket · film · jacket */}
+      <div className="absolute inset-0 hidden grid-cols-3 md:grid [&>*]:h-full [&>*]:w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/lookbook/jacket-grey.webp" alt="" loading="eager" decoding="async" className="photo-grade object-cover object-top" />
+        <HeroFilm />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/lookbook/jacket-back.webp" alt="" loading="lazy" decoding="async" className="photo-grade object-cover object-top" />
       </div>
 
       {/* legibility scrim + grain */}
