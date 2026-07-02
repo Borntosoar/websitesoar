@@ -185,6 +185,22 @@ body::after {
   animation: heroRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* SSR-safe reduced-motion swap for the hero film: both nodes ship in the HTML
+   and CSS alone decides which shows, so the film never loads or plays for
+   reduced-motion users regardless of hydration */
+.rm-only {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-hide {
+    display: none !important;
+  }
+  .rm-only {
+    display: block;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
