@@ -67,7 +67,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
     <>
       <Nav />
       <main id="main" className="pt-24 md:pt-28">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
         <div className="wrap pt-6">
           <a href="/#collection" className="mono text-ash transition-colors hover:text-ink">← Collection</a>
         </div>
