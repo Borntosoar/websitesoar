@@ -10,8 +10,10 @@ const GRAIN =
 export function RepresentHero() {
   return (
     <section id="top" className="on-dark relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-[#0b0a09] py-24 text-paper">
-      {/* blurred ambient fill — the film, softened, covering the whole frame */}
-      <HeroFilm className="absolute inset-0 scale-110 blur-3xl brightness-[0.4]" />
+      {/* blurred ambient fill — a static poster still, so the LCP view runs only
+          ONE live video (perf), never blank */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/hero-poster.jpg" alt="" aria-hidden className="photo-grade absolute inset-0 h-full w-full scale-110 object-cover blur-3xl brightness-[0.4]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_45%,transparent_34%,rgba(0,0,0,0.72))]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
 
