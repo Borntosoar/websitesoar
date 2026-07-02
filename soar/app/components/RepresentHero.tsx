@@ -1,23 +1,13 @@
 import { Reveal } from "./Reveal";
 import { HeroFilm } from "./HeroFilm";
 
-// Full-viewport campaign hero (Represent move) — the SOAR film in the centre,
-// flanked by real Drop 001 shots on desktop; the film fills the frame on mobile.
+// Full-screen SOAR film hero — the clip fills the whole frame edge to edge on
+// every screen; collection line + Shop Now over the bottom.
 export function RepresentHero() {
   return (
     <section id="top" className="on-dark relative flex min-h-svh w-full flex-col justify-end overflow-hidden bg-[#0b0a09] text-paper">
-      {/* mobile: the film fills */}
-      <div className="absolute inset-0 md:hidden">
-        <HeroFilm />
-      </div>
-      {/* desktop: jacket · film · jacket */}
-      <div className="absolute inset-0 hidden grid-cols-3 md:grid [&>*]:h-full [&>*]:w-full">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/lookbook/jacket-grey.webp" alt="" loading="eager" decoding="async" className="photo-grade object-cover object-top" />
-        <HeroFilm />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/lookbook/jacket-back.webp" alt="" loading="lazy" decoding="async" className="photo-grade object-cover object-top" />
-      </div>
+      {/* full-screen film — fills the frame edge to edge */}
+      <HeroFilm className="absolute inset-0" />
 
       {/* legibility scrim + grain */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[68%] bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
