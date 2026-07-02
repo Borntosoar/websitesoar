@@ -1,3 +1,4 @@
+import { Entrance } from "./components/Entrance";
 import { Nav } from "./components/Nav";
 import { RepresentHero } from "./components/RepresentHero";
 import { ProductRow } from "./components/ProductRow";
@@ -53,6 +54,7 @@ export default async function Home() {
 
   return (
     <>
+      <Entrance />
       <Nav />
       <main id="main">
         <RepresentHero />
