@@ -1,41 +1,46 @@
 import { Reveal } from "./Reveal";
 import { HeroFilm } from "./HeroFilm";
 
-// Full-screen SOAR film hero — the clip fills the whole frame edge to edge on
-// every screen; collection line + Shop Now over the bottom.
+const GRAIN =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+// Cinema hero — the SOAR film shown at its natural portrait shape (logo never
+// cropped) in a clean framed still, floated over a blurred fill of itself so the
+// full width is covered, never blank. Works identically on phone and desktop.
 export function RepresentHero() {
   return (
-    <section id="top" className="on-dark relative flex min-h-svh w-full flex-col justify-end overflow-hidden bg-[#0b0a09] text-paper">
-      {/* full-screen film — fills the frame edge to edge */}
-      <HeroFilm className="absolute inset-0" />
+    <section id="top" className="on-dark relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-[#0b0a09] py-24 text-paper">
+      {/* blurred ambient fill — the film, softened, covering the whole frame */}
+      <HeroFilm className="absolute inset-0 scale-110 blur-3xl brightness-[0.4]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_45%,transparent_34%,rgba(0,0,0,0.72))]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
 
-      {/* legibility scrim + grain */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[68%] bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-        style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }}
-      />
-
-      {/* overlay copy */}
-      <div className="relative z-10 flex flex-col items-center px-6 pb-[9vh] text-center">
+      <div className="relative z-10 flex flex-col items-center gap-8 px-6">
         <Reveal>
-          <p className="mono text-paper/75">Collection One — Drop 001</p>
+          {/* the film at its true aspect — no crop, logo intact */}
+          <div className="relative aspect-[9/16] h-[46svh] max-h-[540px] overflow-hidden rounded-[3px] ring-1 ring-paper/10 shadow-[0_40px_90px_-25px_rgba(0,0,0,0.85)] md:h-[58svh]">
+            <HeroFilm className="absolute inset-0" />
+          </div>
         </Reveal>
-        <Reveal delay={0.08}>
-          <h1 className="display mt-3 text-[clamp(2.6rem,8vw,6rem)] drop-shadow-lg">
-            Born to <span className="italic">soar</span>.
-          </h1>
-        </Reveal>
-        <Reveal delay={0.16}>
-          <a
-            href="#collection"
-            className="mono mt-7 border border-paper/45 bg-black/25 px-12 py-3.5 text-paper backdrop-blur-sm transition-colors hover:bg-paper hover:text-ink"
-          >
-            Shop Now
-          </a>
-        </Reveal>
+
+        <div className="flex flex-col items-center text-center">
+          <Reveal delay={0.06}>
+            <p className="mono text-paper/70">Collection One — Drop 001</p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <h1 className="display mt-3 text-[clamp(2.2rem,6vw,4.4rem)] drop-shadow-lg">
+              Born to <span className="italic">soar</span>.
+            </h1>
+          </Reveal>
+          <Reveal delay={0.18}>
+            <a
+              href="#collection"
+              className="mono mt-6 border border-paper/45 bg-black/25 px-12 py-3.5 text-paper backdrop-blur-sm transition-colors hover:bg-paper hover:text-ink"
+            >
+              Shop Now
+            </a>
+          </Reveal>
+        </div>
       </div>
 
       <div aria-hidden className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2">
