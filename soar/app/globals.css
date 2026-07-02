@@ -168,6 +168,23 @@ body::after {
   animation: twinkle 4s ease-in-out infinite;
 }
 
+/* quiet mount fade-up for above-the-fold hero copy — reliable on first paint
+   (no scroll-into-view edge cases); reduced-motion collapses it to the end
+   state via the global rule below, so the text always lands visible */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-rise {
+  animation: heroRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
