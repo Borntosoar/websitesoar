@@ -12,6 +12,16 @@ const ATMO = new THREE.Color("#d6dce6");
 const IGNITE = new THREE.Vector3(0.08, 0.02, 1).normalize(); // the SOAR mark / chain-reaction origin, front of the globe
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
 
+// All motion is a pure function of this time, so an offline capture can drive the
+// scene frame-accurately (window.__capture / __CAP_T). Live: the clock; reduced
+// motion: a fixed lit, pulled-back still.
+function timeOf(clock: THREE.Clock, reduce: boolean) {
+  const w = typeof window !== "undefined" ? (window as unknown as { __capture?: boolean; __CAP_T?: number }) : undefined;
+  if (w && w.__capture) return w.__CAP_T || 0;
+  if (reduce) return 6.5;
+  return clock.elapsedTime;
+}
+
 const EARTH_VERT = /* glsl */ `
   varying vec2 vUv; varying vec3 vN; varying vec3 vView;
   void main(){
@@ -114,24 +124,19 @@ function Earth({ reduce }: { reduce: boolean }) {
     [],
   );
 
-  const rip = useRef(2);
-  useFrame((state, dt) => {
-    const d = reduce ? 0 : Math.min(dt, 0.05);
-    if (earthRef.current) earthRef.current.rotation.y += d * 0.035;
-    if (cloudRef.current) cloudRef.current.rotation.y += d * 0.05;
-    // the chain reaction — a light ripple racing across the globe every ~10s
-    const t = state.clock.elapsedTime;
+  useFrame((state) => {
+    const t = timeOf(state.clock, reduce);
+    if (earthRef.current) earthRef.current.rotation.y = t * 0.035;
+    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.05;
+    // the chain reaction: ignites on arrival, then a rare quick sweep
     let r = 2;
-    if (!reduce) {
-      if (t < 2.7) r = t / 2.7; // the arrival chain reaction, in step with the pull-back
-      else {
-        const p = ((t - 2.7) % 16) / 2.0; // then a rare, quick sweep
-        r = p <= 1 ? p : 2;
-      }
+    if (t < 2.7) r = t / 2.7;
+    else {
+      const p = ((t - 2.7) % 16) / 2.0;
+      r = p <= 1 ? p : 2;
     }
-    rip.current = r;
     mat.uniforms.uRipple.value = r;
-    if (flashRef.current) flashRef.current.opacity = reduce ? 0 : Math.pow(Math.max(0, 1 - r * 3), 2) * 0.95;
+    if (flashRef.current) flashRef.current.opacity = Math.pow(Math.max(0, 1 - r * 3), 2) * 0.95;
   });
 
   return (
@@ -161,17 +166,9 @@ function Earth({ reduce }: { reduce: boolean }) {
 
 function Rig({ reduce }: { reduce: boolean }) {
   const { camera } = useThree();
-  const intro = useRef(0);
-  useEffect(() => {
-    camera.position.set(0, 0, reduce ? 9 : 3.6);
-    camera.lookAt(0, 0, 0);
-  }, [camera, reduce]);
-  useFrame((state, dt) => {
-    if (reduce) return;
-    intro.current = Math.min(1, intro.current + dt / 5);
-    const z = 3.6 + easeOut(intro.current) * 5.4; // surface -> full globe in space
-    camera.position.z = z;
-    const t = state.clock.elapsedTime;
+  useFrame((state) => {
+    const t = timeOf(state.clock, reduce);
+    camera.position.z = 3.6 + easeOut(Math.min(1, t / 5)) * 5.4; // surface -> full globe in space
     camera.position.x = Math.sin(t * 0.05) * 0.4;
     camera.position.y = Math.cos(t * 0.04) * 0.25;
     camera.lookAt(0, 0, 0);
@@ -182,16 +179,21 @@ function Rig({ reduce }: { reduce: boolean }) {
 export function EarthScene({ active = true }: { active?: boolean }) {
   const reduce = useReducedMotion() ?? false;
   const [lite, setLite] = useState(false);
+  const [cap, setCap] = useState(false);
   useEffect(() => {
     setLite(window.innerWidth < 768 || (navigator.hardwareConcurrency || 8) <= 4);
+    if (new URLSearchParams(window.location.search).has("capture")) {
+      (window as unknown as { __capture?: boolean }).__capture = true;
+      setCap(true);
+    }
   }, []);
 
   return (
     <Canvas
       camera={{ position: [0, 0, 3.6], fov: 42 }}
-      dpr={lite ? [1, 1.4] : [1, 1.9]}
-      gl={{ antialias: !lite, powerPreference: "high-performance" }}
-      frameloop={reduce || !active ? "demand" : "always"}
+      dpr={cap ? 1 : lite ? [1, 1.4] : [1, 1.9]}
+      gl={{ antialias: !lite, powerPreference: "high-performance", preserveDrawingBuffer: cap }}
+      frameloop={cap ? "always" : reduce || !active ? "demand" : "always"}
     >
       <color attach="background" args={["#050507"]} />
       <ambientLight intensity={0.06} />

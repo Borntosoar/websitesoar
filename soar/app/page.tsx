@@ -1,5 +1,5 @@
 import { Nav } from "./components/Nav";
-import { EarthHero } from "./components/earth/EarthHero";
+import { RepresentHero } from "./components/RepresentHero";
 import { ProductRow } from "./components/ProductRow";
 import { TileRow } from "./components/TileRow";
 import { SplitBanner } from "./components/SplitBanner";
@@ -55,7 +55,7 @@ export default async function Home() {
     <>
       <Nav />
       <main id="main">
-        <EarthHero />
+        <RepresentHero />
         <ProductRow products={drop} />
         <TileRow id="lookbook" heading="The lookbook" sub="Collection One · Worn" items={tiles} />
         <SplitBanner />
