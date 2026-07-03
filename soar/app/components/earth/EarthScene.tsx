@@ -1,14 +1,15 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useTexture, Stars } from "@react-three/drei";
+import { useTexture, Stars, Billboard } from "@react-three/drei";
 import { useReducedMotion } from "framer-motion";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const R = 2;
 const SUN = new THREE.Vector3(0.45, 0.22, 1.0).normalize();
-const ATMO = new THREE.Color("#cdddf5");
+const ATMO = new THREE.Color("#d6dce6");
+const IGNITE = new THREE.Vector3(0.08, 0.02, 1).normalize(); // the SOAR mark / chain-reaction origin, front of the globe
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
 
 const EARTH_VERT = /* glsl */ `
@@ -31,12 +32,16 @@ const EARTH_FRAG = /* glsl */ `
     float sun = dot(N, normalize(uSun));
     float day = smoothstep(-0.1, 0.45, sun);
     vec3 dayC = texture2D(uDay, vUv).rgb;
+    dayC = pow(dayC, vec3(0.85)) * 1.2;                 // silver continents vs charcoal ocean
     vec3 nightC = texture2D(uNight, vUv).rgb;
-    vec3 surf = mix(nightC * 1.5, dayC * (0.24 + 0.85 * day), day);
+    vec3 surf = mix(nightC * 2.8, dayC * (0.3 + 0.8 * day), day);
+    float term = smoothstep(0.32, 0.0, abs(sun));       // the day/night line
+    surf += nightC * term * 1.5;                        // cities blaze across the terminator (light from darkness)
     if (uRipple <= 1.0) {
       float ang = acos(clamp(dot(N, normalize(uRippleDir)), -1.0, 1.0));
-      float band = smoothstep(0.075, 0.0, abs(ang - uRipple * 3.14159));
-      surf += band * (1.0 - uRipple) * 0.85;
+      float band = smoothstep(0.05, 0.0, abs(ang - uRipple * 3.14159));
+      surf += band * (1.0 - uRipple) * 1.25;            // crisp wavefront racing out
+      surf += smoothstep(0.12, 0.0, ang) * pow(max(0.0, 1.0 - uRipple * 3.0), 3.0) * 1.7; // ignition point
     }
     float fres = pow(1.0 - max(dot(N, normalize(vView)), 0.0), 3.0);
     surf += fres * uAtmo * (0.35 + 0.65 * day);
@@ -62,7 +67,11 @@ function Earth({ reduce }: { reduce: boolean }) {
     "/textures/earth-spec.jpg",
     "/textures/earth-clouds.jpg",
   ]);
+  const logo = useTexture("/soar-logo-white.png");
+  const flashRef = useRef<THREE.MeshBasicMaterial>(null);
   useEffect(() => {
+    logo.colorSpace = THREE.SRGBColorSpace;
+    logo.anisotropy = 8;
     for (const t of [day, night, spec, clouds]) t.colorSpace = THREE.SRGBColorSpace;
     for (const t of [day, night, normal, spec, clouds]) {
       t.anisotropy = 8;
@@ -86,7 +95,7 @@ function Earth({ reduce }: { reduce: boolean }) {
           uSun: { value: SUN },
           uAtmo: { value: ATMO },
           uRipple: { value: 2 },
-          uRippleDir: { value: new THREE.Vector3(0.2, 0.1, 1).normalize() },
+          uRippleDir: { value: IGNITE },
         },
       }),
     [day, night],
@@ -112,23 +121,40 @@ function Earth({ reduce }: { reduce: boolean }) {
     if (cloudRef.current) cloudRef.current.rotation.y += d * 0.05;
     // the chain reaction — a light ripple racing across the globe every ~10s
     const t = state.clock.elapsedTime;
-    const phase = (t % 14) / 1.8; // a rare, quick sweep across the globe
-    rip.current = reduce ? 2 : phase <= 1 ? phase : 2;
-    mat.uniforms.uRipple.value = rip.current;
+    let r = 2;
+    if (!reduce) {
+      if (t < 2.7) r = t / 2.7; // the arrival chain reaction, in step with the pull-back
+      else {
+        const p = ((t - 2.7) % 16) / 2.0; // then a rare, quick sweep
+        r = p <= 1 ? p : 2;
+      }
+    }
+    rip.current = r;
+    mat.uniforms.uRipple.value = r;
+    if (flashRef.current) flashRef.current.opacity = reduce ? 0 : Math.pow(Math.max(0, 1 - r * 3), 2) * 0.95;
   });
 
   return (
-    <group rotation={[0, 0, 0.41]}>
-      <mesh ref={earthRef} material={mat}>
-        <sphereGeometry args={[R, 128, 128]} />
-      </mesh>
-      <mesh ref={cloudRef} scale={1.012}>
-        <sphereGeometry args={[R, 72, 72]} />
-        <meshStandardMaterial map={clouds} alphaMap={clouds} transparent opacity={0.3} color="#c8c8c8" depthWrite={false} roughness={1} metalness={0} />
-      </mesh>
-      <mesh scale={1.16} material={atmoMat}>
-        <sphereGeometry args={[R, 64, 64]} />
-      </mesh>
+    <group>
+      <group rotation={[0, 0, 0.41]}>
+        <mesh ref={earthRef} material={mat}>
+          <sphereGeometry args={[R, 128, 128]} />
+        </mesh>
+        <mesh ref={cloudRef} scale={1.012}>
+          <sphereGeometry args={[R, 72, 72]} />
+          <meshStandardMaterial map={clouds} alphaMap={clouds} transparent opacity={0.3} color="#c8c8c8" depthWrite={false} roughness={1} metalness={0} />
+        </mesh>
+        <mesh scale={1.16} material={atmoMat}>
+          <sphereGeometry args={[R, 64, 64]} />
+        </mesh>
+      </group>
+      {/* the SOAR mark on the globe — the chain reaction ignites from it */}
+      <Billboard position={[IGNITE.x * R * 1.02, IGNITE.y * R * 1.02, IGNITE.z * R * 1.02]}>
+        <mesh>
+          <planeGeometry args={[0.66, 0.55]} />
+          <meshBasicMaterial ref={flashRef} map={logo} transparent opacity={0} depthWrite={false} toneMapped={false} blending={THREE.AdditiveBlending} />
+        </mesh>
+      </Billboard>
     </group>
   );
 }
@@ -153,7 +179,7 @@ function Rig({ reduce }: { reduce: boolean }) {
   return null;
 }
 
-export function EarthScene() {
+export function EarthScene({ active = true }: { active?: boolean }) {
   const reduce = useReducedMotion() ?? false;
   const [lite, setLite] = useState(false);
   useEffect(() => {
@@ -165,7 +191,7 @@ export function EarthScene() {
       camera={{ position: [0, 0, 3.6], fov: 42 }}
       dpr={lite ? [1, 1.4] : [1, 1.9]}
       gl={{ antialias: !lite, powerPreference: "high-performance" }}
-      frameloop={reduce ? "demand" : "always"}
+      frameloop={reduce || !active ? "demand" : "always"}
     >
       <color attach="background" args={["#050507"]} />
       <ambientLight intensity={0.06} />

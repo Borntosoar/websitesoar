@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const POSTER = "/earth-poster.jpg";
 
@@ -29,13 +29,22 @@ function hasWebGL() {
 // camera pulls back into a starfield. Static poster when WebGL is unavailable.
 export function EarthHero() {
   const [webgl, setWebgl] = useState(true);
+  const [active, setActive] = useState(true);
+  const secRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     setWebgl(hasWebGL());
+    const el = secRef.current;
+    if (!el) return;
+    // stop rendering the planet while the hero is off-screen (battery / perf)
+    const io = new IntersectionObserver(([e]) => setActive(e.isIntersecting), { threshold: 0.04 });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return (
-    <section id="top" className="on-dark relative h-[82svh] w-full overflow-hidden bg-[#050507] text-paper md:h-svh">
-      <div className="absolute inset-0">{webgl ? <EarthScene /> : <PosterBg />}</div>
+    <section ref={secRef} id="top" className="on-dark relative h-[82svh] w-full overflow-hidden bg-[#050507] text-paper md:h-svh">
+      <div className="absolute inset-0">{webgl ? <EarthScene active={active} /> : <PosterBg />}</div>
 
       {/* depth + legibility, kept low so it never dims the planet */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-black/92 via-black/45 to-transparent" />
