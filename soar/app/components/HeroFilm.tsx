@@ -2,47 +2,42 @@
 
 import { useRef, useState } from "react";
 
-// The SOAR emblem film. Both the still and the film are rendered on the server;
-// a CSS media query (see .rm-only / .rm-hide) decides which shows, so reduced
-// motion is honoured on the very first paint — no hydration gap, and the film is
-// never fetched for those users (preload="none"). A quiet pause control satisfies
-// WCAG 2.2.2 for the auto-looping film.
+// The SOAR hero film. Landscape and portrait cuts both ship in the HTML; a CSS
+// media query (.land-vid / .port-vid) picks the one that fits the viewport, and
+// preload="none" means only the shown cut is ever fetched. A separate CSS query
+// (.rm-only / .rm-hide) swaps to a static still under reduced motion — honoured
+// on the first paint, no hydration gap. A quiet pause control (WCAG 2.2.2)
+// governs whichever cut is playing.
 const POSTER = "/hero-poster.jpg";
+const POSTER_P = "/hero-poster-portrait.jpg";
 const SRC = "/soar-hero.mp4";
+const SRC_P = "/soar-hero-portrait.mp4";
 const BASE = "h-full w-full object-cover";
 
 export function HeroFilm({ className = "" }: { className?: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
+  const landRef = useRef<HTMLVideoElement>(null);
+  const portRef = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(false);
 
   function toggle() {
-    const v = ref.current;
-    if (!v) return;
-    if (v.paused) {
-      v.play().catch(() => {});
-      setPaused(false);
-    } else {
-      v.pause();
-      setPaused(true);
-    }
+    const vids = [landRef.current, portRef.current].filter((v): v is HTMLVideoElement => !!v);
+    const playing = vids.some((v) => !v.paused);
+    vids.forEach((v) => {
+      if (playing) v.pause();
+      else v.play().catch(() => {});
+    });
+    setPaused(playing);
   }
 
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={POSTER} alt="" aria-hidden className={`rm-only ${BASE} ${className}`} />
-      <video
-        ref={ref}
-        poster={POSTER}
-        className={`rm-hide ${BASE} ${className}`}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="none"
-        aria-hidden="true"
-      >
+      <video ref={landRef} poster={POSTER} className={`rm-hide land-vid ${BASE} ${className}`} autoPlay muted loop playsInline preload="none" aria-hidden="true">
         <source src={SRC} type="video/mp4" />
+      </video>
+      <video ref={portRef} poster={POSTER_P} className={`rm-hide port-vid ${BASE} ${className}`} autoPlay muted loop playsInline preload="none" aria-hidden="true">
+        <source src={SRC_P} type="video/mp4" />
       </video>
       <button
         type="button"

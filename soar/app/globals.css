@@ -201,6 +201,20 @@ body::after {
   }
 }
 
+/* hero cut by orientation — portrait phones get the 9:16 render, everything
+   wider gets the 16:9; only the shown one loads (preload="none") */
+.port-vid {
+  display: none;
+}
+@media (max-aspect-ratio: 3 / 4) {
+  .land-vid {
+    display: none;
+  }
+  .port-vid {
+    display: block;
+  }
+}
+
 /* The Ascent — signature entrance ritual (once per session). A live warp
    starfield (canvas) flies up toward the emblem's star; the mark emerges from
    darkness, the star ignites, then the whole scene warps through the star and
