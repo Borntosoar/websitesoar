@@ -10,6 +10,7 @@ const R = 2;
 const SUN = new THREE.Vector3(0.45, 0.22, 1.0).normalize();
 const ATMO = new THREE.Color("#d6dce6");
 const IGNITE = new THREE.Vector3(0.08, 0.02, 1).normalize(); // the SOAR mark / chain-reaction origin, front of the globe
+const ROT0 = 4.0; // start longitude so a landmass (not the dark Pacific) faces the camera at ignition
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
 
 // All motion is a pure function of this time, so an offline capture can drive the
@@ -126,8 +127,10 @@ function Earth({ reduce }: { reduce: boolean }) {
 
   useFrame((state) => {
     const t = timeOf(state.clock, reduce);
-    if (earthRef.current) earthRef.current.rotation.y = t * 0.035;
-    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.05;
+    const w = typeof window !== "undefined" ? (window as unknown as { __ROT0?: number }) : undefined;
+    const rot0 = w && w.__ROT0 != null ? w.__ROT0 : ROT0;
+    if (earthRef.current) earthRef.current.rotation.y = t * 0.035 + rot0;
+    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.05 + rot0;
     // the chain reaction: ignites on arrival, then a rare quick sweep
     let r = 2;
     if (t < 2.7) r = t / 2.7;
