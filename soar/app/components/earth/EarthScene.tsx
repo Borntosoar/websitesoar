@@ -12,6 +12,10 @@ const ATMO = new THREE.Color("#d6dce6");
 const IGNITE = new THREE.Vector3(0.08, 0.02, 1).normalize(); // the SOAR mark / chain-reaction origin, front of the globe
 const ROT0 = 4.0; // start longitude so a landmass (not the dark Pacific) faces the camera at ignition
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
+const sstep = (a: number, b: number, x: number) => {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
 
 // All motion is a pure function of this time, so an offline capture can drive the
 // scene frame-accurately (window.__capture / __CAP_T). Live: the clock; reduced
@@ -79,7 +83,9 @@ function Earth({ reduce }: { reduce: boolean }) {
     "/textures/earth-clouds.jpg",
   ]);
   const logo = useTexture("/soar-logo-white.png");
+  const flare = useTexture("/textures/flare.png");
   const flashRef = useRef<THREE.MeshBasicMaterial>(null);
+  const flareRef = useRef<THREE.MeshBasicMaterial>(null);
   useEffect(() => {
     logo.colorSpace = THREE.SRGBColorSpace;
     logo.anisotropy = 8;
@@ -129,17 +135,20 @@ function Earth({ reduce }: { reduce: boolean }) {
     const t = timeOf(state.clock, reduce);
     const w = typeof window !== "undefined" ? (window as unknown as { __ROT0?: number }) : undefined;
     const rot0 = w && w.__ROT0 != null ? w.__ROT0 : ROT0;
-    if (earthRef.current) earthRef.current.rotation.y = t * 0.035 + rot0;
-    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.05 + rot0;
-    // the chain reaction: ignites on arrival, then a rare quick sweep
+    if (earthRef.current) earthRef.current.rotation.y = t * 0.03 + rot0;
+    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.043 + rot0;
+    // the chain reaction sweeps the globe from the SOAR ignition at ~1.5s
     let r = 2;
-    if (t < 2.7) r = t / 2.7;
-    else {
-      const p = ((t - 2.7) % 16) / 2.0;
-      r = p <= 1 ? p : 2;
-    }
+    if (t >= 1.5 && t < 3.7) r = (t - 1.5) / 2.2;
     mat.uniforms.uRipple.value = r;
-    if (flashRef.current) flashRef.current.opacity = Math.pow(Math.max(0, 1 - r * 3), 2) * 0.95;
+    // the SOAR mark fades in, ignites at 1.5s, then fades
+    const em = t < 1.5 ? sstep(0.5, 1.5, t) * 0.42 : Math.pow(Math.max(0, 1 - (t - 1.5) * 1.25), 2) * 0.98;
+    if (flashRef.current) flashRef.current.opacity = reduce ? 0 : em;
+    // anamorphic lens flare peaks on the ignition
+    if (flareRef.current) {
+      const fl = t >= 1.35 && t < 2.9 ? Math.pow(Math.max(0, 1 - Math.abs(t - 1.65) * 1.5), 2) : 0;
+      flareRef.current.opacity = reduce ? 0 : fl * 0.9;
+    }
   });
 
   return (
@@ -163,6 +172,13 @@ function Earth({ reduce }: { reduce: boolean }) {
           <meshBasicMaterial ref={flashRef} map={logo} transparent opacity={0} depthWrite={false} toneMapped={false} blending={THREE.AdditiveBlending} />
         </mesh>
       </Billboard>
+      {/* anamorphic lens flare across the ignition — the cinematic beat */}
+      <Billboard position={[IGNITE.x * R * 1.06, IGNITE.y * R * 1.06, IGNITE.z * R * 1.06]}>
+        <mesh>
+          <planeGeometry args={[3.6, 0.9]} />
+          <meshBasicMaterial ref={flareRef} map={flare} transparent opacity={0} depthWrite={false} toneMapped={false} blending={THREE.AdditiveBlending} />
+        </mesh>
+      </Billboard>
     </group>
   );
 }
@@ -171,9 +187,11 @@ function Rig({ reduce }: { reduce: boolean }) {
   const { camera } = useThree();
   useFrame((state) => {
     const t = timeOf(state.clock, reduce);
-    camera.position.z = 3.6 + easeOut(Math.min(1, t / 5)) * 5.4; // surface -> full globe in space
-    camera.position.x = Math.sin(t * 0.05) * 0.4;
-    camera.position.y = Math.cos(t * 0.04) * 0.25;
+    // film arc: a slow push while SOAR ignites, then a dramatic ascent to space
+    const z = t < 1.5 ? 4.3 - (t / 1.5) * 0.5 : 3.8 + easeOut(Math.min(1, (t - 1.5) / 5)) * 6.0;
+    camera.position.z = z;
+    camera.position.x = Math.sin(t * 0.06) * 0.5;
+    camera.position.y = Math.cos(t * 0.05) * 0.3;
     camera.lookAt(0, 0, 0);
   });
   return null;
