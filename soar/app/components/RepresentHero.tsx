@@ -15,13 +15,16 @@ export function RepresentHero() {
 
       {/* tagline + CTA, pinned low, clear of the emblem */}
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-6 pb-[9svh] text-center">
-        <p className="mono hero-rise text-paper/85 [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]">Collection One — Drop 001</p>
-        <h1 className="display hero-rise mt-3 text-[clamp(2rem,5.4vw,3.6rem)] drop-shadow-lg" style={{ animationDelay: "0.08s" }}>
-          Born to <span className="italic">soar</span>.
-        </h1>
+        {/* the title beat — rises in as the flare hits (~3s into the 6s loop), then out */}
+        <div className="hero-beat flex flex-col items-center">
+          <h1 className="display text-[clamp(2rem,5.4vw,3.6rem)] [text-shadow:0_2px_18px_rgba(0,0,0,0.7)]">
+            Born to <span className="italic">soar</span>.
+          </h1>
+          <p className="mono mt-3 text-[0.72rem] tracking-[0.34em] text-paper/70 [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]">· Edition of 200 ·</p>
+        </div>
         <a
           href="#collection"
-          className="mono hero-rise mt-7 border border-paper/50 bg-black/25 px-12 py-3.5 text-paper backdrop-blur-sm transition-colors hover:bg-paper hover:text-ink [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]"
+          className="mono hero-rise mt-8 border border-paper/50 bg-black/25 px-12 py-3.5 text-paper backdrop-blur-sm transition-colors hover:bg-paper hover:text-ink [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]"
           style={{ animationDelay: "0.16s" }}
         >
           Shop Now

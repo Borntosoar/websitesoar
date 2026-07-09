@@ -215,6 +215,37 @@ body::after {
   }
 }
 
+/* the hero title beat — rises in as the film's flare hits (6s loop, flare ~3s) */
+.hero-beat {
+  opacity: 0;
+  animation: heroBeat 6s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+@keyframes heroBeat {
+  0%,
+  46% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  58%,
+  74% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  86%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-beat {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
+
 /* The Ascent — signature entrance ritual (once per session). A live warp
    starfield (canvas) flies up toward the emblem's star; the mark emerges from
    darkness, the star ignites, then the whole scene warps through the star and
