@@ -1,5 +1,5 @@
 import Image from "next/image";
-import soarLogo from "@/public/soar-logo.png";
+import soarLogo from "@/public/soar-mark.png";
 
 function Col({ title, links }: { title: string; links: [string, string][] }) {
   return (
