@@ -26,6 +26,8 @@ export function HeroFilm({ className = "" }: { className?: string }) {
       if (playing) v.pause();
       else v.play().catch(() => {});
     });
+    // one control governs all hero motion — freeze the title beat too (WCAG 2.2.2)
+    vids[0]?.closest("section")?.classList.toggle("hero-paused", playing);
     setPaused(playing);
   }
 
@@ -43,7 +45,7 @@ export function HeroFilm({ className = "" }: { className?: string }) {
         type="button"
         onClick={toggle}
         aria-label={paused ? "Play background film" : "Pause background film"}
-        className="rm-hide absolute bottom-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-paper/20 bg-black/25 text-paper/55 backdrop-blur-sm transition-colors hover:border-paper/45 hover:text-paper"
+        className="rm-hide absolute bottom-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-paper/30 bg-black/30 text-paper/75 backdrop-blur-sm transition-colors hover:border-paper/55 hover:text-paper"
       >
         {paused ? (
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

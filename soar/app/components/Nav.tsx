@@ -42,7 +42,8 @@ export function Nav() {
       {/* announcement bar */}
       <div className="flex h-9 items-center justify-center bg-ink px-4 text-paper">
         <p className="mono truncate text-paper/90">
-          First Flight is open — members get the code first<span className="hidden sm:inline"> · Drop 001 · Edition of 200</span>
+          <span className="sm:hidden">Members get the code first</span>
+          <span className="hidden sm:inline">First Flight is open — members get the code first · Drop 001 · Edition of 200</span>
         </p>
       </div>
 

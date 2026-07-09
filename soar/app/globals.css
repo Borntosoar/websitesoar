@@ -219,7 +219,10 @@ body::after {
 .hero-beat {
   opacity: 0;
   animation: heroBeat 6s ease-in-out infinite;
-  will-change: opacity, transform;
+}
+/* the film's pause control freezes the title beat too (one control, all motion) */
+.hero-paused .hero-beat {
+  animation-play-state: paused;
 }
 @keyframes heroBeat {
   0%,

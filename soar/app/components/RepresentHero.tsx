@@ -20,7 +20,7 @@ export function RepresentHero() {
           <h1 className="display text-[clamp(2rem,5.4vw,3.6rem)] [text-shadow:0_2px_18px_rgba(0,0,0,0.7)]">
             Born to <span className="italic">soar</span>.
           </h1>
-          <p className="mono mt-3 text-[0.72rem] tracking-[0.34em] text-paper/70 [text-shadow:0_1px_10px_rgba(0,0,0,0.55)]">· Edition of 200 ·</p>
+          <p className="mono mt-3 text-[0.72rem] tracking-[0.34em] text-paper/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">· Edition of 200 ·</p>
         </div>
         <a
           href="#collection"
