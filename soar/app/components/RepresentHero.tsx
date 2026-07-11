@@ -24,10 +24,10 @@ export function RepresentHero() {
         </div>
         <a
           href="#collection"
-          className="mono hero-rise mt-8 bg-paper px-12 py-3.5 text-ink shadow-[0_6px_24px_rgba(0,0,0,0.35)] transition-colors hover:bg-paper/85"
+          className="mono hero-rise mt-8 bg-paper px-12 py-3.5 shadow-[0_6px_24px_rgba(0,0,0,0.35)] transition-colors hover:bg-paper/85"
           style={{ animationDelay: "0.16s" }}
         >
-          Shop Now
+          <span className="text-ink">Shop Now</span>
         </a>
       </div>
     </section>
