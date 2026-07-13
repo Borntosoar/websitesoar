@@ -1,7 +1,21 @@
+import Image from "next/image";
+
+const ROAD_IMG =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_3FXgELxsRYjIzXOtRqy3Oa9oQQ7/hf_20260713_173904_843842c4-884d-4073-8956-11d81c64fc79.png";
+
 export default function CommunityBand() {
   return (
-    <section className="w-full border-y border-white/10 bg-[#050505] px-6 py-20 md:px-10">
-      <div className="mx-auto grid max-w-[1600px] gap-10 md:grid-cols-2 md:items-end md:gap-0">
+    <section className="relative w-full overflow-hidden border-y border-white/10 bg-[#050505] px-6 py-20 md:px-10">
+      <Image
+        src={ROAD_IMG}
+        alt=""
+        fill
+        className="object-cover opacity-30"
+        sizes="100vw"
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
+      <div className="relative z-10 mx-auto grid max-w-[1600px] gap-10 md:grid-cols-2 md:items-end md:gap-0">
         {/* Left — stat */}
         <div className="flex flex-col gap-3">
           <p className="font-display text-5xl tracking-tight text-white sm:text-6xl">
