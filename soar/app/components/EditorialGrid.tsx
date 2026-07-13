@@ -3,12 +3,16 @@ import Image from "next/image";
 const HERO_IMG =
   "https://d8j0ntlcm91z4.cloudfront.net/user_3FXgELxsRYjIzXOtRqy3Oa9oQQ7/hf_20260701_210915_03b1f4ae-d985-442e-b60b-e4d98dba62ba.png";
 
+const FLATLAY_IMG =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_3FXgELxsRYjIzXOtRqy3Oa9oQQ7/hf_20260713_173438_59876cce-bc6f-4db8-931c-5550ea08dfb9.png";
+
 const concepts = [
   {
     id: "002",
     name: "ELEVATION\nHOODIE",
     price: "£195",
     tag: "DROP 002",
+    img: FLATLAY_IMG,
     bg: "radial-gradient(ellipse at 20% 80%, #1c1c3a 0%, #050508 55%, #000 100%)",
   },
   {
@@ -16,6 +20,7 @@ const concepts = [
     name: "RISE\nCARGO",
     price: "£175",
     tag: "DROP 002",
+    img: null,
     bg: "radial-gradient(ellipse at 80% 20%, #1a0f0a 0%, #060402 55%, #000 100%)",
   },
   {
@@ -23,6 +28,7 @@ const concepts = [
     name: "ASCENT\nTEE",
     price: "£95",
     tag: "DROP 002",
+    img: null,
     bg: "radial-gradient(ellipse at 50% 100%, #0d150d 0%, #020503 55%, #000 100%)",
   },
   {
@@ -30,6 +36,7 @@ const concepts = [
     name: "SUMMIT\nJOGGER",
     price: "£145",
     tag: "DROP 002",
+    img: null,
     bg: "radial-gradient(ellipse at 10% 50%, #12121e 0%, #040408 55%, #000 100%)",
   },
   {
@@ -37,6 +44,7 @@ const concepts = [
     name: "PEAK\nLONGSLEEVE",
     price: "£120",
     tag: "DROP 002",
+    img: null,
     bg: "radial-gradient(ellipse at 90% 90%, #1a1008 0%, #060402 55%, #000 100%)",
   },
   {
@@ -44,6 +52,7 @@ const concepts = [
     name: "SOAR\nSHORTS",
     price: "£110",
     tag: "DROP 002",
+    img: null,
     bg: "radial-gradient(ellipse at 50% 0%, #0f0f1a 0%, #030305 55%, #000 100%)",
   },
 ];
@@ -97,21 +106,41 @@ export default function EditorialGrid() {
           <div
             key={c.id}
             className="group relative aspect-[4/5] overflow-hidden bg-black"
-            style={{ backgroundImage: c.bg }}
+            style={c.img ? undefined : { backgroundImage: c.bg }}
           >
-            {/* Subtle grid lines */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 48px)",
-              }}
-            />
+            {/* Real image if available */}
+            {c.img && (
+              <Image
+                src={c.img}
+                alt={c.name.replace("\n", " ")}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            )}
 
-            {/* Large watermark number */}
-            <span className="absolute right-4 top-4 font-display text-[80px] leading-none text-white/[0.04] select-none">
-              {c.id}
-            </span>
+            {/* Overlay for image cells */}
+            {c.img && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            )}
+
+            {/* Subtle grid lines for non-image cells */}
+            {!c.img && (
+              <div
+                className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 48px)",
+                }}
+              />
+            )}
+
+            {/* Large watermark number for non-image cells */}
+            {!c.img && (
+              <span className="absolute right-4 top-4 font-display text-[80px] leading-none text-white/[0.04] select-none">
+                {c.id}
+              </span>
+            )}
 
             {/* Product name */}
             <div className="absolute inset-x-0 top-0 flex flex-col p-5">
