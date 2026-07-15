@@ -29,15 +29,15 @@ export default function CommunityBand() {
         {/* Right — brand manifesto */}
         <div className="flex flex-col gap-6 md:items-end md:text-right">
           <p className="max-w-xs text-sm leading-relaxed text-white/50">
-            Most people stay where they are. They accept where they land.
-            SOAR is built for the ones who don&apos;t.
+            The list keeps growing. The door doesn&apos;t — and most who join
+            it never get through.
           </p>
           <div className="flex flex-col gap-1 md:items-end">
             <p className="text-[10px] uppercase tracking-[0.35em] text-white/20">
-              True success comes from having the courage
+              Members get in first.
             </p>
             <p className="text-[10px] uppercase tracking-[0.35em] text-white/20">
-              to rise above limitations.
+              Then it&apos;s gone.
             </p>
           </div>
           <a
