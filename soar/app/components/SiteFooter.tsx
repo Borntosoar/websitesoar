@@ -32,7 +32,7 @@ export default function SiteFooter() {
 
       <div className="mx-auto mt-12 flex max-w-[1600px] flex-col-reverse items-start justify-between gap-4 border-t border-white/10 pt-6 text-[10px] uppercase tracking-[0.25em] text-white/30 sm:flex-row sm:items-center">
         <span>© {new Date().getFullYear()} SOAR. All rights reserved.</span>
-        <span>Site password protected pre-launch</span>
+        <span>Password protected. Pre-launch.</span>
       </div>
     </footer>
   );

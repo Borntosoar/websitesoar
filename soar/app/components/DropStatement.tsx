@@ -30,7 +30,7 @@ export default function DropStatement() {
           {[
             { value: "7", label: "Pieces in the drop" },
             { value: "64%", label: "Already claimed" },
-            { value: "Ltd.", label: "No restock" },
+            { value: "Ltd.", label: "No restocks. Ever." },
             { value: "002", label: "Current drop number" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col gap-1 bg-black p-6">

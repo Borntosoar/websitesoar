@@ -48,7 +48,7 @@ export default function AccessPage() {
             SOAR
           </span>
           <p className="text-[10px] uppercase tracking-[0.35em] text-white/30">
-            Members only
+            Pre-launch access
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export default function AccessPage() {
 
         <div className="flex flex-col items-center gap-2">
           <p className="text-xs text-white/30">
-            Don&apos;t have access?
+            Not on the list yet?
           </p>
           <Link
             href="/#access"

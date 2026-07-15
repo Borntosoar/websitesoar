@@ -48,9 +48,8 @@ export default function NotifyAccess() {
             Early Access
           </h2>
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/50">
-            The next drop isn&apos;t public yet. Request access now and
-            we&apos;ll notify you — by email and text — the second the
-            password unlocks.
+            Drop 003 isn&apos;t open. Get on the list now and we&apos;ll send
+            your access password the moment it does.
           </p>
 
           <div className="mt-10 flex gap-6 sm:gap-10">
