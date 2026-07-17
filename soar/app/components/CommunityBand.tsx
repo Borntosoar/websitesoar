@@ -26,20 +26,15 @@ export default function CommunityBand() {
           </p>
         </div>
 
-        {/* Right — brand manifesto */}
+        {/* Right — scarcity */}
         <div className="flex flex-col gap-6 md:items-end md:text-right">
           <p className="max-w-xs text-sm leading-relaxed text-white/50">
-            The list keeps growing. The door doesn&apos;t — and most who join
-            it never get through.
+            The list keeps growing. The door doesn&apos;t — and most who
+            join it never get through.
           </p>
-          <div className="flex flex-col gap-1 md:items-end">
-            <p className="text-[10px] uppercase tracking-[0.35em] text-white/20">
-              Members get in first.
-            </p>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-white/20">
-              Then it&apos;s gone.
-            </p>
-          </div>
+          <p className="text-[10px] uppercase tracking-[0.35em] text-white/20">
+            Members get in first. Then it&apos;s gone.
+          </p>
           <a
             href="#access"
             className="inline-block rounded-full border border-white/20 px-6 py-2.5 text-[10px] uppercase tracking-[0.3em] text-white/60 transition-all hover:border-white hover:text-white"
