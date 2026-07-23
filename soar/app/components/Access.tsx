@@ -64,7 +64,7 @@ export function Access() {
     <section id="access" className="on-dark border-t border-paper/10 bg-pitch text-paper">
       <div className="wrap grid gap-14 py-24 md:grid-cols-[1.1fr_0.9fr] md:gap-20 md:py-36">
         {/* left — drop status + pitch */}
-        <div className="flex flex-col justify-center">
+        <div>
           {hasTarget && !live && (
             <>
               <span className="mono text-paper/55">Next drop in</span>
@@ -87,7 +87,7 @@ export function Access() {
           {!hasTarget && (
             <>
               <span className="mono text-paper/55">The next drop</span>
-              <p className="display mt-3 max-w-[14ch] text-[clamp(2.2rem,6vw,4.4rem)]">Members hear first.</p>
+              <p className="display mt-3 max-w-[14ch] text-[clamp(2.2rem,6vw,4.4rem)]">To be announced.</p>
             </>
           )}
           <p className="sr-only">{srSummary}</p>
