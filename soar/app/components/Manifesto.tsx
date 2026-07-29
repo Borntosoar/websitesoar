@@ -14,14 +14,10 @@ export function Manifesto() {
         </h2>
 
         <div className="mt-12 grid max-w-4xl gap-8 md:grid-cols-2">
-          <p className="lede text-paper/90">
-            That&rsquo;s the whole mark. We don&rsquo;t explain it much further.
-          </p>
+          <p className="lede text-paper/90">Then it soars.</p>
           <p className="text-[14px] leading-relaxed text-paper/55">
-            Most of what keeps people where they are is a box of their own making
-            — quieter than a symbol, and harder to leave. We&rsquo;d rather make
-            the clothes than lecture anyone about it. Read into the bird what you
-            like; most people read their own.
+            Drawn once, in Alberta, and unchanged since. The rest is in the
+            clothes.
           </p>
         </div>
 
