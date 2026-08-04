@@ -14,10 +14,10 @@ export function Manifesto() {
         </h2>
 
         <div className="mt-12 grid max-w-4xl gap-8 md:grid-cols-2">
-          <p className="lede text-paper/90">Then it soars.</p>
+          <p className="lede text-paper/90">We were Tragic before we were SOAR.</p>
           <p className="text-[14px] leading-relaxed text-paper/55">
-            Drawn once, in Alberta, and unchanged since. The rest is in the
-            clothes.
+            The box is where everyone starts. Leaving it is the whole name —
+            you already know if it&rsquo;s you.
           </p>
         </div>
 
